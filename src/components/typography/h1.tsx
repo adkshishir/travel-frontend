@@ -9,7 +9,7 @@ const H1 = ({
   className?: string;
 }) => {
   return (
-    <h1 className={cn('text-[#012E41] text-[48px] leading-[50px] font-medium',className)}>{children}</h1>
+    <h1 className={cn('text-[#012E41] text-[48px] leading-[50px] font-semibold',className)}>{children}</h1>
   );
 };
 

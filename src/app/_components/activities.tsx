@@ -1,4 +1,4 @@
-import ActivitiesCard from '@/components/activities/card';
+import ActivitiesCard from '@/components/activities/activity-card';
 import H1 from '@/components/typography/h1';
 import PrimaryText from '@/components/typography/primary';
 import React from 'react';
