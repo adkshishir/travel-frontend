@@ -1,10 +1,4 @@
-import { Cloud, Sun } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import P from '../typography/P';
 type TProps = {

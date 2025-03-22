@@ -1,7 +1,6 @@
 import PrimaryText from '@/components/typography/primary';
 import Image from 'next/image';
 import React from 'react';
-import { SearchBar } from './search-bar';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
@@ -24,7 +23,9 @@ const HeroSection = () => {
           </h1>
           <div className='mt-4'>
             {/* <SearchBar /> */}
-            <Button variant={'secondary'} className=''>Book Now</Button>
+            <Button variant={'secondary'} className=''>
+              Book Now
+            </Button>
           </div>
         </div>
         <div className='w-full'>
