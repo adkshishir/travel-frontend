@@ -1,7 +1,6 @@
 import TestimonialCard from '@/components/testimonial/testimonial-card';
 import H1 from '@/components/typography/h1';
 import PrimaryText from '@/components/typography/primary';
-import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import React from 'react';
 
