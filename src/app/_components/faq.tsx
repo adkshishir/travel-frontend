@@ -6,7 +6,7 @@ import React from 'react';
 const Faq = () => {
   return (
     <section className='bg-[#F6F6F6] mt-32 py-32'>
-      <div className=' max-w-[1296px] mx-auto '>
+      <div className=' max-w-[1180px] mx-auto '>
         <div className='text-center max-w-2xl grid   mx-auto'>
           <PrimaryText className='mb-4'>FAQ</PrimaryText>
           <H1 className='mb-8'>Unpacking Your Travel Questions</H1>

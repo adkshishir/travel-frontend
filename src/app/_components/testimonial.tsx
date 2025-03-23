@@ -7,7 +7,7 @@ import React from 'react';
 const Testimonial = () => {
   return (
     <section className='bg-[#F6F6F6] mt-32'>
-      <div className='max-w-[1296px] mx-auto py-32 flex gap-8'>
+      <div className='max-w-[1180px] mx-auto py-32 flex gap-8'>
         <div>
           <Image
             src={'/images/hero.jpg'}

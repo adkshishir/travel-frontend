@@ -40,7 +40,7 @@ const Blogs = () => {
     },
   ];
   return (
-    <section className='mx-auto max-w-[1296px] my-32'>
+    <section className='mx-auto max-w-[1180px] my-32'>
       <div className='text-center max-w-2xl grid   mx-auto'>
         <PrimaryText className='mb-4'>Blogs & News</PrimaryText>
         <H1 className='mb-8'>Tips and Tricks for Planning Your Dream Trip</H1>

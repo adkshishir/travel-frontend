@@ -5,7 +5,7 @@ import React from 'react';
 
 const Activities = () => {
   return (
-    <section className=' mx-auto max-w-[1296px] mt-16'>
+    <section className=' mx-auto max-w-[1180px] mt-16'>
       <PrimaryText className='mx-auto w-fit'>Activities</PrimaryText>
       <H1 className='mx-auto w-fit'>We Offer The Best Service</H1>
       <div className='flex  justify-between gap-4 mt-8 '>

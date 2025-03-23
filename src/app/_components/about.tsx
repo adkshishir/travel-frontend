@@ -7,7 +7,7 @@ import React from 'react';
 
 const AboutSection = () => {
   return (
-    <section className='max-w-[1296px] mt-32 mx-auto flex gap-8 justify-between items-center'>
+    <section className='max-w-[1180px] mt-32 mx-auto flex gap-8 justify-between items-center'>
       <div className='w-full'>
         <Image
           src={'/images/hero.jpg'}

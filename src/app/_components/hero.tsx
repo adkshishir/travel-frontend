@@ -15,10 +15,10 @@ const HeroSection = () => {
         height={1080}
         className='w-screen -z-10 absolute min-h-screen object-cover '
       />
-      <div className='flex justify-between  h-fit container max-w-[1296px] mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/5'>
+      <div className='flex justify-between gap-2  h-fit container max-w-[1180px] mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/5'>
         <div className='w-full mt-8'>
           <PrimaryText>Start Travelling with us</PrimaryText>
-          <h1 className='text-[76px] font-medium mt-4 leading-[84px] text-[#012E41]'>
+          <h1 className='text-[56px] font-semibold mt-4 leading-[62px] text-[#012E41]'>
             Let’s enjoy your desired trip with Tourice
           </h1>
           <div className='mt-4'>

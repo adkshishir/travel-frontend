@@ -60,7 +60,7 @@ export default function Destinations() {
   ]);
 
   return (
-    <section className=' mx-auto max-w-[1296px] '>
+    <section className=' mx-auto max-w-[1180px] '>
       <div className='text-center max-w-2xl grid mt-32  mx-auto'>
         <PrimaryText className='mb-4'>Popular Destinations</PrimaryText>
         <H1 className='mb-8'>Search a best place in the world</H1>

@@ -5,7 +5,7 @@ import { Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className='bg-[#003344] text-white'>
-      <div className='container mx-auto px-4 py-12'>
+      <div className='container mx-auto px-4 py-4'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {/* Logo and Description */}
           <div className='space-y-4'>
@@ -102,7 +102,7 @@ export default function Footer() {
         </div>
 
         {/* Gallery */}
-        <div className='mt-12'>
+        {/* <div className='mt-12'>
           <h3 className='text-lg font-medium mb-4'>Gallery</h3>
           <div className='grid grid-cols-3 md:grid-cols-6 gap-2'>
             {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -118,7 +118,7 @@ export default function Footer() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Copyright */}
         <div className='mt-12 pt-6 border-t border-gray-700 text-center text-sm text-gray-400'>

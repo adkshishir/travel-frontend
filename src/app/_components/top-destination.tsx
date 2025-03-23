@@ -6,7 +6,7 @@ import React from 'react';
 
 const TopDestination = () => {
   return (
-    <section className='mx-auto max-w-[1296px] mt-32'>
+    <section className='mx-auto max-w-[1180px] mt-32'>
       <div className='text-center max-w-2xl grid  mx-auto'>
         <PrimaryText className='mb-4'>Top Destination</PrimaryText>
         <H1 className='mb-8'>Search a best place in the world</H1>
