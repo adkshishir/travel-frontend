@@ -20,7 +20,7 @@ const AboutSection = () => {
         />
       </div>
       <div className='w-full'>
-        <div className='max-lg:justify-center text-center'>
+        <div className='max-lg:justify-center max-lg:text-center'>
           <PrimaryText>About</PrimaryText>
           <H1>We Are The Best Travel Agency</H1>
         </div>
