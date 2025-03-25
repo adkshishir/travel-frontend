@@ -7,7 +7,7 @@ import React from 'react';
 
 const AboutSection = () => {
   return (
-    <section className='max-w-[1180px] mt-32 mx-auto flex gap-8 justify-between items-center'>
+    <section className='max-w-[1180px] max-lg:px-4 mt-32 max-lg:mt-16 mx-auto flex max-lg:flex-col gap-8 justify-between items-center'>
       <div className='w-full'>
         <Image
           src={'/images/hero.jpg'}
@@ -20,15 +20,18 @@ const AboutSection = () => {
         />
       </div>
       <div className='w-full'>
-        <PrimaryText>About</PrimaryText>
-        <H1>We Are The Best Travel Agency</H1>
-        <div className='flex mt-8 gap-4 items-center'>
+        <div className='max-lg:justify-center text-center'>
+          <PrimaryText>About</PrimaryText>
+          <H1>We Are The Best Travel Agency</H1>
+        </div>
+        <div className='flex max-lg:flex-col mt-8 gap-4 items-center'>
           <Button variant={'ghost'} size={'icon'} className='w-20'>
             <Image
               src={'/images/btn-text-about.jpg'}
               height={300}
               width={300}
               alt='More About Us'
+              className='max-lg:p-2'
             />
           </Button>
           <div className=''>

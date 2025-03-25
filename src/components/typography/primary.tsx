@@ -6,7 +6,7 @@ type TProps = {
 };
 const PrimaryText = ({ className, children }: TProps) => {
   return (
-    <div className={cn('text-primary text-[24px] font-medium ', className)}>
+    <div className={cn('text-primary  text-[24px] max-lg:text-[18px] max-md:text-[14px] font-medium ', className)}>
       {children}
     </div>
   );

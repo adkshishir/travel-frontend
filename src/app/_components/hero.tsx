@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
   return (
-    <section className='relative h-[85vh]'>
+    <section className='relative h-[60vh]  lg:h-[85vh]'>
       <Image
         priority={true}
         quality={100}
@@ -13,12 +13,12 @@ const HeroSection = () => {
         alt='hero'
         width={1920}
         height={1080}
-        className='w-screen -z-10 absolute min-h-screen object-cover '
+        className='w-screen -z-10  absolute min-h-screen object-cover '
       />
-      <div className='flex justify-between gap-2  h-fit container max-w-[1180px] mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/5'>
-        <div className='w-full mt-8'>
+      <div className='flex max-lg:flex-col-reverse max-lg:px-4  justify-between gap-2  h-fit container max-w-[1180px] mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/5'>
+        <div className='w-full mt-8 max-lg:text-center max-lg:justify-center'>
           <PrimaryText>Start Travelling with us</PrimaryText>
-          <h1 className='text-[56px] font-semibold mt-4 leading-[62px] text-[#012E41]'>
+          <h1 className='text-[56px] font-semibold mt-4 leading-[62px] max-lg:text-[48px] max-md:text-[36px] max-lg:leading-[42px] text-[#012E41]'>
             Let’s enjoy your desired trip with Tourice
           </h1>
           <div className='mt-4'>
@@ -36,7 +36,7 @@ const HeroSection = () => {
             alt='hero'
             width={1000}
             height={1000}
-            className='w-full object-cover rounded-2xl'
+            className='w-full object-cover max-lg:hidden rounded-2xl'
           />
         </div>
       </div>

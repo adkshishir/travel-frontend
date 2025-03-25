@@ -5,12 +5,12 @@ import React from 'react';
 
 const TopPackages = () => {
   return (
-    <section className='mx-auto max-w-[1180px] mt-32'>
+    <section className='mx-auto max-w-[1180px] mt-32 max-lg:mt-16'>
       <div className='text-center max-w-2xl mx-auto'>
         <PrimaryText className='mb-4'>POPULAR PACKAGES</PrimaryText>
         <H1 className='mb-8'>Vacations To Make Your Experience Enjoyable</H1>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <div className='grid max-lg:px-4 grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-4'>
         <PackageCard
           title='Colombian Coffee Trails'
           location='Regions'

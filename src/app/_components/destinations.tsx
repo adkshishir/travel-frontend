@@ -60,19 +60,19 @@ export default function Destinations() {
   ]);
 
   return (
-    <section className=' mx-auto max-w-[1180px] '>
-      <div className='text-center max-w-2xl grid mt-32  mx-auto'>
+    <section className=' mx-auto max-w-[1180px] max-lg:px-4 '>
+      <div className='text-center max-lg:text-center max-w-2xl grid mt-32 max-lg:mt-16  mx-auto'>
         <PrimaryText className='mb-4'>Popular Destinations</PrimaryText>
         <H1 className='mb-8'>Search a best place in the world</H1>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-4'>
+      <div className='grid grid-cols-1 h-full md:grid-cols-2 lg:grid-cols-3  lg:grid-rows-2 gap-4'>
         {destinations.map((destination, index) => (
           <div
             key={destination.id}
             className={cn(
-              'relative overflow-hidden rounded-lg',
-              index == 0 && ' h-56 lg:row-span-1',
-              index == 1 && 'col-span-1 lg:row-span-2 col-start-2 h-full '
+              'relative overflow-hidden h-56 rounded-lg w-full max-lg:mx-auto',
+              index == 0 && '  lg:row-span-1',
+              index == 1 && 'col-span-1 lg:row-span-2 lg:col-start-2 h-full '
             )}>
             <div className='relative h-full w-full'>
               <Image
