@@ -23,7 +23,7 @@ const HeroSection = () => {
           </h1>
           <div className='mt-4'>
             {/* <SearchBar /> */}
-            <Button variant={'secondary'} className=''>
+            <Button variant={'default'} className=''>
               Book Now
             </Button>
           </div>

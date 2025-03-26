@@ -1,4 +1,5 @@
 import TestimonialCard from '@/components/testimonial/testimonial-card';
+import { TestimonialCarousel } from '@/components/testimonial/testimonial-carousel';
 import H1 from '@/components/typography/h1';
 import PrimaryText from '@/components/typography/primary';
 import Image from 'next/image';
@@ -25,27 +26,7 @@ const Testimonial = () => {
             <H1 className=' max-w-xl'>What Customer Said About Us</H1>
           </div>
           <div className='flex max-lg:flex-col gap-8 mt-8'>
-            <TestimonialCard
-              name='John Snow'
-              quote="As a seasoned traveler, I can confidently say that Tourica is one of the best travel agencies I've had the pleasure of working."
-              rating={5}
-              avatarUrl='/images/hero.jpg'
-              role='Customer'
-            />
-            <TestimonialCard
-              name='John Snow'
-              quote="As a seasoned traveler, I can confidently say that Tourica is one of the best travel agencies I've had the pleasure of working."
-              rating={5}
-              avatarUrl='/images/hero.jpg'
-              role='Customer'
-            />{' '}
-            <TestimonialCard
-              name='John Snow'
-              quote="As a seasoned traveler, I can confidently say that Tourica is one of the best travel agencies I've had the pleasure of working."
-              rating={5}
-              avatarUrl='/images/hero.jpg'
-              role='Customer'
-            />
+            <TestimonialCarousel/>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ export default function ActivitiesCard({ title, description, image }: TProps) {
         {/* <CardDescription className='text-[18px] text-[#012E41] font-normal line-clamp-2'>
           {description}
         </CardDescription> */}
-        <P>{description}</P>
+        <P className='max-md:hidden'>{description}</P>
       </CardContent>
     </Card>
   );
