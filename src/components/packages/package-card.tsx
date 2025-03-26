@@ -27,7 +27,7 @@ export default function PackageCard({
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <div className='max-w-sm  rounded-xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md'>
+    <div className='max-w-sm max-lg:max-w-md  rounded-xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md'>
       <div className='relative'>
         {/* Image */}
         <div className='relative h-56 w-full'>
