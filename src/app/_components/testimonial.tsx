@@ -1,4 +1,3 @@
-import TestimonialCard from '@/components/testimonial/testimonial-card';
 import { TestimonialCarousel } from '@/components/testimonial/testimonial-carousel';
 import H1 from '@/components/typography/h1';
 import PrimaryText from '@/components/typography/primary';

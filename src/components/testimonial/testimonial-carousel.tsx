@@ -3,7 +3,7 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 
 import { Button } from "@/components/ui/button"
 import TestimonialCard from "./testimonial-card"
@@ -48,7 +48,7 @@ const testimonials = [
 ]
 
 export function TestimonialCarousel() {
-  const [api, setApi] = React.useState<any>()
+  const [api, setApi] = React.useState<CarouselApi>()
 
   return (
     <div className="relative max-w-full mx-auto">
