@@ -90,8 +90,8 @@ const activities = [
 // Main navigation links
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/blog', label: 'Activities' },
+  { href: '/contact/contact', label: 'Destinations' },
 ];
 
 export default function Header() {
