@@ -92,6 +92,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Activities' },
   { href: '/contact/contact', label: 'Destinations' },
+  { href: '/contact/contact/test', label: 'Packages' },
 ];
 
 export default function Header() {
