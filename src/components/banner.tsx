@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import H1 from './typography/h1';
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,

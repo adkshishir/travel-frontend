@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import PrimaryText from '@/components/typography/primary';
-import H1 from '@/components/typography/h1';
 import { cn } from '@/lib/utils';
 
 interface Destination {
