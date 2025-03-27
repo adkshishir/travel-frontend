@@ -19,7 +19,7 @@ export default function TestimonialCard({
   return (
     <div className='max-w-md bg-white rounded-xl p-6 shadow-sm'>
       {/* Quote */}
-      <p className='text-gray-700 mb-3 line-clamp-4'>
+      <p className='text-gray-700 mb-3 line-clamp-3'>
         {quote.includes('pleasure') ? (
           <>
             {quote.split('pleasure')[0]}

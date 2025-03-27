@@ -20,52 +20,6 @@ const activities = [
         name: 'Asia',
         packages: ['Himalayan Heights', 'Jungle Paths', 'Rice Terrace Walks'],
       },
-      {
-        name: 'Americas',
-        packages: [
-          'Andes Expedition',
-          'Rocky Mountain Trail',
-          'Patagonia Trek',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'City Tours',
-    destinations: [
-      {
-        name: 'Europe',
-        packages: ['Paris Discovery', 'London Explorer', 'Rome Classic'],
-      },
-      {
-        name: 'Asia',
-        packages: ['Tokyo Adventure', 'Bangkok Highlights', 'Singapore City'],
-      },
-      {
-        name: 'Americas',
-        packages: [
-          'New York Complete',
-          'San Francisco Bay',
-          'Mexico City Tour',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Beach',
-    destinations: [
-      {
-        name: 'Europe',
-        packages: ['Mediterranean Escape', 'Greek Islands', 'Spanish Coast'],
-      },
-      {
-        name: 'Asia',
-        packages: ['Bali Paradise', 'Thai Islands', 'Philippines Getaway'],
-      },
-      {
-        name: 'Americas',
-        packages: ['Caribbean Cruise', 'Miami Beach', 'Cancun All-Inclusive'],
-      },
     ],
   },
   {
@@ -89,10 +43,11 @@ const activities = [
 
 // Main navigation links
 const navLinks = [
-  { href: '/', label: 'Home' },
   { href: '/blog', label: 'Activities' },
   { href: '/contact/contact', label: 'Destinations' },
   { href: '/contact/contact/test', label: 'Packages' },
+  { href: '/blogs/details', label: 'Blog Details' },
+  { href: '/blogs', label: 'Blogs' },
 ];
 
 export default function Header() {
