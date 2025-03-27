@@ -6,22 +6,38 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js
+        run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Only runs if 'build' job succeeds
+
+    steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{secrets.SERVER_HOST}}
-          username: ${{secrets.SERVER_USERNAME}}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/projects/poonhill/frontend
-            git pull origin main  # Pull latest changes
-            npm ci  # Install dependencies (if needed)
-            npm run build  # Build project (if applicable)
-            pm2 restart poonhill  # Restart the app if using PM2
+            git pull origin main
+            npm ci
+            npm run build
+            pm2 restart poonhill
