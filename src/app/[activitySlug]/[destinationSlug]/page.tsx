@@ -8,7 +8,7 @@ const DestinationPage = () => {
       <Banner
         title='Destinations'
         image='/images/hero.jpg'
-        breadcrumb={[{ name: 'Home', href: '/' }]}
+        breadcrumb={[{ name: 'Home', href: '/' },{ name: 'Activities', href: '/activities' }]}
         pageName='Destinations'
       />
       <Packages />
