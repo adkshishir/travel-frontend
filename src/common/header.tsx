@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 // Sample data structure for activities, destinations, and packages
 const activities = [
@@ -62,6 +63,7 @@ export default function Header() {
   const [mobileActiveDestination, setMobileActiveDestination] = useState<
     number | null
   >(null);
+  const router = useRouter();
 
   // Refs for detecting clicks outside dropdown
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -115,7 +117,7 @@ export default function Header() {
 
   return (
     <header className='fixed top-0 left-0 right-0 z-50  bg-[#ffffffee] shadow-sm'>
-      <div className='max-w-[1180px] mx-auto px-4'>
+      <div className='max-w-[1180px] mx-auto max-lg:px-4'>
         <div className='flex items-center justify-between h-16'>
           {/* Logo */}
           <Link href='/' className='text-xl font-bold flex items-center'>
@@ -202,7 +204,7 @@ export default function Header() {
           </nav>
 
           {/* Book Trip Button */}
-          <Button className='hidden md:block bg-teal-500 hover:bg-teal-600 text-white'>
+          <Button onClick={() => router.push('/booking')} className='hidden cursor-pointer md:block bg-teal-500 hover:bg-teal-600 text-white'>
             Book Trip
           </Button>
 
@@ -354,7 +356,10 @@ export default function Header() {
                   transition={{
                     delay: (navLinks.length + activities.length) * 0.05,
                   }}
-                  className='pt-4'>
+                  className='pt-4 cursor-pointer'
+                  onClick={() => {
+                    router.push('/booking');
+                  }}>
                   <Button className='w-full bg-teal-500 hover:bg-teal-600 text-white'>
                     Book Trip
                   </Button>
