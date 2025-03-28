@@ -1,7 +1,7 @@
 import Banner from '@/components/banner';
 import { Navigation } from './_components/navigation';
-import { HotelDetails } from './_components/hotel-details';
-import { Booking } from './_components/booking';
+import {  PackageDetails } from './_components/package-details';
+import {  PackageBooking } from './_components/booking';
 
 export default function Page() {
   return (
@@ -46,11 +46,11 @@ export default function Page() {
 
             <Navigation />
 
-            <HotelDetails />
+            <PackageDetails />
           </div>
           {/* Fixed the sticky sidebar by adding proper height constraints and adjusting top position */}
           <div className='lg:col-span-1 '>
-            <Booking />
+            <PackageBooking />
           </div>
         </div>
       </div>
