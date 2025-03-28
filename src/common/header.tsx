@@ -49,6 +49,7 @@ const navLinks = [
   { href: '/contact/contact/test', label: 'Packages' },
   { href: '/blogs/details', label: 'Blog Details' },
   { href: '/blogs', label: 'Blogs' },
+  { href: '/about', label: 'Aboout Us' },
 ];
 
 export default function Header() {
@@ -204,7 +205,9 @@ export default function Header() {
           </nav>
 
           {/* Book Trip Button */}
-          <Button onClick={() => router.push('/booking')} className='hidden cursor-pointer md:block bg-teal-500 hover:bg-teal-600 text-white'>
+          <Button
+            onClick={() => router.push('/booking')}
+            className='hidden cursor-pointer md:block bg-teal-500 hover:bg-teal-600 text-white'>
             Book Trip
           </Button>
 
