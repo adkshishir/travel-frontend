@@ -7,49 +7,60 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
+
+export type TActivity = {
+  name: string;
+  slug: string;
+  destinations: {
+    name: string;
+    slug: string;
+    packages: {
+      title: string;
+      slug: string;
+    }[];
+  }[];
+}[];
 
 // Sample data structure for activities, destinations, and packages
-const activities = [
-  {
-    name: 'Hiking',
-    destinations: [
-      {
-        name: 'Europe',
-        packages: ['Alpine Adventure', 'Mountain Explorer', 'Forest Trek'],
-      },
-      {
-        name: 'Asia',
-        packages: ['Himalayan Heights', 'Jungle Paths', 'Rice Terrace Walks'],
-      },
-    ],
-  },
-  {
-    name: 'Cultural',
-    destinations: [
-      {
-        name: 'Europe',
-        packages: ['Historical Tour', 'Art & Museums', 'Local Experiences'],
-      },
-      {
-        name: 'Asia',
-        packages: ['Temple Journey', 'Ancient Traditions', 'Local Homestay'],
-      },
-      {
-        name: 'Americas',
-        packages: ['Indigenous Culture', 'Colonial History', 'Music & Arts'],
-      },
-    ],
-  },
-];
+// const activities = [
+//   {
+//     name: 'Hiking',
+//     destinations: [
+//       {
+//         name: 'Europe',
+//         packages: ['Alpine Adventure', 'Mountain Explorer', 'Forest Trek'],
+//       },
+//       {
+//         name: 'Asia',
+//         packages: ['Himalayan Heights', 'Jungle Paths', 'Rice Terrace Walks'],
+//       },
+//     ],
+//   },
+//   {
+//     name: 'Cultural',
+//     destinations: [
+//       {
+//         name: 'Europe',
+//         packages: ['Historical Tour', 'Art & Museums', 'Local Experiences'],
+//       },
+//       {
+//         name: 'Asia',
+//         packages: ['Temple Journey', 'Ancient Traditions', 'Local Homestay'],
+//       },
+//       {
+//         name: 'Americas',
+//         packages: ['Indigenous Culture', 'Colonial History', 'Music & Arts'],
+//       },
+//     ],
+//   },
+// ];
 
 // Main navigation links
 const navLinks = [
-  { href: '/blog', label: 'Activities' },
-  { href: '/contact/contact', label: 'Destinations' },
-  { href: '/contact/contact/test', label: 'Packages' },
-  { href: '/blogs/details', label: 'Blog Details' },
-  { href: '/blogs', label: 'Blogs' },
-  { href: '/about', label: 'Aboout Us' },
+  // { href: '/blogs', label: 'Blogs' },
+  { href: '/about', label: 'About Us' },
 ];
 
 export default function Header() {
@@ -65,6 +76,7 @@ export default function Header() {
     number | null
   >(null);
   const router = useRouter();
+  const [navItems, setNavItems] = useState<TActivity>();
 
   // Refs for detecting clicks outside dropdown
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -86,6 +98,14 @@ export default function Header() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    (async () => {
+      const navs = await fetchData(ENDPOINTS.NAV_ITEMS);
+      console.log(navs, 'navsssssssssssss');
+      setNavItems(navs);
+    })();
+  }, []);
+  console.log(navItems);
 
   // Handle activity hover/click for desktop
   const handleActivityInteraction = (index: number) => {
@@ -122,24 +142,16 @@ export default function Header() {
         <div className='flex items-center justify-between h-16'>
           {/* Logo */}
           <Link href='/' className='text-xl font-bold flex items-center'>
-            <span className='text-orange-500'>Trip</span>
-            <span className='text-gray-800'>topia</span>
+            <span className='text-orange-500'>Poonhill</span>
+            <span className='text-gray-800'>Treks</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className='hidden md:flex items-center space-x-8'>
             {/* Regular nav links */}
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className='text-gray-600 hover:text-orange-500 transition-colors duration-200'>
-                {link.label}
-              </Link>
-            ))}
 
             {/* Activities in nav bar */}
-            {activities.map((activity, actIndex) => (
+            {navItems?.map((activity, actIndex) => (
               <div key={activity.name} className='relative' ref={dropdownRef}>
                 {/* Activity Dropdown Trigger */}
                 <button
@@ -181,8 +193,8 @@ export default function Header() {
                             <div className='absolute left-full top-0 w-56 bg-white rounded-md shadow-lg py-1'>
                               {destination.packages.map((pkg) => (
                                 <Link
-                                  key={pkg}
-                                  href={`/packages/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg
+                                  key={pkg.slug}
+                                  href={`/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg.slug
                                     .toLowerCase()
                                     .replace(/\s+/g, '-')}`}
                                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orange-500'
@@ -190,7 +202,7 @@ export default function Header() {
                                     setActiveActivity(null);
                                     setActiveDestination(null);
                                   }}>
-                                  {pkg}
+                                  {pkg.title}
                                 </Link>
                               ))}
                             </div>
@@ -202,11 +214,19 @@ export default function Header() {
                 </AnimatePresence>
               </div>
             ))}
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className='text-gray-600 hover:text-orange-500 transition-colors duration-200'>
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Book Trip Button */}
           <Button
-            onClick={() => router.push('/booking')}
+            onClick={() => router.push('/admin')}
             className='hidden cursor-pointer md:block bg-teal-500 hover:bg-teal-600 text-white'>
             Book Trip
           </Button>
@@ -232,25 +252,8 @@ export default function Header() {
             className='md:hidden bg-white border-t overflow-hidden'>
             <div className='container mx-auto px-4 py-4'>
               <nav className='flex flex-col space-y-1'>
-                {/* Regular nav links for mobile */}
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className='py-2'>
-                    <Link
-                      href={link.href}
-                      className='text-gray-700 hover:text-orange-500 transition-colors'
-                      onClick={() => setIsOpen(false)}>
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
-
                 {/* Activities for mobile */}
-                {activities.map((activity, actIndex) => (
+                {navItems?.map((activity, actIndex) => (
                   <div key={activity.name}>
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
@@ -324,19 +327,19 @@ export default function Header() {
                                       {destination.packages.map(
                                         (pkg, pkgIndex) => (
                                           <motion.div
-                                            key={pkg}
+                                            key={pkg.slug}
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{
                                               delay: pkgIndex * 0.05,
                                             }}>
                                             <Link
-                                              href={`/packages/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg
+                                              href={`/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg.slug
                                                 .toLowerCase()
                                                 .replace(/\s+/g, '-')}`}
                                               className='block py-2 text-sm text-gray-600 hover:text-orange-500'
                                               onClick={() => setIsOpen(false)}>
-                                              {pkg}
+                                              {pkg.title}
                                             </Link>
                                           </motion.div>
                                         )
@@ -352,12 +355,31 @@ export default function Header() {
                     </AnimatePresence>
                   </div>
                 ))}
+                {/* Regular nav links for mobile */}
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className='py-2'>
+                    <Link
+                      href={link.href}
+                      className='text-gray-700 hover:text-orange-500 transition-colors'
+                      onClick={() => setIsOpen(false)}>
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
 
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: (navLinks.length + activities.length) * 0.05,
+                    delay:
+                      (navItems
+                        ? navLinks.length + navItems.length
+                        : navLinks.length) * 0.05,
                   }}
                   className='pt-4 cursor-pointer'
                   onClick={() => {

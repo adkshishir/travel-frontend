@@ -1,10 +1,9 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
 import PrimaryText from '@/components/typography/primary';
 import H1 from '@/components/typography/h1';
 import { cn } from '@/lib/utils';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
 
 interface Destination {
   id: string;
@@ -15,52 +14,61 @@ interface Destination {
   size: 'medium' | 'large';
 }
 
-export default function Destinations() {
-  const [destinations] = useState<Destination[]>([
-    {
-      id: '1',
-      name: 'Finland',
-      rating: 5.0,
-      feature: 'Waterfall',
-      image: '/images/hero.jpg',
-      size: 'medium',
-    },
-    {
-      id: '2',
-      name: 'Ankara',
-      rating: 5.0,
-      feature: 'Waterfall',
-      image: '/images/hero.jpg',
-      size: 'large',
-    },
-    {
-      id: '3',
-      name: 'Istanbul',
-      rating: 5.0,
-      feature: 'Waterfall',
-      image: '/images/hero.jpg',
-      size: 'large',
-    },
-    {
-      id: '4',
-      name: 'Prag',
-      rating: 5.0,
-      feature: 'Waterfall',
-      image: '/images/hero.jpg',
-      size: 'medium',
-    },
-    {
-      id: '5',
-      name: 'Florence',
-      rating: 5.0,
-      feature: 'Waterfall',
-      image: '/images/hero.jpg',
-      size: 'medium',
-    },
-  ]);
+export default async function Destinations() {
+  const fetchedDestinations = await fetchData(ENDPOINTS.DESTINATIONS);
+  const destinations: Destination[] = fetchedDestinations?.filter((destination: any,index:number) => index < 4).map((destination: any) => ({
+    id: destination.id,
+    name: destination.name,
+    rating: destination.rating,
+    feature: destination.feature,
+    image: destination.media?.thumbnail,
+    size: destination.size,
+  }))
+  // const destinations: Destination[] = [
+  //   {
+  //     id: '1',
+  //     name: 'Finland',
+  //     rating: 5.0,
+  //     feature: 'Waterfall',
+  //     image: '/images/hero.jpg',
+  //     size: 'medium',
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Ankara',
+  //     rating: 5.0,
+  //     feature: 'Waterfall',
+  //     image: '/images/hero.jpg',
+  //     size: 'large',
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Istanbul',
+  //     rating: 5.0,
+  //     feature: 'Waterfall',
+  //     image: '/images/hero.jpg',
+  //     size: 'large',
+  //   },
+  //   {
+  //     id: '4',
+  //     name: 'Prag',
+  //     rating: 5.0,
+  //     feature: 'Waterfall',
+  //     image: '/images/hero.jpg',
+  //     size: 'medium',
+  //   },
+  //   {
+  //     id: '5',
+  //     name: 'Florence',
+  //     rating: 5.0,
+  //     feature: 'Waterfall',
+  //     image: '/images/hero.jpg',
+  //     size: 'medium',
+  //   },
+  // ];
 
   return (
-    <section className=' mx-auto max-w-[1180px] max-lg:px-4 '>
+    <section className=' mx-auto max-w-[1180px] pb-32 max-lg:px-4 '>
       <div className='text-center max-lg:text-center max-w-2xl grid mt-32 max-lg:mt-16  mx-auto'>
         <PrimaryText className='mb-4'>Popular Destinations</PrimaryText>
         <H1 className='mb-8'>Search a best place in the world</H1>

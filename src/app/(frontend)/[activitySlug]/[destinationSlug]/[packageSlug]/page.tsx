@@ -1,20 +1,37 @@
 import Banner from '@/components/banner';
 import { Navigation } from './_components/navigation';
-import {  PackageDetails } from './_components/package-details';
-import {  PackageBooking } from './_components/booking';
+import { PackageDetails } from './_components/package-details';
+import { PackageBooking } from './_components/booking';
+import { Params } from 'next/dist/server/request/params';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
 
-export default function Page() {
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { activitySlug, destinationSlug, packageSlug } = await params;
+  const result = (await fetchData(ENDPOINTS.PACKAGES + '/' + packageSlug))
+    ?.package;
+  console.log('resutl', result);
   return (
-    <div className='min-h-screen relative'>
+    <div className='min-h-screen  relative'>
       <Banner
-        title='Colombian Coffee Trails'
-        pageName='Colombian Coffee Trails'
+        title={result?.title}
+        pageName={result?.title}
         breadcrumb={[
           { name: 'Home', href: '/' },
-          { name: 'Activities', href: '/activities' },
-          { name: 'Destinations', href: '/actitites/destinations' },
+          {
+            name: result?.destination?.activity?.name,
+            href: `/${activitySlug}`,
+          },
+          {
+            name: result?.destination?.name,
+            href: `/${activitySlug}/${destinationSlug}`,
+          },
         ]}
-        image='/images/hero.jpg'
+        image={
+          result?.media?.length > 0
+            ? result?.media[0]?.thumbnail
+            : '/images/hero.jpg'
+        }
       />
 
       <div className='max-w-[1180px] h-full relative mx-auto max-lg:px-4 py-6'>
@@ -23,13 +40,13 @@ export default function Page() {
             <div className='flex items-center'>
               <div className='mr-auto'>
                 <h1 className='text-2xl font-bold text-foreground sm:text-3xl'>
-                  Honouring History and Heritage in the Land of Heroes
+                  {result?.title}
                 </h1>
               </div>
               <div className='flex'>
-                {[1, 2, 3, 4, 5].map((star) => (
+                {[...Array(result?.rating || 4)].map((star, index) => (
                   <svg
-                    key={star}
+                    key={index}
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 24 24'
                     fill='currentColor'
@@ -46,7 +63,7 @@ export default function Page() {
 
             <Navigation />
 
-            <PackageDetails />
+            <PackageDetails pack={result} />
           </div>
           {/* Fixed the sticky sidebar by adding proper height constraints and adjusting top position */}
           <div className='lg:col-span-1 '>

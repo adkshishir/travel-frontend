@@ -1,17 +1,28 @@
 import Banner from '@/components/banner';
 import React from 'react';
 import Destinations from './_components/destinations';
+import { Params } from 'next/dist/server/request/params';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
 
-const ActivitiesPage = () => {
+const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
+  const { activitySlug } = await params;
+  const result = await fetchData(ENDPOINTS.ACTIVITIES + '/' + activitySlug);
+  console.log(result);
+
   return (
     <main>
       <Banner
-        title='Activities'
-        image='/images/hero.jpg'
+        title={result?.name || 'Activities'}
+        image={result?.media?.phone || '/images/hero.jpg'}
         breadcrumb={[{ name: 'Home', href: '/' }]}
-        pageName='Activities'
+        pageName={result?.name || 'Activities'}
       />
-      <Destinations />
+      <Destinations
+        activityName={result?.name}
+        activitySlug={activitySlug}
+        destinations={result?.destinations}
+      />
     </main>
   );
 };

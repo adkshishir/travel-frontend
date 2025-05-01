@@ -25,6 +25,7 @@ export default function PackageCard({
   popular = true,
 }: TravelPackageCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  console.log(image);
 
   return (
     <div className='max-w-sm max-lg:max-w-md  rounded-xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md'>
@@ -85,7 +86,7 @@ export default function PackageCard({
             />
           ))}
           <span className='text-sm text-gray-500 ml-1'>
-            ({reviews.toLocaleString()})
+            {/* ({reviews.toLocaleString()}) */}
           </span>
         </div>
 

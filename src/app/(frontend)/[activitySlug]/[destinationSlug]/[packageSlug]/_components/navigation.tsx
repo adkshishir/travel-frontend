@@ -2,13 +2,16 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const tabs = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'itinerary', label: 'Itinerary' },
-  { id: 'inclusions', label: 'Inclusions' },
+  { id: 'overview', label: 'Trip Details' },
   { id: 'reviews', label: 'Reviews' },
+
+  { id: 'itinerary', label: 'Itinerary' },
   { id: 'map', label: 'Map' },
+  { id: 'inclusions', label: 'Include & Exclude' },
+  { id: 'information', label: 'Trip Information' },
   { id: 'faq', label: 'FAQ' },
 ];
 
@@ -27,7 +30,7 @@ export function Navigation() {
               ? 'border-primary text-primary'
               : 'border-transparent text-muted-foreground hover:border-muted hover:text-foreground'
           )}>
-          {tab.label}
+          <Link href={`#${tab.id}`}>{tab.label}</Link>
         </button>
       ))}
     </div>

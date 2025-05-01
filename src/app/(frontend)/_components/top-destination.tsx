@@ -2,9 +2,13 @@ import DestinationCard from '@/components/destinations/destination-card';
 import H1 from '@/components/typography/h1';
 import P from '@/components/typography/P';
 import PrimaryText from '@/components/typography/primary';
+import ENDPOINTS from '@/utils/endpoints';
+import { fetchData } from '@/utils/request-intregation';
 import React from 'react';
 
-const TopDestination = () => {
+const TopDestination = async() => {
+  const destinations = await fetchData(ENDPOINTS.DESTINATIONS );
+
   return (
     <section className='mx-auto max-w-[1180px] max-lg:px-4 mt-32 max-lg:mt-16'>
       <div className='text-center  max-w-2xl grid  mx-auto'>
@@ -19,7 +23,29 @@ const TopDestination = () => {
         </P>
       </div>
       <div className='mt-8 grid grid-cols-2 max-lg:justify-center lg:grid-cols-4 gap-4 lg:gap-8 justify-between '>
-        <DestinationCard
+        {
+          destinations?.map(
+            (destination: {
+              id: number;
+              name: string;
+              slug: string;
+              description: string;
+              activity: { slug: string };
+              media: { thumbnail: string; alt: string };
+            }) => (
+              <DestinationCard
+                activitySlug={destination?.activity?.slug}
+                key={destination?.id}
+                slug={destination?.slug}
+                name={destination?.name}
+                description={destination?.description}
+                imageUrl={destination?.media?.thumbnail}
+                alt={destination?.media?.alt}
+              />
+            )
+          )
+        }
+        {/* <DestinationCard
           name='Bali'
           description='Top Destination'
           imageUrl='/images/hero.jpg'
@@ -78,7 +104,7 @@ const TopDestination = () => {
           name='Bali'
           description='Top Destination'
           imageUrl='/images/hero.jpg'
-        />
+        /> */}
       </div>
     </section>
   );
