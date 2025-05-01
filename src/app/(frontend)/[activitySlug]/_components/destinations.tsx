@@ -26,7 +26,6 @@ export default function Destinations({
     activitySlug: ParamValue;
   activityName: string;
 }) {
-  console.log(destinations);
   // const [destinations] = useState<Destination[]>([
   //   {
   //     id: '1',

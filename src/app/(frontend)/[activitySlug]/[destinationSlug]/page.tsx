@@ -8,7 +8,6 @@ import ENDPOINTS from '@/utils/endpoints';
 const DestinationPage = async ({ params }: { params: Promise<Params> }) => {
   const { activitySlug, destinationSlug } = await params;
   const result = await fetchData(ENDPOINTS.DESTINATIONS + '/' + destinationSlug);
-  console.log(result);
   return (
     <main>
       <Banner

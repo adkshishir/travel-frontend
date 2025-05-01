@@ -8,7 +8,6 @@ import Link from 'next/link';
 
 const HeroSection = async () => {
   const carousels = await fetchData(ENDPOINTS.CAROUSELS + '/home');
-  console.log(carousels);
   return (
     <section className='relative h-[60vh]  lg:h-[85vh]'>
       <Image

@@ -30,7 +30,6 @@ const OtpForm = () => {
       };
       const responseData = await postAndPatch(ENDPOINTS.AUTH_VERIFY, data);
       if (responseData) {
-        console.log(responseData);
         localStorage.removeItem('email');
         await setPersistentCookie('token', responseData.token);
         router.push('/auth/login');

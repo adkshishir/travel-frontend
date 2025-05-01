@@ -118,7 +118,6 @@ const CarouselForm = ({
     submitLabel: initialData ? 'Update' : 'Create',
   };
   async function handleSubmit(data: any) {
-    console.log(data);
     const { media, alt, ...rest } = data;
     if (data.media) {
       const response = await uploadImage({

@@ -6,7 +6,6 @@ import React from 'react';
 
 const ReviewsPage = async () => {
     const reviews = await fetchData(ENDPOINTS.REVIEWS);
-    console.log(reviews);
   return (
     <div className='grid gap-4'>
       <Link

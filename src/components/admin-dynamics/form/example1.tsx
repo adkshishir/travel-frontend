@@ -139,17 +139,14 @@ export default function ExamplePage() {
   };
 
   const handleLoginSubmit = (data: any) => {
-    console.log('Login form submitted:', data);
     setLoginData(data);
   };
 
   const handleContactSubmit = (data: any) => {
-    console.log('Contact form submitted:', data);
     setContactData(data);
   };
 
   const handleSurveySubmit = (data: any) => {
-    console.log('Survey form submitted:', data);
     setSurveyData(data);
   };
 

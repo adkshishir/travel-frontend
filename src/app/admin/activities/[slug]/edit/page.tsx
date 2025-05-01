@@ -7,7 +7,6 @@ import ActivityForm from '../../_components/activity-form';
 const EditActivities = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
   const result = await fetchData(ENDPOINTS.ACTIVITIES + '/' + slug);
-  console.log(result);
   return (
     <div>
       <h1 className='text-2xl font-semibold mb-2'>Edit Activity</h1>

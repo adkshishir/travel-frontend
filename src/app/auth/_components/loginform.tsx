@@ -23,7 +23,6 @@ const Auth = () => {
   async function handleSubmit(data: any) {
     const responseData = await postAndPatch(ENDPOINTS.AUTH, data);
     if (responseData) {
-      console.log(responseData);
       localStorage.setItem('email', data.email);
       router.push('/auth/verify');
     }

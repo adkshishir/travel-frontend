@@ -10,7 +10,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const { activitySlug, destinationSlug, packageSlug } = await params;
   const result = (await fetchData(ENDPOINTS.PACKAGES + '/' + packageSlug))
     ?.package;
-  console.log('resutl', result);
   return (
     <div className='min-h-screen  relative'>
       <Banner

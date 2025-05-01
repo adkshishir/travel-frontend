@@ -112,7 +112,6 @@ export default function Home() {
   };
 
   const handleSubmit = (data: any) => {
-    console.log('Form submitted:', data);
     setFormData(data);
     setSubmitted(true);
 

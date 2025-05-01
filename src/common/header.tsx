@@ -101,11 +101,9 @@ export default function Header() {
   useEffect(() => {
     (async () => {
       const navs = await fetchData(ENDPOINTS.NAV_ITEMS);
-      console.log(navs, 'navsssssssssssss');
       setNavItems(navs);
     })();
   }, []);
-  console.log(navItems);
 
   // Handle activity hover/click for desktop
   const handleActivityInteraction = (index: number) => {

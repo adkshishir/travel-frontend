@@ -21,7 +21,7 @@ export default function AboutPage() {
         <AboutValues />
         <AboutTeam />
         <AboutPartners />
-        <TestimonialCarousel />
+        <TestimonialCarousel testimonials={[]} />
         <AboutContact />
       </div>
     </div>
