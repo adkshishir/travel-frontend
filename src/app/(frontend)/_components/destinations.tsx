@@ -16,7 +16,7 @@ interface Destination {
 
 export default async function Destinations() {
   const fetchedDestinations = await fetchData(ENDPOINTS.DESTINATIONS);
-  const destinations: Destination[] = fetchedDestinations?.filter((destination: any,index:number) => index < 4).map((destination: any) => ({
+  const destinations: Destination[]|undefined = fetchedDestinations?.filter((destination: any,index:number) => index < 4).map((destination: any) => ({
     id: destination.id,
     name: destination.name,
     rating: destination.rating,
@@ -74,7 +74,7 @@ export default async function Destinations() {
         <H1 className='mb-8'>Search a best place in the world</H1>
       </div>
       <div className='grid grid-cols-1 h-full md:grid-cols-2 lg:grid-cols-3  lg:grid-rows-2 gap-4'>
-        {destinations.map((destination, index) => (
+        {destinations?.map((destination, index) => (
           <div
             key={destination.id}
             className={cn(

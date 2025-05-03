@@ -24,7 +24,7 @@ export type Testimonial = {
 export function TestimonialCarousel({
   testimonials,
 }: {
-  testimonials: Testimonial[];
+  testimonials: Testimonial[]|undefined;
 }) {
   const [api, setApi] = React.useState<CarouselApi>();
 
@@ -32,7 +32,7 @@ export function TestimonialCarousel({
     <div className='relative max-w-full mx-auto'>
       <Carousel setApi={setApi} className='w-full'>
         <CarouselContent className='lg:-ml-4'>
-          {testimonials.map((testimonial, index) => (
+          {testimonials?.map((testimonial, index) => (
             <CarouselItem
               key={index}
               className='lg:pl-4 md:basis-1/2 lg:basis-1/3'>

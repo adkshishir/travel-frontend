@@ -10,7 +10,7 @@ import {
 export default function TravelAccordion({
   data,
 }: {
-  data: { question: string; answer: string }[];
+  data: { question: string; answer: string }[]|undefined;
 }) {
   return (
     <div className='w-full bg-white  rounded-lg'>
@@ -20,7 +20,7 @@ export default function TravelAccordion({
         collapsible
         className='w-full'>
         {
-          data.map((item, index) => (
+          data?.map((item, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}
