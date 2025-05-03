@@ -13,11 +13,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import TravelAccordion from '@/components/travel/accordion';
 import { extractDataFromHTML } from './extract-data';
-import Packages from '../../_components/packages';
+import Packages, { Package } from '../../_components/packages';
 import Image from 'next/image';
 
-export function PackageDetails({ pack }: { pack: any }) {
-  const { itinerary, includes } = pack;
+export function PackageDetails({ pack }: { pack: any | undefined }) {
+  // const { itinerary, includes } = pack;
+  const itinerary = pack?.itinerary || '';
+  const includes = pack?.includes || '';
   const extractData = extractDataFromHTML(itinerary);
   const extractIncludes = extractDataFromHTML(includes);
 
