@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, use, useEffect } from 'react';
 import Link from 'next/link';
 import {
   BarChart3,
@@ -33,7 +33,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-
+import { getCookie } from '@/utils/cookie-handler';
+import { useRouter } from 'next/navigation';
 export default function AdminLayout({
   children,
 }: {
@@ -42,6 +43,19 @@ export default function AdminLayout({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const [hasToken, setHasToken] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    (async () => {
+      const token = await getCookie('token');
+      console.log(token);
+      if (!token) {
+        router.push('/auth');
+        return;
+      }
+      setHasToken(true);
+    })();
+  }, []);
 
   const navItems = [
     {
@@ -88,7 +102,8 @@ export default function AdminLayout({
     },
   ];
 
-  return (
+  console.log(hasToken);
+  return hasToken ? (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-900'>
       {/* Mobile Sidebar Overlay */}
       {mobileOpen && (
@@ -277,5 +292,7 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
