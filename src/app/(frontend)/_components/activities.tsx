@@ -7,7 +7,7 @@ import React from 'react';
 
 const Activities = async () => {
   const activities = await fetchData(ENDPOINTS.ACTIVITIES);
-
+  console.log(activities);
   return (
     <section className=' mx-auto max-w-[1180px] max-lg:px-4 mt-16'>
       <PrimaryText className='mx-auto w-fit'>Activities</PrimaryText>
@@ -16,7 +16,7 @@ const Activities = async () => {
         {activities?.map(
           (activity: {
             id: number;
-            title: string;
+            name: string;
             slug: string;
             description: string;
             media: { thumbnail: string; alt: string };
@@ -24,33 +24,13 @@ const Activities = async () => {
             <ActivitiesCard
               key={activity?.id}
               slug={activity?.slug}
-              title={activity?.title}
+              title={activity?.name}
               description={activity?.description}
               image={activity?.media?.thumbnail}
               alt={activity?.media?.alt}
             />
           )
         )}
-        {/* <ActivitiesCard
-          title='title'
-          description='descirpiotnasd asdf asdf asdf as df'
-          image=''
-        />{' '}
-        <ActivitiesCard
-          title='title'
-          description='descirpiotnasd asdf asdf asdf as dfnnnnnnn'
-          image=''
-        />{' '}
-        <ActivitiesCard
-          title='title'
-          description='descirpiotnasd asdf asdf asdf as df'
-          image=''
-        />
-        <ActivitiesCard
-          title='title'
-          description='descirpiotnasd asdf asdf asdf as df'
-          image=''
-        /> */}
       </div>
     </section>
   );

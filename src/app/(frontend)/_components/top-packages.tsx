@@ -3,10 +3,12 @@ import H1 from '@/components/typography/h1';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
+import Link from 'next/link';
 import React from 'react';
 
 const TopPackages = async () => {
   const data = await fetchData(ENDPOINTS.PACKAGES);
+  console.log(data);
   return (
     <section className='mx-auto max-w-[1180px] mt-32 max-lg:mt-16'>
       <div className='text-center max-w-2xl mx-auto'>
@@ -17,49 +19,25 @@ const TopPackages = async () => {
         {data?.map(
           (item: any, index: number) =>
             index <= 2 && (
-              <PackageCard
+              <Link
                 key={item.id}
-                title={item.title}
-                location={item.location}
-                image={
-                  item.media?.length > 0
-                    ? item.media[0].thumbnail
-                    : '/images/hero.jpg'
-                }
-                price={item.price}
-                rating={item.rating}
-                reviews={item.reviews}
-                popular
-              />
+                href={`/${item.destination.activity.slug}/${item.destination.slug}/${item.slug}`}>
+                <PackageCard
+                  title={item.title}
+                  location={item.location}
+                  image={
+                    item.media?.length > 0
+                      ? item.media[0].thumbnail
+                      : '/images/hero.jpg'
+                  }
+                  price={item.price}
+                  rating={item.rating}
+                  reviews={item.reviews}
+                  popular
+                />
+              </Link>
             )
         )}
-        {/* <PackageCard
-          title='Colombian Coffee Trails'
-          location='Regions'
-          image='/images/hero.jpg'
-          price={150}
-          rating={4}
-          reviews={4035}
-          popular
-        />
-        <PackageCard
-          title='Colombian Coffee Trails'
-          location='Istanbul, Turkey'
-          image='/images/hero.jpg'
-          price={150}
-          rating={4}
-          reviews={4035}
-          popular
-        />{' '}
-        <PackageCard
-          title='Colombian Coffee Trails'
-          location='Another Region'
-          image='/images/hero.jpg'
-          price={150}
-          rating={4}
-          reviews={4035}
-          popular
-        /> */}
       </div>
     </section>
   );

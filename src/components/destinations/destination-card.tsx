@@ -30,7 +30,7 @@ export default function DestinationCard({
       </div>
       <div className='flex flex-col'>
         <h3 className='font-medium text-base'>{name}</h3>
-        <p className='text-sm text-muted-foreground'>{description}</p>
+        <p className='text-sm text-muted-foreground line-clamp-2'>{description}</p>
       </div>
     </Link>
   );

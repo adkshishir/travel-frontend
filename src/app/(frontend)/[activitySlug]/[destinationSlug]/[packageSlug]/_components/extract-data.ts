@@ -20,25 +20,31 @@ export function extractDataFromHTML(html: string): ExtractedData {
   const h3Elements = doc.querySelectorAll('h3');
   h3Elements.forEach((h3) => {
     const subtitle = h3.textContent?.trim() || '';
-    let ul = h3.nextElementSibling;
-
-    // Skip over any non-ul elements if present
-    while (ul && ul.tagName.toLowerCase() !== 'ul') {
-      ul = ul.nextElementSibling;
-    }
+    let nextElement = h3.nextElementSibling;
 
     const items: string[] = [];
-    if (ul) {
-      const lis = ul.querySelectorAll('li');
-      lis.forEach((li) => {
-        const text = li.textContent?.trim();
+
+    // Check for <p> and <ul> tags after <h3>
+    while (nextElement && nextElement.tagName.toLowerCase() !== 'h3') {
+      if (nextElement.tagName.toLowerCase() === 'p') {
+        const text = nextElement.textContent?.trim();
         if (text && text !== '') {
-          items.push(text);
+          items.push(text); // Add <p> content to items
         }
-      });
+      } else if (nextElement.tagName.toLowerCase() === 'ul') {
+        const lis = nextElement.querySelectorAll('li');
+        lis.forEach((li) => {
+          const text = li.textContent?.trim();
+          if (text && text !== '') {
+            items.push(text); // Add <li> content to items
+          }
+        });
+        break; // Stop after processing the <ul>
+      }
+      nextElement = nextElement.nextElementSibling;
     }
 
-    sections.push({ subtitle, items });
+    sections.push({ subtitle, items }); // Keep description empty if not needed
   });
 
   return { title, sections };
