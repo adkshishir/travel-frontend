@@ -11,7 +11,7 @@ const tabs = [
   { id: 'itinerary', label: 'Itinerary' },
   { id: 'map', label: 'Map' },
   { id: 'inclusions', label: 'Include & Exclude' },
-  { id: 'information', label: 'Trip Information' },
+  { id: 'good-to-know', label: 'Good To Know' },
   { id: 'faq', label: 'FAQ' },
 ];
 

@@ -2,10 +2,6 @@
 import {
   Clock,
   MapPin,
-  Utensils,
-  Hotel,
-  Car,
-  Camera,
   Users,
 } from 'lucide-react';
 
@@ -13,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import TravelAccordion from '@/components/travel/accordion';
 import { extractDataFromHTML } from './extract-data';
-import Packages, { Package } from '../../_components/packages';
 import Image from 'next/image';
 
 export function PackageDetails({ pack }: { pack: any | undefined }) {
@@ -63,63 +58,6 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
             id='highlights'
             className='space-y-4 text-muted-foreground'></div>
         </div>
-        {/* <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-          <div className='rounded-lg border bg-card p-4'>
-            <div className='flex items-center gap-3'>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary'>
-                <Hotel className='h-5 w-5' />
-              </div>
-              <div>
-                <h3 className='font-medium'>Luxury Accommodations</h3>
-                <p className='text-sm text-muted-foreground'>
-                  5-star beachfront resort
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className='rounded-lg border bg-card p-4'>
-            <div className='flex items-center gap-3'>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary'>
-                <Utensils className='h-5 w-5' />
-              </div>
-              <div>
-                <h3 className='font-medium'>Gourmet Dining</h3>
-                <p className='text-sm text-muted-foreground'>
-                  Daily breakfast & 3 special dinners
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className='rounded-lg border bg-card p-4'>
-            <div className='flex items-center gap-3'>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary'>
-                <Camera className='h-5 w-5' />
-              </div>
-              <div>
-                <h3 className='font-medium'>Guided Excursions</h3>
-                <p className='text-sm text-muted-foreground'>
-                  4 premium tours included
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className='rounded-lg border bg-card p-4'>
-            <div className='flex items-center gap-3'>
-              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary'>
-                <Car className='h-5 w-5' />
-              </div>
-              <div>
-                <h3 className='font-medium'>Private Transportation</h3>
-                <p className='text-sm text-muted-foreground'>
-                  Airport transfers & tour transport
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
 
       {/* Itinerary Section */}
@@ -137,9 +75,9 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
             </div>
           ))}
 
-          <Button variant='outline' className='mt-2 w-full'>
+          {/* <Button onClick={} variant='outline' className='mt-2 w-full'>
             View Full Itinerary
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -189,103 +127,15 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
                 </div>
               )
           )}
-
-          {/* <div>
-            <h3 className='mb-2 font-medium'>What's Not Included</h3>
-            <ul className='space-y-2 text-sm text-muted-foreground'>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>International flights</span>
-              </li>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>Travel insurance</span>
-              </li>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>Meals not mentioned in the itinerary</span>
-              </li>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>Personal expenses & souvenirs</span>
-              </li>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>Optional activities not in itinerary</span>
-              </li>
-              <li className='flex items-start'>
-                <svg
-                  className='mr-2 h-5 w-5 text-red-500'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-                <span>Visa fees (if applicable)</span>
-              </li>
-            </ul>
-          </div> */}
         </div>
+      </div>
+      <div id='good-to-know'>
+        <h2 className='mb-4 text-xl font-semibold'>Good to Know</h2>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: pack?.goodtoknow || '',
+          }}
+          className='space-y-4 text-muted-foreground'></div>
       </div>
       <div id='map'>
         <h2 className='mb-4 text-lg font-semibold'>Map</h2>
