@@ -7,7 +7,6 @@ import React from 'react';
 
 const Activities = async () => {
   const activities = await fetchData(ENDPOINTS.ACTIVITIES);
-  console.log(activities);
   return (
     <section className=' mx-auto max-w-[1180px] max-lg:px-4 mt-16'>
       <PrimaryText className='mx-auto w-fit'>Activities</PrimaryText>
