@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Calendar, MessageSquare, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface BlogCardProps {
   blog: {
@@ -11,6 +12,7 @@ interface BlogCardProps {
     date: string;
     comments: number;
     shares: number;
+    slug?: string; // Added slug for navigation
   };
 }
 
@@ -24,7 +26,11 @@ export default function BlogCard({ blog }: BlogCardProps) {
         height={400}
         className='w-full h-auto rounded-lg object-cover aspect-[16/9] mb-4'
       />
-      <h2 className='text-2xl font-bold text-slate-800 mb-2'>{blog.title}</h2>
+      <Link href={`/blogs/${blog.slug || blog.id}`}>
+        <h2 className='text-2xl font-bold text-slate-800 mb-2 hover:text-orange-500 cursor-pointer transition-colors'>
+          {blog.title}
+        </h2>
+      </Link>
       <p className='text-slate-600 mb-4'>{blog.excerpt}</p>
 
       <div className='flex items-center justify-between mb-4'>
@@ -48,9 +54,11 @@ export default function BlogCard({ blog }: BlogCardProps) {
         </div>
       </div>
 
-      <Button variant='default' className='bg-orange-500 hover:bg-orange-600'>
-        Read More
-      </Button>
+      <Link href={`/blogs/${blog.slug || blog.id}`}>
+        <Button variant='default' className='bg-orange-500 hover:bg-orange-600'>
+          Read More
+        </Button>
+      </Link>
     </div>
   );
 }

@@ -11,6 +11,7 @@ const ENDPOINTS = {
   REVIEWS: 'reviews',
   FAQ: 'faqs',
   BLOGS: 'blogs',
+  AUTHORS: 'authors',
 };
 
 export default ENDPOINTS;
