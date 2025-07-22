@@ -192,7 +192,7 @@ export default function Header() {
                               {destination.packages.map((pkg) => (
                                 <Link
                                   key={pkg.slug}
-                                  href={`/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg.slug
+                                  href={`/${activity.slug}/${destination.slug}/${pkg.slug
                                     .toLowerCase()
                                     .replace(/\s+/g, '-')}`}
                                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orange-500'
@@ -332,7 +332,7 @@ export default function Header() {
                                               delay: pkgIndex * 0.05,
                                             }}>
                                             <Link
-                                              href={`/${activity.name.toLowerCase()}/${destination.name.toLowerCase()}/${pkg.slug
+                                              href={`/${activity.slug}/${destination.slug}/${pkg.slug
                                                 .toLowerCase()
                                                 .replace(/\s+/g, '-')}`}
                                               className='block py-2 text-sm text-gray-600 hover:text-orange-500'
