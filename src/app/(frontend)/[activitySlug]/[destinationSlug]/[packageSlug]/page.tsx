@@ -6,8 +6,8 @@ import { Params } from 'next/dist/server/request/params';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 
-export async function generateMetadata({ params }: { params: { packageSlug: string } }) {
-  const { packageSlug } = params;
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
+  const { packageSlug } = await params;
   const result = (await fetchData(ENDPOINTS.PACKAGES + '/' + packageSlug))?.package;
   const seo = result?.seo || {};
   const title = seo.metaTitle || result?.title || 'Package Details';

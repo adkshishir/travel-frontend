@@ -5,8 +5,8 @@ import { Params } from 'next/dist/server/request/params';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 
-export async function generateMetadata({ params }: { params: { destinationSlug: string } }) {
-  const { destinationSlug } = params;
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
+  const { destinationSlug } = await params;
   const result = await fetchData(ENDPOINTS.DESTINATIONS + '/' + destinationSlug);
   const seo = result?.seo || {};
   const title = seo.metaTitle || result?.name || 'Destination';
