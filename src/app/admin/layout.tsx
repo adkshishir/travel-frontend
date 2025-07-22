@@ -106,6 +106,12 @@ export default function AdminLayout({
       href: '/admin/blogs',
       description: 'Manage your blog posts',
     },
+    {
+      icon: User,
+      label: 'Authors',
+      href: '/admin/authors',
+      description: 'Manage blog authors',
+    },
   ];
 
   console.log(hasToken);
