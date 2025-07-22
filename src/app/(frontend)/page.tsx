@@ -8,6 +8,27 @@ import Destinations from './_components/destinations';
 import Faq from './_components/faq';
 import Blogs from './_components/blogs';
 
+export const metadata = {
+  title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
+  description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+  keywords: 'poon hill, trekking, nepal, tours, hiking, ghorepani, annapurna, adventure, himalayas',
+  alternates: { canonical: 'https://poonhill.com/' },
+  openGraph: {
+    title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+    url: 'https://poonhill.com/',
+    type: 'website',
+    images: ['/images/hero.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+    images: ['/images/hero.jpg'],
+  },
+  // Optionally add schema here
+};
+
 export default function Home() {
   return (
     <main>

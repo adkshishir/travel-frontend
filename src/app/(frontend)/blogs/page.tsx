@@ -2,57 +2,12 @@ import Banner from '@/components/banner';
 import BlogCard from '@/components/blog/blog-card-big';
 import Sidebar from '@/components/blog/side-bar';
 import Pagination from '@/components/pagination';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
 import React from 'react';
 
-const BlogsPage = () => {
-  // Sample blog data
-  const blogs = [
-    {
-      id: 1,
-      title:
-        "Anatolian Adventure: Off-the-Beaten-Path Discoveries in Turkey's Heartland",
-      image: '',
-      excerpt:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo con quis nostrud exercitation quis nostrud esse enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud',
-      date: '12 March 2024',
-      comments: 14,
-      shares: 8,
-    },
-    {
-      id: 2,
-      title:
-        'Soaking in the Natural Thermal Springs and Cotton Castle Terraces',
-      image: '',
-
-      excerpt:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo con quis nostrud exercitation quis nostrud esse enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud',
-      date: '12 March 2024',
-      comments: 14,
-      shares: 5,
-    },
-    {
-      id: 3,
-      title: 'Hidden Gems of the Mediterranean Coast: Secret Beaches and Coves',
-      image: '',
-
-      excerpt:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo con quis nostrud exercitation quis nostrud esse enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud',
-      date: '10 March 2024',
-      comments: 9,
-      shares: 12,
-    },
-    {
-      id: 4,
-      title: 'Mountain Trekking: Exploring the Peaks of the Taurus Range',
-      image: '',
-
-      excerpt:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo con quis nostrud exercitation quis nostrud esse enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud',
-      date: '8 March 2024',
-      comments: 7,
-      shares: 3,
-    },
-  ];
+const BlogsPage = async () => {
+  const blogs = await fetchData(ENDPOINTS.BLOGS);
   return (
     <main>
       <Banner
@@ -64,12 +19,22 @@ const BlogsPage = () => {
       <div className='flex flex-col lg:flex-row gap-8 max-lg:px-4 max-w-[1180px] mx-auto my-16'>
         {/* Main content */}
         <div className='lg:w-2/3'>
-          {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
+          {blogs?.map((blog: any) => (
+            <BlogCard key={blog.id} blog={{
+              id: blog.id,
+              title: blog.title,
+              image: blog.media?.thumbnail || '/images/hero.jpg',
+              excerpt: blog.description?.slice(0,200) || '',
+              date: blog.createdAt?.slice(0,10) || '',
+              comments: blog.comments?.length || 0,
+              shares: 0,
+            }} />
           ))}
 
-          {/* Pagination */}
-          <Pagination currentPage={1} totalPages={3} />
+          {/* TODO: Implement real pagination */}
+          {blogs && blogs.length > 6 && (
+            <Pagination currentPage={1} totalPages={1} />
+          )}
         </div>
 
         {/* Sidebar */}

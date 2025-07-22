@@ -6,6 +6,38 @@ import { Params } from 'next/dist/server/request/params';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 
+export async function generateMetadata({ params }: { params: { packageSlug: string } }) {
+  const { packageSlug } = params;
+  const result = (await fetchData(ENDPOINTS.PACKAGES + '/' + packageSlug))?.package;
+  const seo = result?.seo || {};
+  const title = seo.metaTitle || result?.title || 'Package Details';
+  const description = seo.metaDescription || result?.description || 'Explore this package.';
+  const keywords = seo.metaKeywords || '';
+  const canonical = seo.metaCanonical || '';
+  const image = result?.media?.[0]?.thumbnail || '/images/hero.jpg';
+  const url = typeof window !== 'undefined' ? window.location.href : '';
+  return {
+    title,
+    description,
+    keywords,
+    alternates: canonical ? { canonical } : undefined,
+    openGraph: {
+      title,
+      description,
+      url: canonical || url,
+      type: 'article',
+      images: [image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+    ...(seo.schema && { other: { 'application/ld+json': seo.schema } }),
+  };
+}
+
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { activitySlug, destinationSlug, packageSlug } = await params;
   const result = (await fetchData(ENDPOINTS.PACKAGES + '/' + packageSlug))

@@ -108,6 +108,12 @@ export function DynamicForm({ config, onSubmit }: DynamicFormProps) {
         case 'date':
           fieldSchema = z.date();
           break;
+        case 'checkbox':
+          fieldSchema = z.boolean().default(false);
+          break;
+        case 'switch':
+          fieldSchema = z.boolean().default(false);
+          break;
         case 'file':
           fieldSchema = z.any();
           break;
@@ -219,13 +225,16 @@ export function DynamicForm({ config, onSubmit }: DynamicFormProps) {
 
   // Render a field based on its type
   const renderField = (field: FieldConfig) => {
+    // Special case for richtext editor - make it span full width
+    const isFullWidth = field.type === 'richtext';
+    
     return (
       <FormField
         key={field.name}
         control={form.control}
         name={field.name}
         render={({ field: formField }) => (
-          <FormItem>
+          <FormItem className={isFullWidth ? 'lg:col-span-2' : ''}>
             {field.type !== 'checkbox' && field.type !== 'switch' && (
               <FormLabel>{field.label}</FormLabel>
             )}
@@ -367,7 +376,11 @@ export function DynamicForm({ config, onSubmit }: DynamicFormProps) {
           />
         );
       case 'richtext':
-        return <CKEditor value={field.value} onChange={field.onChange} />;
+        return (
+          <div className="w-full min-h-[400px] border rounded-md">
+            <CKEditor value={field.value} onChange={field.onChange} />
+          </div>
+        );
       default:
         return (
           <Input

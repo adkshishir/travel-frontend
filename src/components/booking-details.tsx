@@ -15,16 +15,46 @@ import {
 } from '@/components/ui/select';
 
 import React from 'react';
+import { postAndPatch } from '@/utils/request-intregation';
+import toast from 'react-hot-toast';
 
 const BookingDetails = () => {
   const [departureDate, setDepartureDate] = useState('');
   const [travelers, setTravelers] = useState('2 Adults');
+  const [selectedOptions, setSelectedOptions] = useState<{[key:string]: boolean}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setTravelers('2 Adults');
   }, []);
+
+  const handleOptionChange = (option: string) => {
+    setSelectedOptions((prev) => ({ ...prev, [option]: !prev[option] }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!departureDate) {
+      toast.error('Please select a departure date');
+      return;
+    }
+    setIsSubmitting(true);
+    const bookingPayload = {
+      startDate: departureDate,
+      travelers,
+      options: Object.keys(selectedOptions).filter((k) => selectedOptions[k]),
+      // Add more fields as needed (e.g., packageId, user info)
+    };
+    const response = await postAndPatch('booking', bookingPayload);
+    if (response) {
+      toast.success('Booking successful!');
+      // Optionally reset form or redirect
+    }
+    setIsSubmitting(false);
+  };
+
   return (
-    <div className='rounded-lg border bg-card p-5 shadow-sm'>
+    <form onSubmit={handleSubmit} className='rounded-lg border bg-card p-5 shadow-sm'>
       <div className='flex items-center justify-between'>
         <div>
           <span className='text-2xl font-bold'>$1,299</span>
@@ -52,7 +82,7 @@ const BookingDetails = () => {
 
       <div className='mt-4'>
         <Label htmlFor='travelers'>Travelers</Label>
-        <Select defaultValue={travelers}>
+        <Select value={travelers} onValueChange={setTravelers}>
           <SelectTrigger className='w-full'>
             <SelectValue placeholder='Select travelers' />
           </SelectTrigger>
@@ -60,9 +90,7 @@ const BookingDetails = () => {
             <SelectItem value='1 Adult'>1 Adult</SelectItem>
             <SelectItem value='2 Adults'>2 Adults</SelectItem>
             <SelectItem value='2 Adults, 1 Child'>2 Adults, 1 Child</SelectItem>
-            <SelectItem value='2 Adults, 2 Children'>
-              2 Adults, 2 Children
-            </SelectItem>
+            <SelectItem value='2 Adults, 2 Children'>2 Adults, 2 Children</SelectItem>
             <SelectItem value='Group (5+)'>Group (5+)</SelectItem>
           </SelectContent>
         </Select>
@@ -72,7 +100,7 @@ const BookingDetails = () => {
         <h3 className='font-medium'>Package Options</h3>
         <div className='mt-2 space-y-3'>
           <div className='flex items-start space-x-2'>
-            <Checkbox id='flight' />
+            <Checkbox id='flight' checked={!!selectedOptions['flight']} onCheckedChange={() => handleOptionChange('flight')} />
             <div className='grid gap-1.5 leading-none'>
               <Label htmlFor='flight' className='text-sm font-medium'>
                 Include International Flights
@@ -85,7 +113,7 @@ const BookingDetails = () => {
           </div>
 
           <div className='flex items-start space-x-2'>
-            <Checkbox id='upgrade' />
+            <Checkbox id='upgrade' checked={!!selectedOptions['upgrade']} onCheckedChange={() => handleOptionChange('upgrade')} />
             <div className='grid gap-1.5 leading-none'>
               <Label htmlFor='upgrade' className='text-sm font-medium'>
                 Upgrade to Luxury Villa
@@ -98,7 +126,7 @@ const BookingDetails = () => {
           </div>
 
           <div className='flex items-start space-x-2'>
-            <Checkbox id='spa' />
+            <Checkbox id='spa' checked={!!selectedOptions['spa']} onCheckedChange={() => handleOptionChange('spa')} />
             <div className='grid gap-1.5 leading-none'>
               <Label htmlFor='spa' className='text-sm font-medium'>
                 Spa Package
@@ -111,7 +139,7 @@ const BookingDetails = () => {
           </div>
 
           <div className='flex items-start space-x-2'>
-            <Checkbox id='insurance' />
+            <Checkbox id='insurance' checked={!!selectedOptions['insurance']} onCheckedChange={() => handleOptionChange('insurance')} />
             <div className='grid gap-1.5 leading-none'>
               <Label htmlFor='insurance' className='text-sm font-medium'>
                 Travel Insurance
@@ -152,13 +180,15 @@ const BookingDetails = () => {
         <span className='text-xl'>$1,428</span>
       </div>
 
-      <Button className='mt-6 w-full'>Book Package</Button>
+      <Button className='mt-6 w-full' type='submit' disabled={isSubmitting}>
+        {isSubmitting ? 'Booking...' : 'Book Package'}
+      </Button>
 
       <div className='mt-4 flex items-center justify-center gap-2 text-center text-sm text-muted-foreground'>
         <Users className='h-4 w-4' />
         <span>12 people booked this package in the last 24 hours</span>
       </div>
-    </div>
+    </form>
   );
 };
 

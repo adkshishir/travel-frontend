@@ -100,6 +100,12 @@ export default function AdminLayout({
       href: '/admin/faq',
       description: 'Manage your Home page faq',
     },
+    {
+      icon: Package,
+      label: 'Blogs',
+      href: '/admin/blogs',
+      description: 'Manage your blog posts',
+    },
   ];
 
   console.log(hasToken);

@@ -4,6 +4,40 @@ import H1 from '@/components/typography/h1';
 import P from '@/components/typography/P';
 import Image from 'next/image';
 import React from 'react';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  const result = (await fetchData(ENDPOINTS.BLOGS + '/' + slug))?.blog;
+  const seo = result?.seo || {};
+  const title = seo.metaTitle || result?.title || 'Blog Details';
+  const description = seo.metaDescription || result?.description || 'Read this blog.';
+  const keywords = seo.metaKeywords || '';
+  const canonical = seo.metaCanonical || '';
+  const image = result?.media?.thumbnail || '/images/hero.jpg';
+  const url = typeof window !== 'undefined' ? window.location.href : '';
+  return {
+    title,
+    description,
+    keywords,
+    alternates: canonical ? { canonical } : undefined,
+    openGraph: {
+      title,
+      description,
+      url: canonical || url,
+      type: 'article',
+      images: [image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+    ...(seo.schema && { other: { 'application/ld+json': seo.schema } }),
+  };
+}
 
 const BlogDetail = () => {
   return (

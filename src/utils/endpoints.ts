@@ -10,6 +10,7 @@ const ENDPOINTS = {
   NAV_ITEMS: 'activities/nav-items',
   REVIEWS: 'reviews',
   FAQ: 'faqs',
+  BLOGS: 'blogs',
 };
 
 export default ENDPOINTS;
