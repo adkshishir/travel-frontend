@@ -12,6 +12,7 @@ const ENDPOINTS = {
   FAQ: 'faqs',
   BLOGS: 'blogs',
   AUTHORS: 'authors',
+  BOOKING: 'booking',
 };
 
 export default ENDPOINTS;
