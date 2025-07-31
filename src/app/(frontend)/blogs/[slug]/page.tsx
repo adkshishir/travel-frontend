@@ -11,8 +11,7 @@ import '@/styles/blog-content.css';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const response = await fetchData(ENDPOINTS.BLOGS + '/' + slug);
-  const blog = response?.data;
+  const blog = await fetchData(ENDPOINTS.BLOGS + '/' + slug);
   const seo = blog?.seo || {};
   const title = seo.metaTitle || blog?.title || 'Blog Details';
   const description = seo.metaDescription || blog?.description || 'Read this blog.';
@@ -45,8 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
 
 const BlogDetail = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
-  const response = await fetchData(ENDPOINTS.BLOGS + '/' + slug);
-  const blog = response?.data;
+  const blog = await fetchData(ENDPOINTS.BLOGS + '/' + slug);
 
   // Handle case where blog is not found
   if (!blog) {

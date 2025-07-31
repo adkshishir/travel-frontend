@@ -8,7 +8,7 @@ import React from 'react';
 
 const BlogsPage = async () => {
   const response = await fetchData(ENDPOINTS.BLOGS);
-  const blogs = response?.data || []; // Fixed: use response.data instead of direct access
+  const blogs = response || []; // Fixed: use response.data instead of direct access
   
   return (
     <main>

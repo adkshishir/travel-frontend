@@ -1,10 +1,19 @@
 import { BookingSidebar } from './booking-sidebar';
 import BookingDetails from '@/components/booking-details';
 
-export function PackageBooking() {
+interface PackageBookingProps {
+  packageData?: {
+    id: number | string;
+    title?: string;
+    price?: number;
+    [key: string]: any;
+  };
+}
+
+export function PackageBooking({ packageData }: PackageBookingProps) {
   return (
     <BookingSidebar>
-      <BookingDetails />
+      <BookingDetails packageData={packageData} />
     </BookingSidebar>
   );
 }
