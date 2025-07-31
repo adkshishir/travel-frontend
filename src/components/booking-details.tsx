@@ -17,8 +17,18 @@ import {
 import React from 'react';
 import { postAndPatch } from '@/utils/request-intregation';
 import toast from 'react-hot-toast';
+import ENDPOINTS from '@/utils/endpoints';
 
-const BookingDetails = () => {
+interface BookingDetailsProps {
+  packageData?: {
+    id: number | string;
+    title?: string;
+    price?: number;
+    [key: string]: any;
+  };
+}
+
+const BookingDetails = ({ packageData }: BookingDetailsProps) => {
   const [departureDate, setDepartureDate] = useState('');
   const [travelers, setTravelers] = useState('2 Adults');
   const [selectedOptions, setSelectedOptions] = useState<{[key:string]: boolean}>({});
@@ -32,33 +42,74 @@ const BookingDetails = () => {
     setSelectedOptions((prev) => ({ ...prev, [option]: !prev[option] }));
   };
 
+  const formatDateToISO = (dateString: string): string => {
+    if (!dateString) return '';
+    
+    // If it's already in YYYY-MM-DD format, convert to ISO 8601
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+    
+    // Return ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
+    return date.toISOString();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!departureDate) {
       toast.error('Please select a departure date');
       return;
     }
-    setIsSubmitting(true);
-    const bookingPayload = {
-      startDate: departureDate,
-      travelers,
-      options: Object.keys(selectedOptions).filter((k) => selectedOptions[k]),
-      // Add more fields as needed (e.g., packageId, user info)
-    };
-    const response = await postAndPatch('booking', bookingPayload);
-    if (response) {
-      toast.success('Booking successful!');
-      // Optionally reset form or redirect
+
+    if (!packageData?.id) {
+      toast.error('Package information is missing');
+      return;
     }
-    setIsSubmitting(false);
+
+    setIsSubmitting(true);
+    
+    const formattedStartDate = formatDateToISO(departureDate);
+    if (!formattedStartDate) {
+      toast.error('Invalid date format');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Prepare other information with travelers and options
+    const selectedOptionsList = Object.keys(selectedOptions).filter((k) => selectedOptions[k]);
+    const otherInfo = {
+      travelers,
+      selectedOptions: selectedOptionsList,
+    };
+
+    const bookingPayload = {
+      packageId: parseInt(packageData.id.toString(), 10), // Ensure it's an integer
+      startDate: formattedStartDate, // ISO 8601 format
+      otherInformation: JSON.stringify(otherInfo), // Store travelers and options in otherInformation
+    };
+
+    try {
+      const response = await postAndPatch(ENDPOINTS.BOOKING, bookingPayload);
+      if (response) {
+        // toast.success('Booking successful!');
+        // Optionally reset form or redirect
+        setDepartureDate('');
+        setSelectedOptions({});
+      }
+    } catch (error) {
+      toast.error('Booking failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className='rounded-lg border bg-card p-5 shadow-sm'>
       <div className='flex items-center justify-between'>
         <div>
-          <span className='text-2xl font-bold'>$1,299</span>
-          <span className='text-sm text-muted-foreground'>/person $1,599</span>
+          <span className='text-2xl font-bold'>${packageData?.price || 1299}</span>
+          <span className='text-sm text-muted-foreground'>/person</span>
         </div>
         <div className='rounded-md bg-orange-500 px-2 py-1 text-xs font-medium text-white'>
           20% OFF
@@ -70,13 +121,12 @@ const BookingDetails = () => {
         <div className='relative mt-1'>
           <Input
             id='departure-date'
-            type='text'
-            placeholder='mm/dd/yyyy'
+            type='date'
             value={departureDate}
             onChange={(e) => setDepartureDate(e.target.value)}
-            className='pr-10'
+            className='w-full'
+            min={new Date().toISOString().split('T')[0]} // Prevent past dates
           />
-          <Calendar className='absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
         </div>
       </div>
 
@@ -160,7 +210,7 @@ const BookingDetails = () => {
         <div className='mt-2 space-y-2'>
           <div className='flex items-center justify-between'>
             <span>Base Package (per person)</span>
-            <span className='font-medium'>$1,299</span>
+            <span className='font-medium'>${packageData?.price || 1299}</span>
           </div>
           <div className='flex items-center justify-between'>
             <span>Selected Options</span>
@@ -177,7 +227,7 @@ const BookingDetails = () => {
 
       <div className='flex items-center justify-between font-medium'>
         <span>Total (per person)</span>
-        <span className='text-xl'>$1,428</span>
+        <span className='text-xl'>${packageData?.price || 1299}</span>
       </div>
 
       <Button className='mt-6 w-full' type='submit' disabled={isSubmitting}>
