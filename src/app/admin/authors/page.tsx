@@ -8,14 +8,14 @@ import Link from 'next/link';
 import React from 'react';
 
 const Authors = async () => {
-  const result = await fetchData(ENDPOINTS.AUTHORS).catch(() => ({ data: [] }));
+  const result = await fetchData(ENDPOINTS.AUTHORS).catch(() => ([]));
 
   
   // Calculate stats
-  const totalAuthors = result.length;
-  const activeAuthors = result.filter((author: any) => author.status === 'active').length;
-  const authorsWithBio = result.filter((author: any) => author.bio).length;
-  const authorsWithWebsite = result.filter((author: any) => author.website).length;
+  const totalAuthors = result?.length;
+  const activeAuthors = result?.filter((author: any) => author.status === 'active').length;
+  const authorsWithBio = result?.filter((author: any) => author.bio).length;
+  const authorsWithWebsite = result?.filter((author: any) => author.website).length;
   
   return (
     <div className='space-y-6'>

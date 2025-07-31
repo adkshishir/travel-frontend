@@ -23,11 +23,11 @@ import Link from 'next/link';
 const AdminDashboard = async () => {
   // Fetch data for dashboard stats with proper error handling
   const [activitiesRes, destinationsRes, packagesRes, blogsRes, reviewsRes] = await Promise.all([
-    fetchData(ENDPOINTS.ACTIVITIES).catch(() => ({ data: [] })),
-    fetchData(ENDPOINTS.DESTINATIONS).catch(() => ({ data: [] })),
-    fetchData(ENDPOINTS.PACKAGES).catch(() => ({ data: [] })),
-    fetchData(ENDPOINTS.BLOGS).catch(() => ({ data: [] })),
-    fetchData(ENDPOINTS.REVIEWS).catch(() => ({ data: [] }))
+    fetchData(ENDPOINTS.ACTIVITIES).catch(() => ([])),
+    fetchData(ENDPOINTS.DESTINATIONS).catch(() => ([])),
+    fetchData(ENDPOINTS.PACKAGES).catch(() => ([])),
+    fetchData(ENDPOINTS.BLOGS).catch(() => ([])),
+    fetchData(ENDPOINTS.REVIEWS).catch(() => ([]))
   ]);
 
   const activities = activitiesRes || [];

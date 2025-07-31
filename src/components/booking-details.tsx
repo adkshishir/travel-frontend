@@ -98,7 +98,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
         setSelectedOptions({});
       }
     } catch (error) {
-      toast.error('Booking failed. Please try again.');
+      // toast.error('Booking failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

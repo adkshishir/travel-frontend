@@ -5,8 +5,7 @@ import ENDPOINTS from '@/utils/endpoints';
 
 const EditAuthorPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const response = await fetchData(ENDPOINTS.AUTHORS + '/' + id);
-  const author = response?.data;
+  const author = await fetchData(ENDPOINTS.AUTHORS + '/' + id);
 
   if (!author) {
     return (
