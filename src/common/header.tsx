@@ -23,40 +23,6 @@ export type TActivity = {
   }[];
 }[];
 
-// Sample data structure for activities, destinations, and packages
-// const activities = [
-//   {
-//     name: 'Hiking',
-//     destinations: [
-//       {
-//         name: 'Europe',
-//         packages: ['Alpine Adventure', 'Mountain Explorer', 'Forest Trek'],
-//       },
-//       {
-//         name: 'Asia',
-//         packages: ['Himalayan Heights', 'Jungle Paths', 'Rice Terrace Walks'],
-//       },
-//     ],
-//   },
-//   {
-//     name: 'Cultural',
-//     destinations: [
-//       {
-//         name: 'Europe',
-//         packages: ['Historical Tour', 'Art & Museums', 'Local Experiences'],
-//       },
-//       {
-//         name: 'Asia',
-//         packages: ['Temple Journey', 'Ancient Traditions', 'Local Homestay'],
-//       },
-//       {
-//         name: 'Americas',
-//         packages: ['Indigenous Culture', 'Colonial History', 'Music & Arts'],
-//       },
-//     ],
-//   },
-// ];
-
 // Main navigation links
 const navLinks = [
   // { href: '/blogs', label: 'Blogs' },
@@ -134,6 +100,22 @@ export default function Header() {
     );
   };
 
+  // Handle activity name click - navigate to activity page
+  const handleActivityNameClick = (e: React.MouseEvent, activitySlug: string) => {
+    e.stopPropagation();
+    router.push(`/${activitySlug}`);
+    setActiveActivity(null);
+    setActiveDestination(null);
+  };
+
+  // Handle destination name click - navigate to destination page
+  const handleDestinationNameClick = (e: React.MouseEvent, activitySlug: string, destinationSlug: string) => {
+    e.stopPropagation();
+    router.push(`/${activitySlug}/${destinationSlug}`);
+    setActiveActivity(null);
+    setActiveDestination(null);
+  };
+
   return (
     <header className='fixed top-0 left-0 right-0 z-50  bg-[#ffffffee] shadow-sm'>
       <div className='max-w-[1180px] mx-auto max-lg:px-4'>
@@ -152,13 +134,19 @@ export default function Header() {
             {navItems?.map((activity, actIndex) => (
               <div key={activity.name} className='relative' ref={dropdownRef}>
                 {/* Activity Dropdown Trigger */}
-                <button
-                  className='flex items-center text-gray-600 hover:text-orange-500 transition-colors duration-200'
-                  onMouseEnter={() => handleActivityInteraction(actIndex)}
-                  onClick={() => handleActivityInteraction(actIndex)}>
-                  {activity.name}
-                  <ChevronDown className='ml-1 h-4 w-4' />
-                </button>
+                <div className='flex items-center'>
+                  <button
+                    className='text-gray-600 hover:text-orange-500 transition-colors duration-200 cursor-pointer'
+                    onClick={(e) => handleActivityNameClick(e, activity.slug)}>
+                    {activity.name}
+                  </button>
+                  <button
+                    className='ml-1 text-gray-600 hover:text-orange-500 transition-colors duration-200'
+                    onMouseEnter={() => handleActivityInteraction(actIndex)}
+                    onClick={() => handleActivityInteraction(actIndex)}>
+                    <ChevronDown className='h-4 w-4' />
+                  </button>
+                </div>
 
                 {/* First Level Dropdown - Destinations */}
                 <AnimatePresence>
@@ -181,8 +169,12 @@ export default function Header() {
                           onMouseEnter={() =>
                             handleDestinationHover(destIndex)
                           }>
-                          <div className='flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orange-500 cursor-pointer'>
-                            <span>{destination.name}</span>
+                          <div className='flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-orange-500'>
+                            <button
+                              className='flex-1 text-left cursor-pointer'
+                              onClick={(e) => handleDestinationNameClick(e, activity.slug, destination.slug)}>
+                              {destination.name}
+                            </button>
                             <ChevronRight className='h-4 w-4' />
                           </div>
 
@@ -260,20 +252,26 @@ export default function Header() {
                         delay: (navLinks.length + actIndex) * 0.05,
                       }}
                       className='py-2'>
-                      <div
-                        className='flex items-center justify-between'
-                        onClick={() => handleMobileActivityClick(actIndex)}>
-                        <span className='text-gray-700 hover:text-orange-500 transition-colors'>
+                      <div className='flex items-center justify-between'>
+                        <button
+                          className='text-gray-700 hover:text-orange-500 transition-colors cursor-pointer'
+                          onClick={() => {
+                            router.push(`/${activity.slug}`);
+                            setIsOpen(false);
+                          }}>
                           {activity.name}
-                        </span>
-                        <ChevronDown
-                          className={cn(
-                            'h-4 w-4 text-gray-600 transition-transform duration-200',
-                            mobileActiveActivity === actIndex
-                              ? 'transform rotate-180'
-                              : ''
-                          )}
-                        />
+                        </button>
+                        <button
+                          onClick={() => handleMobileActivityClick(actIndex)}>
+                          <ChevronDown
+                            className={cn(
+                              'h-4 w-4 text-gray-600 transition-transform duration-200',
+                              mobileActiveActivity === actIndex
+                                ? 'transform rotate-180'
+                                : ''
+                            )}
+                          />
+                        </button>
                       </div>
                     </motion.div>
 
@@ -294,22 +292,28 @@ export default function Header() {
                                   animate={{ opacity: 1, x: 0 }}
                                   transition={{ delay: destIndex * 0.05 }}
                                   className='py-2'>
-                                  <div
-                                    className='flex items-center justify-between'
-                                    onClick={() =>
-                                      handleMobileDestinationClick(destIndex)
-                                    }>
-                                    <span className='text-gray-600 hover:text-orange-500 transition-colors'>
+                                  <div className='flex items-center justify-between'>
+                                    <button
+                                      className='text-gray-600 hover:text-orange-500 transition-colors cursor-pointer'
+                                      onClick={() => {
+                                        router.push(`/${activity.slug}/${destination.slug}`);
+                                        setIsOpen(false);
+                                      }}>
                                       {destination.name}
-                                    </span>
-                                    <ChevronDown
-                                      className={cn(
-                                        'h-4 w-4 text-gray-600 transition-transform duration-200',
-                                        mobileActiveDestination === destIndex
-                                          ? 'transform rotate-180'
-                                          : ''
-                                      )}
-                                    />
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleMobileDestinationClick(destIndex)
+                                      }>
+                                      <ChevronDown
+                                        className={cn(
+                                          'h-4 w-4 text-gray-600 transition-transform duration-200',
+                                          mobileActiveDestination === destIndex
+                                            ? 'transform rotate-180'
+                                            : ''
+                                        )}
+                                      />
+                                    </button>
                                   </div>
                                 </motion.div>
 
