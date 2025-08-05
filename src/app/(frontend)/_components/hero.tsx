@@ -5,10 +5,13 @@ import { Button } from '@/components/ui/button';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 import Link from 'next/link';
+import { VideoModal } from '@/components/video-modal';
 import './hero.css';
 
 const HeroSection = async () => {
   const carousels = await fetchData(ENDPOINTS.CAROUSELS + '/home');
+  const siteInfo = await fetchData(ENDPOINTS.SITE_INFO);
+  
   return (
     <section className='relative h-screen w-full overflow-hidden'>
       {/* Background Image */}
@@ -77,14 +80,11 @@ const HeroSection = async () => {
               <div className='absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
             </Link>
             
-            <button className='group bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:bg-white/30 hover:scale-105 transform active:scale-95'>
-              <span className='flex items-center gap-2'>
-                <svg className='w-5 h-5 group-hover:animate-pulse' fill='currentColor' viewBox='0 0 20 20'>
-                  <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z' clipRule='evenodd' />
-                </svg>
-                Watch Video
-              </span>
-            </button>
+            <VideoModal
+              videoContent={siteInfo?.embedVideo}
+              triggerText="Watch Video"
+              triggerClassName="group bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:bg-white/30 hover:scale-105 transform active:scale-95"
+            />
           </div>
           
           {/* Stats */}
