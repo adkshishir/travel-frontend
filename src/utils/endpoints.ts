@@ -13,6 +13,7 @@ const ENDPOINTS = {
   BLOGS: 'blogs',
   AUTHORS: 'authors',
   BOOKING: 'booking',
+  SITE_INFO: 'site-info',
 };
 
 export default ENDPOINTS;
