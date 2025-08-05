@@ -198,7 +198,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                 </div>
               </div>
 
-              <Navigation />
+              <Navigation packageData={result} />
 
               <PackageDetails pack={result} />
             </div>
