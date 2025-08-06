@@ -19,6 +19,7 @@ import {
   HelpCircle,
   Home,
   Eye,
+  Calendar,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -87,6 +88,12 @@ export default function AdminLayout({
       label: 'Packages',
       href: '/admin/packages',
       description: 'Manage your packages',
+    },
+    {
+      icon: Calendar,
+      label: 'Bookings',
+      href: '/admin/bookings',
+      description: 'Manage customer bookings',
     },
     {
       icon: Eye,

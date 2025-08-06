@@ -80,6 +80,12 @@ const getColumnIcon = (columnName: string) => {
     'activityId': Activity,
     'packages': Package,
     'price': Package,
+    'bookings': Calendar,
+    'booking': Calendar,
+    'startDate': Calendar,
+    'endDate': Calendar,
+    'status': Activity,
+    'paymentStatus': Activity,
   };
   
   const IconComponent = iconMap[columnName];

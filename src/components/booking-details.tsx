@@ -18,6 +18,7 @@ import React from 'react';
 import { postAndPatch } from '@/utils/request-intregation';
 import toast from 'react-hot-toast';
 import ENDPOINTS from '@/utils/endpoints';
+import { useRouter } from 'next/navigation';
 
 interface BookingDetailsProps {
   packageData?: {
@@ -29,10 +30,19 @@ interface BookingDetailsProps {
 }
 
 const BookingDetails = ({ packageData }: BookingDetailsProps) => {
+  const router = useRouter();
   const [departureDate, setDepartureDate] = useState('');
   const [travelers, setTravelers] = useState('2 Adults');
   const [selectedOptions, setSelectedOptions] = useState<{[key:string]: boolean}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // User details state
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: '',
+    country: '',
+    phone: '',
+  });
 
   useEffect(() => {
     setTravelers('2 Adults');
@@ -40,6 +50,13 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
 
   const handleOptionChange = (option: string) => {
     setSelectedOptions((prev) => ({ ...prev, [option]: !prev[option] }));
+  };
+
+  const handleUserDetailsChange = (field: string, value: string) => {
+    setUserDetails(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const formatDateToISO = (dateString: string): string => {
@@ -57,6 +74,8 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
     if (!departureDate) {
       toast.error('Please select a departure date');
       return;
@@ -64,6 +83,26 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
 
     if (!packageData?.id) {
       toast.error('Package information is missing');
+      return;
+    }
+
+    if (!userDetails.name.trim()) {
+      toast.error('Please enter your full name');
+      return;
+    }
+
+    if (!userDetails.email.trim()) {
+      toast.error('Please enter your email address');
+      return;
+    }
+
+    if (!userDetails.country.trim()) {
+      toast.error('Please enter your country');
+      return;
+    }
+
+    if (!userDetails.phone.trim()) {
+      toast.error('Please enter your phone number');
       return;
     }
 
@@ -86,19 +125,22 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
     const bookingPayload = {
       packageId: parseInt(packageData.id.toString(), 10), // Ensure it's an integer
       startDate: formattedStartDate, // ISO 8601 format
+      name: userDetails.name.trim(),
+      email: userDetails.email.trim(),
+      country: userDetails.country.trim(),
+      phone: userDetails.phone.trim(),
       otherInformation: JSON.stringify(otherInfo), // Store travelers and options in otherInformation
     };
 
     try {
       const response = await postAndPatch(ENDPOINTS.BOOKING, bookingPayload);
       if (response) {
-        // toast.success('Booking successful!');
-        // Optionally reset form or redirect
-        setDepartureDate('');
-        setSelectedOptions({});
+        toast.success('Booking submitted successfully! We will contact you soon.');
+        // Redirect to success page
+        router.push('/booking/success');
       }
     } catch (error) {
-      // toast.error('Booking failed. Please try again.');
+      toast.error('Booking failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -116,8 +158,71 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
         </div>
       </div>
 
+      {/* User Details Section */}
+      <div className='mt-6'>
+        <h3 className='font-medium mb-4'>Contact Information</h3>
+        
+        <div className='space-y-4'>
+          <div>
+            <Label htmlFor='name'>Full Name *</Label>
+            <Input
+              id='name'
+              type='text'
+              value={userDetails.name}
+              onChange={(e) => handleUserDetailsChange('name', e.target.value)}
+              className='w-full mt-1'
+              placeholder='Enter your full name'
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor='email'>Email Address *</Label>
+            <Input
+              id='email'
+              type='email'
+              value={userDetails.email}
+              onChange={(e) => handleUserDetailsChange('email', e.target.value)}
+              className='w-full mt-1'
+              placeholder='Enter your email address'
+              required
+            />
+          </div>
+
+          <div className='grid grid-cols-2 gap-4'>
+            <div>
+              <Label htmlFor='country'>Country *</Label>
+              <Input
+                id='country'
+                type='text'
+                value={userDetails.country}
+                onChange={(e) => handleUserDetailsChange('country', e.target.value)}
+                className='w-full mt-1'
+                placeholder='Your country'
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor='phone'>Phone Number *</Label>
+              <Input
+                id='phone'
+                type='tel'
+                value={userDetails.phone}
+                onChange={(e) => handleUserDetailsChange('phone', e.target.value)}
+                className='w-full mt-1'
+                placeholder='Your phone number'
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Separator className='my-6' />
+
       <div className='mt-4'>
-        <Label htmlFor='departure-date'>Departure Date</Label>
+        <Label htmlFor='departure-date'>Departure Date *</Label>
         <div className='relative mt-1'>
           <Input
             id='departure-date'
@@ -126,6 +231,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
             onChange={(e) => setDepartureDate(e.target.value)}
             className='w-full'
             min={new Date().toISOString().split('T')[0]} // Prevent past dates
+            required
           />
         </div>
       </div>
@@ -231,7 +337,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
       </div>
 
       <Button className='mt-6 w-full' type='submit' disabled={isSubmitting}>
-        {isSubmitting ? 'Booking...' : 'Book Package'}
+        {isSubmitting ? 'Submitting Booking...' : 'Book Package'}
       </Button>
 
       <div className='mt-4 flex items-center justify-center gap-2 text-center text-sm text-muted-foreground'>
