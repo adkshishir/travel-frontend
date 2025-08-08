@@ -82,40 +82,7 @@ const Booking = () => {
         </div>
       </div>
 
-      <div className='mb-4 rounded-lg border bg-card shadow-sm'>
-        <div className='flex border-t'>
-          <button
-            onClick={() => setActiveSection('booking')}
-            className={cn(
-              'flex-1 border-b-2 py-2 text-sm font-medium',
-              activeSection === 'booking'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            )}>
-            Booking
-          </button>
-          <button
-            onClick={() => setActiveSection('details')}
-            className={cn(
-              'flex-1 border-b-2 py-2 text-sm font-medium',
-              activeSection === 'details'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            )}>
-            Details
-          </button>
-          <button
-            onClick={() => setActiveSection('reviews')}
-            className={cn(
-              'flex-1 border-b-2 py-2 text-sm font-medium',
-              activeSection === 'reviews'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            )}>
-            Reviews
-          </button>
-        </div>
-      </div>
+   
 
       <div className='grid gap-6 lg:grid-cols-3'>
         {/* Trek Selection Panel */}
