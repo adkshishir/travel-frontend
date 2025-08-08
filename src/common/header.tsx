@@ -110,7 +110,7 @@ export default function Header() {
         <div className='flex items-center justify-between h-16'>
           {/* Logo */}
           <Link href='/' className='flex items-center group'>
-            <span className='text-2xl font-bold text-orange-600 group-hover:text-orange-700 transition-colors duration-200'>
+            <span className='text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors duration-200'>
               Poonhill
             </span>
             <span className='text-2xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200'>
@@ -130,7 +130,7 @@ export default function Header() {
                 
                 {/* Activity Dropdown Trigger */}
                 <button
-                  className='flex items-center space-x-1 text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-200'
+                  className='flex items-center space-x-1 text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200'
                   onClick={(e) => handleActivityNameClick(e, activity.slug)}>
                   <span>{activity.name}</span>
                   <ChevronDown className={cn(
@@ -145,11 +145,11 @@ export default function Header() {
                     <div className='bg-white shadow-xl ring-1 ring-black ring-opacity-5 rounded-lg border border-gray-200'>
                       <div className='p-8'>
                         {/* Grid Layout for Destinations */}
-                        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
+                        <div className='flex flex-wrap justify-around'>
                           {activity.destinations.map((destination) => (
                             <div key={destination.slug} className='space-y-4'>
                               {/* Destination Header */}
-                              <h3 className='text-sm font-semibold text-orange-700 uppercase tracking-wide border-b border-orange-100 pb-2'>
+                              <h3 className='text-sm font-semibold text-primary uppercase tracking-wide border-b border-orange-100 pb-2'>
                                 <button
                                   onClick={(e) => handleDestinationNameClick(e, activity.slug, destination.slug)}
                                   className='hover:text-orange-800 transition-colors duration-200'>
@@ -165,7 +165,7 @@ export default function Header() {
                                       href={`/${activity.slug}/${destination.slug}/${pkg.slug
                                         .toLowerCase()
                                         .replace(/\s+/g, '-')}`}
-                                      className='text-gray-600 hover:text-orange-600 text-sm block py-1 transition-colors hover:translate-x-1 transform duration-200'
+                                      className='text-gray-600 hover:text-primary text-sm block py-1 transition-colors hover:translate-x-1 transform duration-200'
                                       onClick={() => setActiveActivity(null)}>
                                       {pkg.title}
                                     </Link>
@@ -177,9 +177,9 @@ export default function Header() {
                         </div>
                         
                         {/* Call to Action at bottom */}
-                        <div className='mt-8 pt-6 border-t border-gray-100'>
+                        {/* <div className='mt-8 pt-6 border-t border-gray-100'>
                           <div className='flex justify-between items-center'>
-                            <p className='text-sm text-gray-500'>
+                            <p className='text-sm text-primary'>
                               Ready for your next adventure? Let our experts help you plan.
                             </p>
                             <div className='flex space-x-4'>
@@ -191,7 +191,7 @@ export default function Header() {
                               </Button>
                               <Button 
                                 size="sm" 
-                                className="bg-orange-600 hover:bg-orange-700"
+                                className="bg-primary text-white hover:bg-primary/80"
                                 onClick={() => {
                                   router.push(`/${activity.slug}`);
                                   setActiveActivity(null);
@@ -200,7 +200,7 @@ export default function Header() {
                               </Button>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -213,7 +213,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className='text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-200'>
+                className='text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200'>
                 {link.label}
               </Link>
             ))}
@@ -221,17 +221,11 @@ export default function Header() {
 
           {/* Right Side Actions */}
           <div className='flex items-center space-x-4'>
-            <Button
-              variant="outline"
-              size="sm"
-              className='hidden lg:flex'
-              onClick={() => router.push('/login')}>
-              Login
-            </Button>
+           
             <Button
               size="sm"
-              className='bg-orange-600 hover:bg-orange-700 hidden lg:flex'
-              onClick={() => router.push('/admin')}>
+              className='bg-primary text-white hover:bg-primary/80 hidden lg:flex'
+              onClick={() => router.push('/booking')}>
               Book Now
             </Button>
 
@@ -260,7 +254,7 @@ export default function Header() {
                   
                   {/* Activity Header */}
                   <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-semibold text-orange-700 border-b border-orange-100 pb-2 flex-1'>
+                    <h3 className='text-lg font-semibold text-primary/80 border-b border-orange-100 pb-2 flex-1'>
                       <button
                         onClick={() => {
                           router.push(`/${activity.slug}`);
@@ -301,7 +295,7 @@ export default function Header() {
                                     router.push(`/${activity.slug}/${destination.slug}`);
                                     setIsOpen(false);
                                   }}
-                                  className='hover:text-orange-600 transition-colors'>
+                                  className='hover:text-primary transition-colors'>
                                   {destination.name}
                                 </button>
                               </h4>
@@ -332,7 +326,7 @@ export default function Header() {
                                         href={`/${activity.slug}/${destination.slug}/${pkg.slug
                                           .toLowerCase()
                                           .replace(/\s+/g, '-')}`}
-                                        className='text-sm text-gray-600 hover:text-orange-600 block py-1 transition-colors'
+                                        className='text-sm text-gray-600 hover:text-primary block py-1 transition-colors'
                                         onClick={() => setIsOpen(false)}>
                                         • {pkg.title}
                                       </Link>
@@ -359,7 +353,7 @@ export default function Header() {
                 transition={{ delay: (navItems?.length || 0 + index) * 0.1 }}>
                 <Link
                   href={link.href}
-                  className='block text-gray-700 hover:text-orange-600 font-medium py-2'
+                  className='block text-gray-700 hover:text-primary font-medium py-2'
                   onClick={() => setIsOpen(false)}>
                   {link.label}
                 </Link>
@@ -368,17 +362,9 @@ export default function Header() {
 
             {/* Mobile Actions */}
             <div className='pt-4 border-t border-gray-200 space-y-3'>
+              
               <Button 
-                variant="outline" 
-                className='w-full'
-                onClick={() => {
-                  router.push('/login');
-                  setIsOpen(false);
-                }}>
-                Login
-              </Button>
-              <Button 
-                className='w-full bg-orange-600 hover:bg-orange-700'
+                className='w-full bg-primary text-white hover:bg-primary/80'
                 onClick={() => {
                   router.push('/admin');
                   setIsOpen(false);
