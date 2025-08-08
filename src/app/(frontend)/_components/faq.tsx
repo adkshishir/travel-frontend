@@ -8,7 +8,7 @@ import React from 'react';
 const Faq = async () => {
   const result = await fetchData(ENDPOINTS.FAQ);
   return (
-    <section className='bg-[#F6F6F6] max-lg:mt-16 max-lg:py-16 py-32'>
+    <section id='faq' className='bg-[#F6F6F6] max-lg:mt-16 max-lg:py-16 py-32'>
       <div className=' max-w-[1180px] max-lg:px-4 mx-auto '>
         <div className='text-center max-w-2xl grid   mx-auto'>
           <PrimaryText className='mb-4'>FAQ</PrimaryText>
