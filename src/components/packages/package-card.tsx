@@ -95,7 +95,7 @@ export default function PackageCard({
             <span className='font-bold text-xl'>${price}</span>
             <span className='text-gray-500 text-sm'>/Person</span>
           </div>
-          <button className='bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition-colors duration-300 active:scale-95 transform'>
+          <button className='bg-orange-500 hover:bg-primary text-white px-4 py-2 rounded-md transition-colors duration-300 active:scale-95 transform'>
             Book Trip
           </button>
         </div>

@@ -43,7 +43,7 @@ export default function Sidebar() {
         <Button
           size='icon'
           variant='default'
-          className='absolute right-0 top-0 h-full bg-orange-500 hover:bg-orange-600 rounded-l-none'>
+          className='absolute right-0 top-0 h-full bg-orange-500 hover:bg-primary rounded-l-none'>
           <Search className='h-4 w-4' />
         </Button>
       </div>

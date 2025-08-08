@@ -162,7 +162,7 @@ const Auth = () => {
               <Button
                 type='submit'
                 disabled={isLoading || !email || submitStatus === 'success'}
-                className='w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
+                className='w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-primary/80 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
                 {isLoading ? (
                   <>
                     <Loader2 className='mr-2 h-5 w-5 animate-spin' />
@@ -193,7 +193,7 @@ const Auth = () => {
           transition={{ delay: 0.5 }}
           className='text-center mt-8'>
           <p className='text-sm text-gray-600'>
-            Having trouble? <button className='text-orange-600 hover:text-orange-700 font-medium'>Contact support</button>
+            Having trouble? <button className='text-primary hover:text-primary/80 font-medium'>Contact support</button>
           </p>
         </motion.div>
       </motion.div>

@@ -55,7 +55,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
       </div>
 
       <Link href={`/blogs/${blog.slug || blog.id}`}>
-        <Button variant='default' className='bg-orange-500 hover:bg-orange-600'>
+        <Button variant='default' className='bg-orange-500 hover:bg-primary'>
           Read More
         </Button>
       </Link>

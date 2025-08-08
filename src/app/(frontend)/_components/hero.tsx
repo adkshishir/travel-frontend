@@ -75,9 +75,9 @@ const HeroSection = async () => {
           <div className='mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up [animation-delay:0.8s] [animation-fill-mode:forwards]'>
             <Link
               href={'/booking'}
-              className='group relative bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-[position:100%_0] hover:scale-105 hover:shadow-2xl hover:shadow-primary/25 transform active:scale-95'>
+              className='group relative bg-primary text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:bg-[position:100%_0] hover:scale-105 hover:shadow-2xl hover:shadow-primary/25 transform active:scale-95'>
               <span className='relative z-10'>Book Your Adventure</span>
-              <div className='absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+              <div className='absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
             </Link>
             
             <VideoModal

@@ -28,7 +28,7 @@ export default function Pagination({
           size='sm'
           className={
             currentPage === i + 1
-              ? 'bg-orange-500 hover:bg-orange-600 h-8 w-8 p-0'
+              ? 'bg-orange-500 hover:bg-primary h-8 w-8 p-0'
               : 'h-8 w-8 p-0'
           }>
           {i + 1}
