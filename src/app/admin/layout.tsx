@@ -34,7 +34,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import { getCookie } from '@/utils/cookie-handler';
+import { deleteCookie, getCookie } from '@/utils/cookie-handler';
 import { useRouter } from 'next/navigation';
 export default function AdminLayout({
   children,
@@ -283,22 +283,15 @@ export default function AdminLayout({
               <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className='mr-2 h-4 w-4' />
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className='mr-2 h-4 w-4' />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <HelpCircle className='mr-2 h-4 w-4' />
-                  Help
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
+              
                 <DropdownMenuItem>
                   <LogOut className='mr-2 h-4 w-4' />
-                  Logout
+                  <Button onClick={() => {
+                    deleteCookie('token');
+                    router.push('/auth');
+                  }}>
+                    Logout
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
