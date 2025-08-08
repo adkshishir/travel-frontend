@@ -193,7 +193,7 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
             {pack?.activity && (
               <div className='space-y-3 p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg border'>
                 <h3 className='font-semibold text-lg flex items-center gap-2'>
-                  <Users className='h-5 w-5 text-orange-600' />
+                  <Users className='h-5 w-5 text-primary' />
                   Activities
                 </h3>
                 <div className='text-sm text-gray-700 whitespace-pre-line leading-relaxed'>

@@ -38,7 +38,7 @@ export default async function Destinations() {
       slug: destination.slug,
     }));
   return (
-    <section className=' mx-auto max-w-[1180px] pb-32 max-lg:px-4 '>
+    <section id='popular-destinations' className=' mx-auto max-w-[1180px] pb-32 max-lg:px-4 '>
       <div className='text-center max-lg:text-center max-w-2xl grid mt-32 max-lg:mt-16  mx-auto'>
         <PrimaryText className='mb-4'>Popular Destinations</PrimaryText>
         <H1 className='mb-8'>Search a best place in the world</H1>
