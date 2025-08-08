@@ -93,15 +93,7 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
         </div>
       )}
 
-      {/* Description Section */}
-      {pack?.description && (
-        <div className='space-y-4'>
-          <h2 className='text-2xl font-semibold'>Description</h2>
-          <div className='text-muted-foreground whitespace-pre-line leading-relaxed'>
-            {pack.description}
-          </div>
-        </div>
-      )}
+    
 
       {/* Overview Section */}
       {pack?.overview && (
