@@ -22,7 +22,7 @@ const TopDestination = async() => {
           algorithm
         </P>
       </div>
-      <div className='mt-8 grid grid-cols-2 max-lg:justify-center lg:grid-cols-4 gap-4 lg:gap-8 justify-between '>
+      <div className='mt-8 grid md:grid-cols-2 max-lg:justify-center lg:grid-cols-4 gap-4 lg:gap-8 justify-between '>
         {
           destinations?.map(
             (destination: {
