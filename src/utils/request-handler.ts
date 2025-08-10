@@ -1,13 +1,14 @@
-// Define proper types for better type safety
-type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+import { ErrorHandler } from './error-handler';
 
-interface RequestOptions {
+export type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+
+export interface RequestOptions {
   endPoint: string;
   token?: string;
   params?: Record<string, any>;
   data?: any;
-  success: (message: string, data: any) => void;
-  failure: (message: string) => void;
+  success: (message: string, response: any) => void;
+  failure: (message: string, responseData?: any) => void;
 }
 
 type ApiResponse = any;
@@ -67,23 +68,36 @@ class RequestHandler {
 
       // Execute request
       const response = await fetch(url, requestOptions);
-      const responseData = await response.json();
+      let responseData: any;
+      
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        // If JSON parsing fails, create a basic error response
+        responseData = {
+          message: `Failed to parse response: ${response.statusText}`,
+          status: response.status,
+        };
+      }
 
       // Handle response
       if (!response.ok) {
-        const errorMessage =
-          typeof responseData?.message === 'string'
-            ? responseData.message
-            : response.statusText || 'Request failed';
-        failure(errorMessage);
+        // Pass complete response data for better error handling
+        const errorMessage = responseData?.message || response.statusText || 'Request failed';
+        failure(errorMessage, responseData);
         return;
       }
 
       // Success case
       success(responseData?.message || 'success', responseData);
     } catch (error: any) {
-      // Handle exceptions
-      failure(error?.message || 'An unexpected error occurred');
+      // Handle network and other exceptions
+      const errorMessage = error?.message || 'An unexpected error occurred';
+      failure(errorMessage, { 
+        message: errorMessage, 
+        isNetworkError: true,
+        originalError: error 
+      });
     }
   }
 
@@ -150,8 +164,8 @@ class RequestHandler {
   }
 }
 
-// Export a singleton instance
-export default new RequestHandler();
+const requestHandler = new RequestHandler();
+export default requestHandler;
 
 // For backward compatibility
 export type TRequest = RequestOptions;

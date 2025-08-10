@@ -1,5 +1,5 @@
 import requestHandler from '@/utils/request-handler';
-import toast from 'react-hot-toast';
+import { ErrorHandler } from '@/utils/error-handler';
 import ENDPOINTS from './endpoints';
 import { getCookie } from './cookie-handler';
 
@@ -23,6 +23,7 @@ async function getBaseConfig() {
 /**
  * Fetch data from the API
  * @param endPoint - API endpoint path
+ * @param searchParams - Query parameters
  * @param showErrors - Whether to show error toasts
  * @returns Promise with the response data or undefined
  */
@@ -41,9 +42,13 @@ async function fetchData<T = any, S = any>(
       success: (_, response) => {
         resolve(response.data);
       },
-      failure: (message) => {
+      failure: (message, responseData) => {
         if (showErrors) {
-          toast.error(message || 'Failed to fetch data');
+          if (responseData?.isNetworkError) {
+            ErrorHandler.handleNetworkError(responseData.originalError);
+          } else {
+            ErrorHandler.handleFormError(responseData, 'Fetch Error');
+          }
         }
         resolve(undefined);
       },
@@ -52,7 +57,7 @@ async function fetchData<T = any, S = any>(
 }
 
 /**
- * Create or update data
+ * Create or update data with enhanced error handling
  * @param endPoint - API endpoint path
  * @param data - Data to send
  * @param id - Optional ID for update operations
@@ -73,11 +78,26 @@ async function postAndPatch<T = any, D = any>(
       data,
       token,
       success: (message, response) => {
-        toast.success(message || 'Data updated successfully');
-        resolve(response.data);
+        ErrorHandler.showSuccess(message || (id ? 'Data updated successfully' : 'Data created successfully'));
+        resolve(response.data || response);
       },
-      failure: (message) => {
-        toast.error(message || 'Something went wrong');
+      failure: (message, responseData) => {
+        if (responseData?.isNetworkError) {
+          ErrorHandler.handleNetworkError(responseData.originalError);
+        } else {
+          // Check if it's validation errors or general error
+          const hasValidationErrors = ErrorHandler.handleFormError(responseData, id ? 'Update Error' : 'Create Error');
+          
+          // For debugging in development
+          if (process.env.NODE_ENV === 'development') {
+            console.error('API Error Details:', {
+              endpoint: url,
+              method,
+              data,
+              responseData,
+            });
+          }
+        }
         resolve(undefined);
       },
     });
@@ -85,10 +105,11 @@ async function postAndPatch<T = any, D = any>(
 }
 
 /**
- * Upload an image
+ * Upload an image with enhanced error handling
  * @param img - File or string to upload
- * @param folderName - Optional folder name (defaults to 'logo')
- * @returns Promise with the image URL or undefined
+ * @param folder - Optional folder name (defaults to 'images')
+ * @param alt - Alt text for the image
+ * @returns Promise with the image response or undefined
  */
 async function uploadImage({
   img,
@@ -98,7 +119,7 @@ async function uploadImage({
   img: File | string;
   folder?: string | undefined;
   alt?: string | undefined;
-}): Promise<{ id:number } | undefined> {
+}): Promise<{ id: number } | undefined> {
   const { token } = await getBaseConfig();
   const formData = new FormData();
 
@@ -111,11 +132,16 @@ async function uploadImage({
       endPoint: ENDPOINTS.BASE + '/upload',
       data: formData,
       token,
-      success: (_, response) => {
+      success: (message, response) => {
+        ErrorHandler.showSuccess(message || 'Image uploaded successfully');
         resolve(response);
       },
-      failure: (message) => {
-        toast.error(message || 'Failed to upload image');
+      failure: (message, responseData) => {
+        if (responseData?.isNetworkError) {
+          ErrorHandler.handleNetworkError(responseData.originalError);
+        } else {
+          ErrorHandler.handleFormError(responseData, 'Upload Error');
+        }
         resolve(undefined);
       },
     });
@@ -123,7 +149,7 @@ async function uploadImage({
 }
 
 /**
- * Delete data
+ * Delete data with enhanced error handling
  * @param endPoint - API endpoint path
  * @param id - ID of the item to delete
  * @returns Promise indicating success or failure
@@ -139,11 +165,15 @@ async function deleteData(
       endPoint: `${baseUrl}/${endPoint}/${id}`,
       token,
       success: (message) => {
-        toast.success(message || 'Data deleted successfully');
+        ErrorHandler.showSuccess(message || 'Data deleted successfully');
         resolve(true);
       },
-      failure: (message) => {
-        toast.error(message || 'Something went wrong');
+      failure: (message, responseData) => {
+        if (responseData?.isNetworkError) {
+          ErrorHandler.handleNetworkError(responseData.originalError);
+        } else {
+          ErrorHandler.handleFormError(responseData, 'Delete Error');
+        }
         resolve(false);
       },
     });

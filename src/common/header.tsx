@@ -27,6 +27,7 @@ export type TActivity = {
 const navLinks = [
   // { href: '/blogs', label: 'Blogs' },
   { href: '/about', label: 'About Us' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export default function Header() {

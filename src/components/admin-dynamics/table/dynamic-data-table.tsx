@@ -86,6 +86,12 @@ const getColumnIcon = (columnName: string) => {
     'endDate': Calendar,
     'status': Activity,
     'paymentStatus': Activity,
+    'messages': Activity,
+    'message': Activity,
+    'email': Activity,
+    'phone': Activity,
+    'contact': Activity,
+    'mail': Activity,
   };
   
   const IconComponent = iconMap[columnName];

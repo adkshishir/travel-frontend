@@ -20,6 +20,7 @@ import {
   Home,
   Eye,
   Calendar,
+  Mail,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -94,6 +95,12 @@ export default function AdminLayout({
       label: 'Bookings',
       href: '/admin/bookings',
       description: 'Manage customer bookings',
+    },
+    {
+      icon: Mail,
+      label: 'Contact Messages',
+      href: '/admin/messages',
+      description: 'View contact form submissions',
     },
     {
       icon: Eye,
