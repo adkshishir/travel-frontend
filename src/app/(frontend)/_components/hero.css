@@ -20,12 +20,27 @@
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .animate-fade-in-up {
   animation: fade-in-up 0.8s ease-out;
 }
 
 .animate-shimmer {
   animation: shimmer 3s ease-in-out infinite;
+}
+
+.animate-slide-in {
+  animation: slideIn 1s ease-out;
 }
 
 /* Additional smooth transitions for better performance */
@@ -42,4 +57,40 @@
 /* Enhanced hover effects */
 .group:hover .group-hover\:animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Carousel navigation buttons */
+.carousel-nav-button {
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-nav-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+/* Carousel dots */
+.carousel-dot {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.carousel-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.carousel-dot:hover {
+  transform: scale(1.1);
+}
+
+/* Smooth image transitions */
+.carousel-image-container {
+  will-change: opacity;
+}
+
+/* Enhanced text animations on slide change */
+.hero-content {
+  animation: fade-in-up 0.8s ease-out;
 } 

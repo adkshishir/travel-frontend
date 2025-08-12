@@ -142,7 +142,7 @@ export default function Header() {
 
                 {/* Mega Menu Dropdown */}
                 {activeActivity === actIndex && (
-                  <div className='absolute left-1/2 transform -translate-x-1/2 mt-0 w-screen max-w-6xl'>
+                  <div className='fixed -translate-x-1/2 left-1/2 transform  mt-0 w-screen max-w-6xl'>
                     <div className='bg-white shadow-xl ring-1 ring-black ring-opacity-5 rounded-lg border border-gray-200'>
                       <div className='p-8'>
                         {/* Grid Layout for Destinations */}

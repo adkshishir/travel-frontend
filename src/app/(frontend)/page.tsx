@@ -7,6 +7,8 @@ import Testimonial from './_components/testimonial';
 import Destinations from './_components/destinations';
 import Faq from './_components/faq';
 import Blogs from './_components/blogs';
+import { fetchData } from '@/utils/request-intregation';
+import ENDPOINTS from '@/utils/endpoints';
 
 export const metadata = {
   title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
@@ -29,10 +31,14 @@ export const metadata = {
   // Optionally add schema here
 };
 
-export default function Home() {
+export default async function Home() {
+  // Fetch data for HeroSection
+  const carousels = await fetchData(ENDPOINTS.CAROUSELS + '/home');
+  const siteInfo = await fetchData(ENDPOINTS.SITE_INFO);
+
   return (
     <main>
-      <HeroSection />
+      <HeroSection carousels={carousels} siteInfo={siteInfo} />
       <Activities />
       <AboutSection />
       <TopDestination />

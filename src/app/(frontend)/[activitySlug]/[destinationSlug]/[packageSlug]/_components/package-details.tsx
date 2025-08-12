@@ -7,12 +7,18 @@ import {
   Calendar,
   Play,
   Info,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  ZoomIn,
+  Download,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import TravelAccordion from '@/components/travel/accordion';
 import { extractDataFromHTML } from './extract-data';
 import Image from 'next/image';
+import { useState, useEffect, useCallback } from 'react';
 
 export function PackageDetails({ pack }: { pack: any | undefined }) {
   // const { itinerary, includes } = pack;
@@ -20,6 +26,87 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
   const includes = pack?.includes || '';
   const extractData = extractDataFromHTML(itinerary);
   const extractIncludes = extractDataFromHTML(includes);
+
+  // Gallery state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  // Get all available images
+  const galleryImages = pack?.media || [];
+  const hasGallery = galleryImages && galleryImages.length > 0;
+
+  const openGallery = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsGalleryOpen(true);
+  };
+
+  const closeGallery = useCallback(() => {
+    setIsGalleryOpen(false);
+    setIsZoomed(false);
+  }, []);
+
+  const nextImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+  }, [galleryImages.length]);
+
+  const prevImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  }, [galleryImages.length]);
+
+  const toggleZoom = useCallback(() => {
+    setIsZoomed(!isZoomed);
+  }, [isZoomed]);
+
+  const downloadImage = () => {
+    const currentImage = galleryImages[currentImageIndex];
+    if (currentImage?.original) {
+      const link = document.createElement('a');
+      link.href = currentImage.original;
+      link.download = `${pack?.title || 'image'}-${currentImageIndex + 1}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  // Keyboard navigation for gallery
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isGalleryOpen) return;
+      
+      switch (e.key) {
+        case 'Escape':
+          closeGallery();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          prevImage();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          nextImage();
+          break;
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          toggleZoom();
+          break;
+      }
+    };
+
+    if (isGalleryOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isGalleryOpen, nextImage, prevImage, toggleZoom, closeGallery]);
 
   return (
     <div className='space-y-12 pb-8'>
@@ -65,6 +152,183 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
           </Badge>
         </div>
       </div>
+
+      {/* Image Gallery Section */}
+      {hasGallery && (
+        <div className='space-y-6' id='gallery'>
+          <h2 className='text-2xl font-semibold'>Photo Gallery</h2>
+          
+          {/* Main Image Display */}
+          <div className='relative group'>
+            <div className='aspect-[16/10] rounded-xl overflow-hidden bg-gray-100'>
+              <Image
+                src={galleryImages[0]?.original || '/images/hero.jpg'}
+                alt={galleryImages[0]?.alt || 'Gallery image'}
+                width={1200}
+                height={750}
+                className='w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105'
+                onClick={() => openGallery(0)}
+              />
+            </div>
+            <button
+              onClick={() => openGallery(0)}
+              className='absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100'
+            >
+              <div className='bg-white/90 backdrop-blur-sm rounded-full p-3 transform transition-transform duration-200 hover:scale-110'>
+                <ZoomIn className='w-6 h-6 text-gray-800' />
+              </div>
+            </button>
+          </div>
+
+          {/* Thumbnail Grid */}
+          {galleryImages.length > 1 && (
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3'>
+              {galleryImages.slice(1, 9).map((image: any, index: number) => (
+                <div
+                  key={index + 1}
+                  className='aspect-square rounded-lg overflow-hidden bg-gray-100 cursor-pointer group relative'
+                  onClick={() => openGallery(index + 1)}
+                >
+                  <Image
+                    src={image?.thumbnail || image?.original || '/images/hero.jpg'}
+                    alt={image?.alt || `Gallery image ${index + 2}`}
+                    width={200}
+                    height={200}
+                    className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
+                  />
+                  <div className='absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center'>
+                    <ZoomIn className='w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                  </div>
+                  {/* Show count on last image if there are more */}
+                  {index === 7 && galleryImages.length > 9 && (
+                    <div className='absolute inset-0 bg-black/60 flex items-center justify-center'>
+                      <span className='text-white font-semibold text-lg'>
+                        +{galleryImages.length - 9}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* View All Button */}
+          {galleryImages.length > 1 && (
+            <div className='text-center'>
+              <button
+                onClick={() => openGallery(0)}
+                className='inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors duration-300 font-medium'
+              >
+                View All {galleryImages.length} Photos
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Full-Screen Gallery Modal */}
+      {isGalleryOpen && (
+        <div className='fixed inset-0 z-[100] bg-black/95 flex items-center justify-center'>
+          {/* Header */}
+          <div className='absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/50 to-transparent p-6'>
+            <div className='flex items-center justify-between text-white'>
+              <div className='flex items-center gap-4'>
+                <h3 className='text-lg font-medium'>{pack?.title}</h3>
+                <span className='text-sm opacity-75'>
+                  {currentImageIndex + 1} of {galleryImages.length}
+                </span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <button
+                  onClick={toggleZoom}
+                  className='p-2 hover:bg-white/20 rounded-full transition-colors duration-200'
+                  title={isZoomed ? 'Zoom Out' : 'Zoom In'}
+                >
+                  <ZoomIn className='w-5 h-5' />
+                </button>
+                <button
+                  onClick={downloadImage}
+                  className='p-2 hover:bg-white/20 rounded-full transition-colors duration-200'
+                  title='Download Image'
+                >
+                  <Download className='w-5 h-5' />
+                </button>
+                <button
+                  onClick={closeGallery}
+                  className='p-2 hover:bg-white/20 rounded-full transition-colors duration-200'
+                  title='Close Gallery'
+                >
+                  <X className='w-6 h-6' />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Image */}
+          <div className={`relative max-w-7xl max-h-[80vh] mx-auto transition-transform duration-300 ${isZoomed ? 'scale-150 cursor-move' : 'cursor-zoom-in'}`}>
+            <Image
+              src={galleryImages[currentImageIndex]?.original || '/images/hero.jpg'}
+              alt={galleryImages[currentImageIndex]?.alt || 'Gallery image'}
+              width={1200}
+              height={800}
+              className='max-w-full max-h-[80vh] object-contain'
+              onClick={toggleZoom}
+            />
+          </div>
+
+          {/* Navigation Arrows */}
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                onClick={prevImage}
+                className='absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors duration-200 text-white'
+                title='Previous Image'
+              >
+                <ChevronLeft className='w-6 h-6' />
+              </button>
+              <button
+                onClick={nextImage}
+                className='absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors duration-200 text-white'
+                title='Next Image'
+              >
+                <ChevronRight className='w-6 h-6' />
+              </button>
+            </>
+          )}
+
+          {/* Thumbnail Strip */}
+          {galleryImages.length > 1 && (
+            <div className='absolute bottom-6 left-1/2 -translate-x-1/2 max-w-4xl w-full px-6'>
+              <div className='flex items-center justify-center gap-2 overflow-x-auto pb-2'>
+                {galleryImages.map((image: any, index: number) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      index === currentImageIndex 
+                        ? 'border-white scale-110' 
+                        : 'border-transparent hover:border-white/50'
+                    }`}
+                  >
+                    <Image
+                      src={image?.thumbnail || image?.original || '/images/hero.jpg'}
+                      alt={image?.alt || `Thumbnail ${index + 1}`}
+                      width={64}
+                      height={64}
+                      className='w-full h-full object-cover'
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Keyboard Navigation Hint */}
+          <div className='absolute bottom-20 left-6 text-white/70 text-sm'>
+            <p>Use ← → arrow keys to navigate • Press Esc to close • Space/Enter to zoom</p>
+          </div>
+        </div>
+      )}
 
       {/* Trip Details Section */}
       {(pack?.startFrom || pack?.endAt || pack?.groupAge) && (

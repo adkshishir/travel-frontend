@@ -9,6 +9,7 @@ interface NavigationProps {
 
 const allTabs = [
   { id: 'overview', label: 'Overview', condition: (pack: any) => pack?.overview },
+  { id: 'gallery', label: 'Gallery', condition: (pack: any) => pack?.media && pack.media.length > 0 },
   { id: 'highlights', label: 'Highlights', condition: (pack: any) => pack?.highlights },
   // { id: 'experience', label: 'Experience', condition: (pack: any) => pack?.culture || pack?.attractions || pack?.nature || pack?.activity },
   { id: 'itinerary', label: 'Itinerary', condition: (pack: any) => pack?.itinerary },

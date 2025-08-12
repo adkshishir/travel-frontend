@@ -464,7 +464,7 @@ const PackageForm = ({
                 </div>
 
                 <div className='space-y-2'>
-                  <Label htmlFor='startFrom'>Start Date</Label>
+                  <Label htmlFor='startFrom'>Start From</Label>
                   <Input
                     id='startFrom'
                     name='startFrom'
@@ -475,7 +475,7 @@ const PackageForm = ({
                 </div>
 
                 <div className='space-y-2'>
-                  <Label htmlFor='endAt'>End Date</Label>
+                  <Label htmlFor='endAt'>End At</Label>
                   <Input
                     id='endAt'
                     name='endAt'
