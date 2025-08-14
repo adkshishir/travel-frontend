@@ -109,16 +109,19 @@ async function postAndPatch<T = any, D = any>(
  * @param img - File or string to upload
  * @param folder - Optional folder name (defaults to 'images')
  * @param alt - Alt text for the image
+ * @param showSuccessMessage - Whether to show success toast message (defaults to true)
  * @returns Promise with the image response or undefined
  */
 async function uploadImage({
   img,
   folder,
   alt,
+  showSuccessMessage = true,
 }: {
   img: File | string;
   folder?: string | undefined;
   alt?: string | undefined;
+  showSuccessMessage?: boolean;
 }): Promise<{ id: number } | undefined> {
   const { token } = await getBaseConfig();
   const formData = new FormData();
@@ -133,7 +136,9 @@ async function uploadImage({
       data: formData,
       token,
       success: (message, response) => {
-        ErrorHandler.showSuccess(message || 'Image uploaded successfully');
+        if (showSuccessMessage) {
+          ErrorHandler.showSuccess(message || 'Image uploaded successfully');
+        }
         resolve(response);
       },
       failure: (message, responseData) => {
