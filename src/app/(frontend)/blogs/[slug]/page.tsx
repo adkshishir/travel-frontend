@@ -8,6 +8,7 @@ import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 import { Params } from 'next/dist/server/request/params';
 import '@/styles/blog-content.css';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
@@ -48,33 +49,7 @@ const BlogDetail = async ({ params }: { params: Promise<Params> }) => {
 
   // Handle case where blog is not found
   if (!blog) {
-    return (
-      <main>
-        <Banner
-          title="Blog Not Found"
-          image="/images/hero.jpg"
-          breadcrumb={[
-            { name: 'Home', href: '/' },
-            { name: 'Blogs', href: '/blogs' },
-          ]}
-          pageName="Blog Not Found"
-        />
-        <div className='max-w-4xl mx-auto my-16 px-4'>
-          <div className='text-center'>
-            <h2 className='text-2xl font-semibold mb-4'>Blog Post Not Found</h2>
-            <p className='text-gray-600 mb-6'>
-              Sorry, we couldn't find the blog post you're looking for. It may have been moved or deleted.
-            </p>
-            <a 
-              href="/blogs" 
-              className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-            >
-              Back to Blogs
-            </a>
-          </div>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   const formatDate = (dateString: string) => {

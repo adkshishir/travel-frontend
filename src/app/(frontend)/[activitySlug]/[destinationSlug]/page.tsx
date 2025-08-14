@@ -4,6 +4,7 @@ import Packages from './_components/packages';
 import { Params } from 'next/dist/server/request/params';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { activitySlug, destinationSlug } = await params;
@@ -69,122 +70,48 @@ const DestinationPage = async ({ params }: { params: Promise<Params> }) => {
 
     // Handle case where destination is not found
     if (!result) {
-      return (
-        <main>
-          <Banner
-            title="Destination Not Found"
-            image="/images/hero.jpg"
-            breadcrumb={[
-              { name: 'Home', href: '/' },
-              { name: 'Activities', href: '/' },
-            ]}
-            pageName="Destination Not Found"
-          />
-          <div className='max-w-4xl mx-auto my-16 px-4'>
-            <div className='text-center'>
-              <h2 className='text-2xl font-semibold mb-4'>Destination Not Found</h2>
-              <p className='text-gray-600 mb-6'>
-                Sorry, we couldn't find the destination you're looking for. It may have been moved or deleted.
-              </p>
-              <a 
-                href="/" 
-                className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-              >
-                Back to Home
-              </a>
-            </div>
-          </div>
-        </main>
-      );
+      notFound();
     }
 
     // Validate URL structure matches backend data (soft 404)
-    if (result.activity?.slug !== activitySlug) {
-      return (
-        <main>
-          <Banner
-            title="Invalid Destination URL"
-            image="/images/hero.jpg"
-            breadcrumb={[
-              { name: 'Home', href: '/' },
-              { name: 'Activities', href: '/' },
-            ]}
-            pageName="Invalid URL"
-          />
-          <div className='max-w-4xl mx-auto my-16 px-4'>
-            <div className='text-center'>
-              <h2 className='text-2xl font-semibold mb-4'>Invalid Destination URL</h2>
-              <p className='text-gray-600 mb-6'>
-                The URL structure doesn't match the destination's activity. Please check the correct URL.
-              </p>
-              <div className='space-y-2 mb-6'>
-                <p className='text-sm text-gray-500'>
-                  Correct URL should be: /{result.activity?.slug}/{result.slug}
-                </p>
-              </div>
-              <div className='flex gap-4 justify-center'>
-                <a 
-                  href={`/${result.activity?.slug}/${result.slug}`}
-                  className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-                >
-                  Go to Correct URL
-                </a>
-                <a 
-                  href="/" 
-                  className='bg-gray-200 text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300 transition-colors'
-                >
-                  Back to Home
-                </a>
-              </div>
-            </div>
-          </div>
-        </main>
-      );
+    const activity = result?.activity;
+    if (activity && activity.slug !== activitySlug) {
+      notFound();
     }
 
     return (
       <main>
         <Banner
-          title={result?.name || 'Destinations'}
+          title={result?.name || 'Destination'}
           image={result?.media?.phone || '/images/hero.jpg'}
           breadcrumb={[
             { name: 'Home', href: '/' },
-            { name: result?.activity?.name, href: `/${activitySlug}` },
+            { name: activity?.name || 'Activity', href: `/${activity?.slug || activitySlug}` },
           ]}
-          pageName={result?.name || 'Destinations'}
+          pageName={result?.name || 'Destination'}
         />
-        <Packages activitySlug={activitySlug} packages={result?.packages} />
+        
+        {/* Overview Section */}
+        {result?.overview && (
+          <div className='max-w-6xl mx-auto py-16 px-4'>
+            <div className='space-y-6'>
+              <h2 className='text-3xl font-bold text-gray-900'>Overview</h2>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: result.overview,
+                }}
+                className='prose prose-lg max-w-none text-gray-700'
+              />
+            </div>
+          </div>
+        )}
+
+        <Packages packages={result?.packages} activitySlug={activitySlug} />
       </main>
     );
   } catch (error) {
     // Handle network errors or other issues
-    return (
-      <main>
-        <Banner
-          title="Error Loading Destination"
-          image="/images/hero.jpg"
-          breadcrumb={[
-            { name: 'Home', href: '/' },
-            { name: 'Activities', href: '/' },
-          ]}
-          pageName="Error"
-        />
-        <div className='max-w-4xl mx-auto my-16 px-4'>
-          <div className='text-center'>
-            <h2 className='text-2xl font-semibold mb-4'>Error Loading Destination</h2>
-            <p className='text-gray-600 mb-6'>
-              There was an error loading the destination. Please try again later.
-            </p>
-            <a 
-              href="/" 
-              className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-            >
-              Back to Home
-            </a>
-          </div>
-        </div>
-      </main>
-    );
+    notFound();
   }
 };
 

@@ -4,6 +4,7 @@ import Destinations from './_components/destinations';
 import { Params } from 'next/dist/server/request/params';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { activitySlug } = await params;
@@ -68,30 +69,7 @@ const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
 
     // Handle case where activity is not found
     if (!result) {
-      return (
-        <main>
-          <Banner
-            title="Activity Not Found"
-            image="/images/hero.jpg"
-            breadcrumb={[{ name: 'Home', href: '/' }]}
-            pageName="Activity Not Found"
-          />
-          <div className='max-w-4xl mx-auto my-16 px-4'>
-            <div className='text-center'>
-              <h2 className='text-2xl font-semibold mb-4'>Activity Not Found</h2>
-              <p className='text-gray-600 mb-6'>
-                Sorry, we couldn't find the activity you're looking for. It may have been moved or deleted.
-              </p>
-              <a 
-                href="/" 
-                className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-              >
-                Back to Home
-              </a>
-            </div>
-          </div>
-        </main>
-      );
+      notFound();
     }
 
     return (
@@ -111,30 +89,7 @@ const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
     );
   } catch (error) {
     // Handle network errors or other issues
-    return (
-      <main>
-        <Banner
-          title="Error Loading Activity"
-          image="/images/hero.jpg"
-          breadcrumb={[{ name: 'Home', href: '/' }]}
-          pageName="Error"
-        />
-        <div className='max-w-4xl mx-auto my-16 px-4'>
-          <div className='text-center'>
-            <h2 className='text-2xl font-semibold mb-4'>Error Loading Activity</h2>
-            <p className='text-gray-600 mb-6'>
-              There was an error loading the activity. Please try again later.
-            </p>
-            <a 
-              href="/" 
-              className='bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors'
-            >
-              Back to Home
-            </a>
-          </div>
-        </div>
-      </main>
-    );
+    notFound();
   }
 };
 
