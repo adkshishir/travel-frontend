@@ -124,6 +124,7 @@ const CarouselForm = ({
         img: data.media,
         folder: 'carousels',
         alt: data.alt || initialData?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         rest.mediaId = response.id || initialData?.mediaId || undefined;

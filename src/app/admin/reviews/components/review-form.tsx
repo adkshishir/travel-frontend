@@ -86,6 +86,7 @@ const ReviewForm = ({ initialData }: { initialData?: any }) => {
         img: data.media,
         folder: 'reviews',
         alt: data.alt || initialData?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         rest.mediaId = response.id || initialData?.mediaId || undefined;

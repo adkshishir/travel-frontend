@@ -65,7 +65,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ booking }) => {
 
       await postAndPatch(endpoint, payload, booking?.id ? 'PATCH' : 'POST');
       
-      toast.success(booking?.id ? 'Booking updated successfully!' : 'Booking created successfully!');
+      // toast.success(booking?.id ? 'Booking updated successfully!' : 'Booking created successfully!');
       router.push('/admin/bookings');
       router.refresh();
     } catch (error) {

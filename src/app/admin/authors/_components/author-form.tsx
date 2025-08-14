@@ -184,6 +184,7 @@ const AuthorForm = ({ initialData }: { initialData?: any }) => {
           img: profileImage,
           folder: 'authors',
           alt: `Profile image for ${data.name}`,
+          showSuccessMessage: false,
         });
         
         if (imageResponse && imageResponse.id) {

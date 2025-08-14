@@ -50,7 +50,7 @@ const Auth = () => {
       if (responseData) {
         setSubmitStatus('success');
         localStorage.setItem('email', data.email);
-        toast.success('Verification code sent to your email!');
+        // toast.success('Verification code sent to your email!');
         
         // Delay redirect to show success state
         setTimeout(() => {

@@ -274,6 +274,7 @@ const BlogForm = ({ initialData }: { initialData?: any }) => {
         img: featuredImage,
         folder: 'blogs',
         alt: `Featured image for ${data.title}`,
+        showSuccessMessage: false,
       });
       if (response && response.id) {
         blogData.mediaId = response.id;
@@ -288,6 +289,7 @@ const BlogForm = ({ initialData }: { initialData?: any }) => {
         img: seoImage,
         folder: 'blogs/seo',
         alt: `SEO image for ${data.title}`,
+        showSuccessMessage: false,
       });
       if (response && response.id) {
         blogData.seo.mediaId = response.id;

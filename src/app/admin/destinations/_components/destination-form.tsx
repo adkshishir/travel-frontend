@@ -184,6 +184,7 @@ const DestinationForm = ({
         img: data.media,
         folder: 'destinations',
         alt: data.alt || initialData?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.mediaId = response.id || initialData?.mediaId || undefined;
@@ -194,6 +195,7 @@ const DestinationForm = ({
         img: data.seomedia,
         folder: 'destinations',
         alt: data.seomediaAlt || initialData?.seo?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.seo.mediaId =

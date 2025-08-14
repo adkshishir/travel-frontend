@@ -70,7 +70,7 @@ const OtpForm = () => {
         setSubmitStatus('success');
         localStorage.removeItem('email');
         await setPersistentCookie('token', responseData.token);
-        toast.success('Login successful! Welcome back.');
+        // toast.success('Login successful! Welcome back.');
         
         // Delay redirect to show success state
         setTimeout(() => {
@@ -97,7 +97,7 @@ const OtpForm = () => {
     try {
       const responseData = await postAndPatch(ENDPOINTS.AUTH, { email });
       if (responseData) {
-        toast.success('New verification code sent!');
+        // toast.success('New verification code sent!');
         setCountdown(60); // 60 second cooldown
         setOtp(''); // Clear current OTP
         setSubmitStatus('idle');

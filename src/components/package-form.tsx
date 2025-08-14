@@ -257,12 +257,13 @@ const PackageForm = ({
         ),
       };
 
-      // Upload main image if exists
+      // Upload main images if any
       if (mainImage) {
         const mainImageResponse = await uploadImage({
           img: mainImage,
           folder: 'packages',
-          alt: mainImageAlt,
+          alt: `Main image for ${formData.title}`,
+          showSuccessMessage: false,
         });
 
         if (mainImageResponse) {
@@ -276,6 +277,7 @@ const PackageForm = ({
           img: seoImage,
           folder: 'packages/seo',
           alt: seoImageAlt,
+          showSuccessMessage: false,
         });
 
         if (seoImageResponse) {
@@ -287,6 +289,7 @@ const PackageForm = ({
           img: map,
           folder: 'packages/map',
           alt: mapAlt,
+          showSuccessMessage: false,
         });
         if (mapImageResponse) {
           payload.mapId = mapImageResponse.id;
@@ -300,6 +303,7 @@ const PackageForm = ({
             img,
             folder: 'packages/gallery',
             alt: 'Gallery image',
+            showSuccessMessage: false,
           })
         );
 

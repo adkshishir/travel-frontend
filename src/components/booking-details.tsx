@@ -135,7 +135,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
     try {
       const response = await postAndPatch(ENDPOINTS.BOOKING, bookingPayload);
       if (response) {
-        toast.success('Booking submitted successfully! We will contact you soon.');
+        // toast.success('Booking submitted successfully! We will contact you soon.');
         // Redirect to success page
         router.push('/booking/success');
       }
@@ -281,7 +281,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
             <span className='ml-auto font-medium'>+$399</span>
           </div>
 
-          <div className='flex items-start space-x-2'>
+          {/* <div className='flex items-start space-x-2'>
             <Checkbox id='spa' checked={!!selectedOptions['spa']} onCheckedChange={() => handleOptionChange('spa')} />
             <div className='grid gap-1.5 leading-none'>
               <Label htmlFor='spa' className='text-sm font-medium'>
@@ -292,7 +292,7 @@ const BookingDetails = ({ packageData }: BookingDetailsProps) => {
               </p>
             </div>
             <span className='ml-auto font-medium'>+$199</span>
-          </div>
+          </div> */}
 
           <div className='flex items-start space-x-2'>
             <Checkbox id='insurance' checked={!!selectedOptions['insurance']} onCheckedChange={() => handleOptionChange('insurance')} />

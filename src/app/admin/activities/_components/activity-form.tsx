@@ -134,6 +134,7 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
         img: data.media,
         folder: 'activities',
         alt: data.alt || initialData?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.mediaId = response.id || initialData?.mediaId || undefined;
@@ -144,6 +145,7 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
         img: data.seomedia,
         folder: 'activities',
         alt: data.seomediaAlt || initialData?.seo?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.seo.mediaId =

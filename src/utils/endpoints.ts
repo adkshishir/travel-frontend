@@ -15,6 +15,7 @@ const ENDPOINTS = {
   BOOKING: 'booking',
   MAIL: 'mail',
   SITE_INFO: 'site-info',
+  CATEGORIES: 'categories',
 };
 
 export default ENDPOINTS;

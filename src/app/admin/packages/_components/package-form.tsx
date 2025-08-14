@@ -497,6 +497,7 @@ const PackageForm = ({ initialData }: { initialData?: any }) => {
         img: data.mainMedia,
         folder: 'tours',
         alt: data.mainMediaAlt || initialData?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.mediaId = response.id || initialData?.mediaId || undefined;
@@ -509,6 +510,7 @@ const PackageForm = ({ initialData }: { initialData?: any }) => {
         img: data.seomedia,
         folder: 'tours',
         alt: data.seomediaAlt || initialData?.seo?.media?.alt,
+        showSuccessMessage: false,
       });
       if (response) {
         payload.seo.mediaId =
@@ -533,6 +535,7 @@ const PackageForm = ({ initialData }: { initialData?: any }) => {
           img: file,
           folder: 'tours/gallery',
           alt: `Gallery image for ${data.title}`,
+          showSuccessMessage: false,
         });
 
         if (response && response.id) {
