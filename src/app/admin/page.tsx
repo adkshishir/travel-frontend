@@ -267,6 +267,12 @@ const AdminDashboard = async () => {
                 Manage Packages
               </Link>
             </Button>
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <Link href="/admin/categories">
+                <FileText className="mr-2 h-4 w-4" />
+                Manage Categories
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 

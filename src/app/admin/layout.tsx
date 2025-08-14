@@ -21,6 +21,7 @@ import {
   Eye,
   Calendar,
   Mail,
+  FileText,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -89,6 +90,12 @@ export default function AdminLayout({
       label: 'Packages',
       href: '/admin/packages',
       description: 'Manage your packages',
+    },
+    {
+      icon: FileText,
+      label: 'Categories',
+      href: '/admin/categories',
+      description: 'Manage static pages',
     },
     {
       icon: Calendar,

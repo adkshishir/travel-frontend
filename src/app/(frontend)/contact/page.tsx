@@ -53,7 +53,7 @@ const ContactPage = () => {
 
       await postAndPatch(ENDPOINTS.MAIL, payload);
       
-      toast.success('Thank you! Your message has been sent successfully. We will get back to you soon.');
+      // toast.success('Thank you! Your message has been sent successfully. We will get back to you soon.');
       
       // Reset form
       setFormData({
