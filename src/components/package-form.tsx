@@ -30,6 +30,8 @@ import {
   Compass,
   Info,
   CheckCircle,
+  Image as ImageIcon,
+  Upload,
 } from 'lucide-react';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
 import dynamic from 'next/dynamic';
@@ -84,7 +86,7 @@ const PackageForm = ({
     highlights: initialData?.highlights || '',
     mapId: initialData?.mapId || '',
     map:undefined,
-    destinationId: initialData?.destinationId || '',
+    destinationId: initialData?.destinationId ? String(initialData.destinationId) : '',
     seo: {
       metaTitle: initialData?.seo?.metaTitle || '',
       metaDescription: initialData?.seo?.metaDescription || '',
@@ -93,24 +95,53 @@ const PackageForm = ({
       metaCanonical: initialData?.seo?.metaCanonical || '',
       schema: initialData?.seo?.schema || '',
     },
-    mediaIds: initialData?.media?.map((m: { id: any }) => m.id) || [],
+    mediaIds: [], // Will be populated correctly during submission
     faqs: initialData?.faqs || [{ question: '', answer: '' }],
   });
 
   // Media state
   const [mainImage, setMainImage] = useState(null);
+  const [mainImagePreview, setMainImagePreview] = useState(
+    initialData?.mainImage?.medium || initialData?.mainImage?.original || ''
+  );
   const [mainImageAlt, setMainImageAlt] = useState(
-    initialData?.media?.alt || ''
+    initialData?.mainImage?.alt || ''
   );
   const [seoImage, setSeoImage] = useState(null);
+  const [seoImagePreview, setSeoImagePreview] = useState(
+    initialData?.seo?.media?.medium || initialData?.seo?.media?.original || ''
+  );
   const [map, setMap] = useState(null);
+  const [mapPreview, setMapPreview] = useState(
+    initialData?.map?.medium || initialData?.map?.original || ''
+  );
   const [mapAlt, setMapAlt] = useState(initialData?.map?.alt || '');
   const [seoImageAlt, setSeoImageAlt] = useState(
     initialData?.seo?.media?.alt || ''
   );
   const [galleryImages, setGalleryImages] = useState<File[]>([]);
+  const [galleryAltTexts, setGalleryAltTexts] = useState<string[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [existingGalleryImages, setExistingGalleryImages] = useState(
+    initialData?.media?.map((img: any) => ({
+      id: img.id,
+      url: img.medium || img.original || img.thumbnail || '',
+      alt: img.alt || '',
+    })) || []
+  );
 
   // Fetch destinations and maps
+
+  // Debug: Log initial data structure
+  useEffect(() => {
+    if (initialData) {
+      console.log('Initial Data Structure:', initialData);
+      console.log('Main Image:', initialData.mainImage);
+      console.log('Map:', initialData.map);
+      console.log('SEO Media:', initialData.seo?.media);
+      console.log('Gallery Media:', initialData.media);
+    }
+  }, [initialData]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -142,23 +173,63 @@ const PackageForm = ({
     });
   };
 
-  // Handle file changes
-  const handleFileChange = (e, setter) => {
+  // Create image preview
+  const createImagePreview = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle file changes with preview
+  const handleFileChange = async (e, setter, previewSetter) => {
     const file = e.target.files[0];
     if (file) {
       setter(file);
+      if (previewSetter) {
+        const preview = await createImagePreview(file);
+        previewSetter(preview);
+      }
     }
   };
 
-  // Handle gallery images
-  const handleGalleryImages = (e) => {
+  // Handle gallery images with previews and alt texts
+  const handleGalleryImages = async (e) => {
     const files = Array.from(e.target.files);
+    const newPreviews = await Promise.all(
+      files.map((file: File) => createImagePreview(file))
+    );
+    
     setGalleryImages([...galleryImages, ...files]);
+    setGalleryPreviews([...galleryPreviews, ...newPreviews]);
+    setGalleryAltTexts([...galleryAltTexts, ...new Array(files.length).fill('')]);
   };
 
   // Remove gallery image
   const removeGalleryImage = (index) => {
     setGalleryImages(galleryImages.filter((_, i) => i !== index));
+    setGalleryPreviews(galleryPreviews.filter((_, i) => i !== index));
+    setGalleryAltTexts(galleryAltTexts.filter((_, i) => i !== index));
+  };
+
+  // Remove existing gallery image
+  const removeExistingGalleryImage = (index) => {
+    setExistingGalleryImages(existingGalleryImages.filter((_, i) => i !== index));
+  };
+
+  // Update gallery alt text
+  const updateGalleryAltText = (index, altText) => {
+    const updatedAltTexts = [...galleryAltTexts];
+    updatedAltTexts[index] = altText;
+    setGalleryAltTexts(updatedAltTexts);
+  };
+
+  // Update existing gallery alt text
+  const updateExistingGalleryAltText = (index, altText) => {
+    const updated = [...existingGalleryImages];
+    updated[index].alt = altText;
+    setExistingGalleryImages(updated);
   };
 
   // Handle FAQs
@@ -241,42 +312,43 @@ const PackageForm = ({
         includes: formData.includes,
         goodtoknow: formData.goodtoknow,
         highlights: formData.highlights,
-        mapId:  undefined,
+        mapId: initialData?.mapId || undefined, // Keep existing map if no new one
+        mainImageId: initialData?.mainImageId || undefined, // Keep existing main image if no new one
         destinationId: Number(formData.destinationId),
         seo: {
           metaTitle: formData.seo.metaTitle,
           metaDescription: formData.seo.metaDescription,
           metaKeywords: formData.seo.metaKeywords,
-          mediaId: formData.seo.mediaId,
+          mediaId: initialData?.seo?.mediaId || undefined, // Keep existing SEO image if no new one
           metaCanonical: formData.seo.metaCanonical,
           schema: formData.seo.schema,
         },
-        mediaIds: [],
+        mediaIds: [...existingGalleryImages.map(img => img.id)], // Start with existing gallery images
         faqs: formData.faqs.filter(
           (faq: { question: any; answer: any }) => faq.question && faq.answer
         ),
       };
 
-      // Upload main images if any
+      // Upload main image if new one is selected
       if (mainImage) {
         const mainImageResponse = await uploadImage({
           img: mainImage,
           folder: 'packages',
-          alt: `Main image for ${formData.title}`,
+          alt: mainImageAlt || `Main image for ${formData.title}`,
           showSuccessMessage: false,
         });
 
         if (mainImageResponse) {
-          payload.mediaIds.push(mainImageResponse.id || undefined);
+          payload.mainImageId = mainImageResponse.id;
         }
       }
 
-      // Upload SEO image if exists
+      // Upload SEO image if new one is selected
       if (seoImage) {
         const seoImageResponse = await uploadImage({
           img: seoImage,
           folder: 'packages/seo',
-          alt: seoImageAlt,
+          alt: seoImageAlt || `SEO image for ${formData.title}`,
           showSuccessMessage: false,
         });
 
@@ -284,11 +356,13 @@ const PackageForm = ({
           payload.seo.mediaId = seoImageResponse.id;
         }
       }
+      
+      // Upload map if new one is selected
       if(map){
         const mapImageResponse = await uploadImage({
           img: map,
           folder: 'packages/map',
-          alt: mapAlt,
+          alt: mapAlt || `Map for ${formData.title}`,
           showSuccessMessage: false,
         });
         if (mapImageResponse) {
@@ -296,13 +370,13 @@ const PackageForm = ({
         }
       }
 
-      // Upload gallery images if any
+      // Upload new gallery images if any
       if (galleryImages.length > 0) {
-        const uploadPromises = galleryImages.map((img) =>
+        const uploadPromises = galleryImages.map((img, index) =>
           uploadImage({
             img,
             folder: 'packages/gallery',
-            alt: 'Gallery image',
+            alt: galleryAltTexts[index] || `Gallery image for ${formData.title}`,
             showSuccessMessage: false,
           })
         );
@@ -708,56 +782,148 @@ const PackageForm = ({
 
             {/* Media Tab */}
             <TabsContent value='media' className='space-y-6'>
-              <div className='grid grid-cols-2 gap-6'>
-                <div className='space-y-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='mainImage'>Main Image</Label>
-                    <div className='flex items-center gap-2'>
+              <div className='space-y-8'>
+                {/* Main Image */}
+                <div className='grid grid-cols-2 gap-6'>
+                  <div className='space-y-4'>
+                    <div className='space-y-2'>
+                      <Label htmlFor='mainImage'>Main Image</Label>
+                      <div className='flex items-center gap-2'>
+                        <Input
+                          id='mainImage'
+                          type='file'
+                          accept='image/*'
+                          onChange={(e) => handleFileChange(e, setMainImage, setMainImagePreview)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label htmlFor='mainImageAlt'>Main Image Alt Text</Label>
                       <Input
-                        id='mainImage'
-                        type='file'
-                        accept='image/*'
-                        onChange={(e) => handleFileChange(e, setMainImage)}
+                        id='mainImageAlt'
+                        value={mainImageAlt}
+                        onChange={(e) => setMainImageAlt(e.target.value)}
+                        placeholder='Describe the image for accessibility'
                       />
                     </div>
                   </div>
 
+                  {/* Main Image Preview */}
                   <div className='space-y-2'>
-                    <Label htmlFor='mainImageAlt'>Main Image Alt Text</Label>
-                    <Input
-                      id='mainImageAlt'
-                      value={mainImageAlt}
-                      onChange={(e) => setMainImageAlt(e.target.value)}
-                      placeholder='Describe the image'
-                    />
+                    <Label>Preview</Label>
+                    <div className='aspect-video bg-muted rounded-md flex items-center justify-center overflow-hidden border'>
+                      {mainImagePreview ? (
+                        <img
+                          src={mainImagePreview}
+                          alt='Main image preview'
+                          className='w-full h-full object-cover'
+                          onError={(e) => {
+                            console.error('Main image failed to load:', mainImagePreview);
+                            e.currentTarget.style.display = 'none';
+                          }}
+                          onLoad={() => console.log('Main image loaded successfully:', mainImagePreview)}
+                        />
+                      ) : (
+                        <div className='flex flex-col items-center text-muted-foreground'>
+                          <ImageIcon className='h-12 w-12 mb-2' />
+                          <span className='text-sm'>No image selected</span>
+                          {initialData?.mainImage && (
+                            <span className='text-xs text-red-500 mt-1'>
+                              Image data found but preview failed
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {/* Debug info */}
+                    {initialData && (
+                      <div className='text-xs text-muted-foreground bg-muted p-2 rounded'>
+                        <div>Main Image URL: {mainImagePreview || 'None'}</div>
+                        <div>Main Image Alt: {mainImageAlt || 'None'}</div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                <div className='grid  items-center'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='videoLink'>Video Link</Label>
-                    <Input
-                      id='videoLink'
-                      name='videoLink'
-                      value={formData.videoLink}
-                      onChange={handleChange}
-                      placeholder='YouTube or Vimeo URL'
-                    />
-                  </div>
-                  <div>
+                <Separator />
+
+                {/* Map Image */}
+                <div className='grid grid-cols-2 gap-6'>
+                  <div className='space-y-4'>
                     <div className='space-y-2'>
-                      <Label htmlFor='map'>Map</Label>
+                      <Label htmlFor='map'>Map Image</Label>
                       <Input
                         id='map'
                         type='file'
                         accept='image/*'
-                        onChange={(e) => handleFileChange(e, setMap)}
+                        onChange={(e) => handleFileChange(e, setMap, setMapPreview)}
+                      />
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label htmlFor='mapAlt'>Map Alt Text</Label>
+                      <Input
+                        id='mapAlt'
+                        value={mapAlt}
+                        onChange={(e) => setMapAlt(e.target.value)}
+                        placeholder='Describe the map for accessibility'
+                      />
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label htmlFor='videoLink'>Video Link</Label>
+                      <Input
+                        id='videoLink'
+                        name='videoLink'
+                        value={formData.videoLink}
+                        onChange={handleChange}
+                        placeholder='YouTube or Vimeo URL'
                       />
                     </div>
                   </div>
+
+                  {/* Map Preview */}
+                  <div className='space-y-2'>
+                    <Label>Map Preview</Label>
+                    <div className='aspect-video bg-muted rounded-md flex items-center justify-center overflow-hidden border'>
+                      {mapPreview ? (
+                        <img
+                          src={mapPreview}
+                          alt='Map preview'
+                          className='w-full h-full object-cover'
+                          onError={(e) => {
+                            console.error('Map image failed to load:', mapPreview);
+                            e.currentTarget.style.display = 'none';
+                          }}
+                          onLoad={() => console.log('Map image loaded successfully:', mapPreview)}
+                        />
+                      ) : (
+                        <div className='flex flex-col items-center text-muted-foreground'>
+                          <MapPin className='h-12 w-12 mb-2' />
+                          <span className='text-sm'>No map selected</span>
+                          {initialData?.map && (
+                            <span className='text-xs text-red-500 mt-1'>
+                              Map data found but preview failed
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {/* Debug info */}
+                    {initialData && (
+                      <div className='text-xs text-muted-foreground bg-muted p-2 rounded'>
+                        <div>Map URL: {mapPreview || 'None'}</div>
+                        <div>Map Alt: {mapAlt || 'None'}</div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className='col-span-2 space-y-4'>
+                <Separator />
+
+                {/* Gallery Images */}
+                <div className='space-y-4'>
                   <div className='space-y-2'>
                     <Label htmlFor='galleryImages'>Gallery Images</Label>
                     <Input
@@ -769,23 +935,86 @@ const PackageForm = ({
                     />
                   </div>
 
-                  {galleryImages.length > 0 && (
-                    <div className='space-y-2'>
-                      <Label>Selected Gallery Images</Label>
-                      <div className='grid grid-cols-4 gap-4'>
-                        {galleryImages.map((image, index) => (
-                          <div key={index} className='relative group'>
-                            <div className='aspect-square bg-muted rounded-md flex items-center justify-center overflow-hidden'>
-                              <div className='text-sm text-center p-2'>
-                                {image.name}
-                              </div>
+                  {/* Existing Gallery Images */}
+                  {existingGalleryImages.length > 0 && (
+                    <div className='space-y-4'>
+                      <Label>Existing Gallery Images ({existingGalleryImages.length})</Label>
+                      {/* Debug info */}
+                      <div className='text-xs text-muted-foreground bg-muted p-2 rounded'>
+                        <div>Gallery Images Found: {initialData?.media?.length || 0}</div>
+                        <div>Processed Images: {existingGalleryImages.length}</div>
+                      </div>
+                      <div className='grid grid-cols-2 gap-4'>
+                        {existingGalleryImages.map((image, index) => (
+                          <div key={`existing-${image.id}`} className='space-y-2 p-4 border rounded-lg'>
+                            <div className='aspect-video bg-muted rounded-md overflow-hidden'>
+                              <img
+                                src={image.url}
+                                alt={image.alt || 'Gallery image'}
+                                className='w-full h-full object-cover'
+                                onError={(e) => {
+                                  console.error('Gallery image failed to load:', image.url);
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                                onLoad={() => console.log('Gallery image loaded successfully:', image.url)}
+                              />
                             </div>
-                            <button
-                              type='button'
-                              onClick={() => removeGalleryImage(index)}
-                              className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-                              <X className='h-4 w-4' />
-                            </button>
+                            <div className='space-y-2'>
+                              <div className='text-xs text-muted-foreground'>
+                                ID: {image.id} | URL: {image.url}
+                              </div>
+                              <Input
+                                value={image.alt}
+                                onChange={(e) => updateExistingGalleryAltText(index, e.target.value)}
+                                placeholder='Image alt text'
+                              />
+                              <Button
+                                type='button'
+                                variant='destructive'
+                                size='sm'
+                                onClick={() => removeExistingGalleryImage(index)}
+                                className='w-full'>
+                                <X className='h-4 w-4 mr-2' />
+                                Remove Image
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* New Gallery Images */}
+                  {galleryImages.length > 0 && (
+                    <div className='space-y-4'>
+                      <Label>New Gallery Images</Label>
+                      <div className='grid grid-cols-2 gap-4'>
+                        {galleryImages.map((image, index) => (
+                          <div key={`new-${index}`} className='space-y-2 p-4 border rounded-lg'>
+                            <div className='aspect-video bg-muted rounded-md overflow-hidden'>
+                              <img
+                                src={galleryPreviews[index]}
+                                alt={galleryAltTexts[index] || image.name}
+                                className='w-full h-full object-cover'
+                              />
+                            </div>
+                            <div className='space-y-2'>
+                              <p className='text-sm text-muted-foreground truncate'>{image.name}</p>
+                              <Input
+                                value={galleryAltTexts[index] || ''}
+                                onChange={(e) => updateGalleryAltText(index, e.target.value)}
+                                placeholder='Image alt text'
+                              />
+                              <Button
+                                type='button'
+                                variant='destructive'
+                                size='sm'
+                                onClick={() => removeGalleryImage(index)}
+                                className='w-full'>
+                                <X className='h-4 w-4 mr-2' />
+                                Remove Image
+                              </Button>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -875,71 +1104,48 @@ const PackageForm = ({
             {/* SEO Tab */}
             <TabsContent value='seo' className='space-y-6'>
               <div className='grid grid-cols-2 gap-6'>
-                <div className='space-y-2'>
-                  <Label htmlFor='seo.metaTitle'>Meta Title</Label>
-                  <Input
-                    id='seo.metaTitle'
-                    name='seo.metaTitle'
-                    value={formData.seo.metaTitle}
-                    onChange={handleChange}
-                    placeholder='Enter meta title'
-                  />
-                </div>
-
-                <div className='space-y-2'>
-                  <Label htmlFor='seo.metaKeywords'>Meta Keywords</Label>
-                  <Input
-                    id='seo.metaKeywords'
-                    name='seo.metaKeywords'
-                    value={formData.seo.metaKeywords}
-                    onChange={handleChange}
-                    placeholder='Enter meta keywords'
-                  />
-                </div>
-
-                <div className='space-y-2'>
-                  <Label htmlFor='seo.metaCanonical'>Canonical URL</Label>
-                  <Input
-                    id='seo.metaCanonical'
-                    name='seo.metaCanonical'
-                    value={formData.seo.metaCanonical}
-                    onChange={handleChange}
-                    placeholder='https://example.com/page'
-                  />
-                </div>
-
-                <div className='col-span-2 space-y-2'>
-                  <Label htmlFor='seo.metaDescription'>Meta Description</Label>
-                  <Textarea
-                    id='seo.metaDescription'
-                    name='seo.metaDescription'
-                    value={formData.seo.metaDescription}
-                    onChange={handleChange}
-                    placeholder='Enter meta description'
-                    rows={3}
-                  />
-                </div>
-
-                <div className='col-span-2 space-y-2'>
-                  <Label htmlFor='seo.schema'>Schema Markup (JSON-LD)</Label>
-                  <Textarea
-                    id='seo.schema'
-                    name='seo.schema'
-                    value={formData.seo.schema}
-                    onChange={handleChange}
-                    placeholder='Enter schema JSON-LD'
-                    rows={5}
-                  />
-                </div>
-
                 <div className='space-y-4'>
                   <div className='space-y-2'>
-                    <Label htmlFor='seoImage'>SEO Image</Label>
+                    <Label htmlFor='seo.metaTitle'>Meta Title</Label>
+                    <Input
+                      id='seo.metaTitle'
+                      name='seo.metaTitle'
+                      value={formData.seo.metaTitle}
+                      onChange={handleChange}
+                      placeholder='Enter meta title'
+                    />
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label htmlFor='seo.metaDescription'>Meta Description</Label>
+                    <Textarea
+                      id='seo.metaDescription'
+                      name='seo.metaDescription'
+                      value={formData.seo.metaDescription}
+                      onChange={handleChange}
+                      placeholder='Enter meta description'
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label htmlFor='seo.metaKeywords'>Meta Keywords</Label>
+                    <Input
+                      id='seo.metaKeywords'
+                      name='seo.metaKeywords'
+                      value={formData.seo.metaKeywords}
+                      onChange={handleChange}
+                      placeholder='Enter keywords separated by commas'
+                    />
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label htmlFor='seoImage'>SEO Image (Open Graph)</Label>
                     <Input
                       id='seoImage'
                       type='file'
                       accept='image/*'
-                      onChange={(e) => handleFileChange(e, setSeoImage)}
+                      onChange={(e) => handleFileChange(e, setSeoImage, setSeoImagePreview)}
                     />
                   </div>
 
@@ -952,6 +1158,65 @@ const PackageForm = ({
                       placeholder='Describe the SEO image'
                     />
                   </div>
+                </div>
+
+                {/* SEO Image Preview */}
+                <div className='space-y-2'>
+                  <Label>SEO Image Preview</Label>
+                  <div className='aspect-video bg-muted rounded-md flex items-center justify-center overflow-hidden border'>
+                    {seoImagePreview ? (
+                      <img
+                        src={seoImagePreview}
+                        alt='SEO image preview'
+                        className='w-full h-full object-cover'
+                        onError={(e) => {
+                          console.error('SEO image failed to load:', seoImagePreview);
+                          e.currentTarget.style.display = 'none';
+                        }}
+                        onLoad={() => console.log('SEO image loaded successfully:', seoImagePreview)}
+                      />
+                    ) : (
+                      <div className='flex flex-col items-center text-muted-foreground'>
+                        <ImageIcon className='h-12 w-12 mb-2' />
+                        <span className='text-sm'>No SEO image selected</span>
+                        {initialData?.seo?.media && (
+                          <span className='text-xs text-red-500 mt-1'>
+                            SEO image data found but preview failed
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {/* Debug info */}
+                  {initialData && (
+                    <div className='text-xs text-muted-foreground bg-muted p-2 rounded'>
+                      <div>SEO Image URL: {seoImagePreview || 'None'}</div>
+                      <div>SEO Image Alt: {seoImageAlt || 'None'}</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className='col-span-2 space-y-2'>
+                  <Label htmlFor='seo.metaCanonical'>Canonical URL</Label>
+                  <Input
+                    id='seo.metaCanonical'
+                    name='seo.metaCanonical'
+                    value={formData.seo.metaCanonical}
+                    onChange={handleChange}
+                    placeholder='Enter canonical URL'
+                  />
+                </div>
+
+                <div className='col-span-2 space-y-2'>
+                  <Label htmlFor='seo.schema'>Schema Markup</Label>
+                  <Textarea
+                    id='seo.schema'
+                    name='seo.schema'
+                    value={formData.seo.schema}
+                    onChange={handleChange}
+                    placeholder='Enter JSON-LD schema markup'
+                    rows={6}
+                  />
                 </div>
               </div>
             </TabsContent>
