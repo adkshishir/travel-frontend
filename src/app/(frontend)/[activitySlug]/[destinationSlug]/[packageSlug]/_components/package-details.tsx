@@ -38,8 +38,39 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
 
-  // Get all available images
-  const galleryImages = pack?.media || [];
+  // Get all available images - combine mainImage and media
+  const getAllGalleryImages = () => {
+    const images = [];
+    
+    // Add main image as first image if it exists
+    if (pack?.mainImage) {
+      images.push({
+        id: pack.mainImage.id,
+        original: pack.mainImage.original,
+        thumbnail: pack.mainImage.thumbnail,
+        alt: pack.mainImage.alt || 'Main package image'
+      });
+    }
+    
+    // Add media images
+    if (pack?.media && pack.media.length > 0) {
+      pack.media.forEach((image: any) => {
+        // Only add if it's not the same as mainImage (to avoid duplicates)
+        if (!pack?.mainImage || image.id !== pack.mainImage.id) {
+          images.push({
+            id: image.id,
+            original: image.original,
+            thumbnail: image.thumbnail,
+            alt: image.alt || 'Package gallery image'
+          });
+        }
+      });
+    }
+    
+    return images;
+  };
+
+  const galleryImages = getAllGalleryImages();
   const hasGallery = galleryImages && galleryImages.length > 0;
 
   const openGallery = (index: number) => {
@@ -66,9 +97,9 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
 
   const downloadImage = () => {
     const currentImage = galleryImages[currentImageIndex];
-    if (currentImage?.original) {
+    if (currentImage?.original || currentImage?.thumbnail) {
       const link = document.createElement('a');
-      link.href = currentImage.original;
+      link.href = currentImage.original || currentImage.thumbnail;
       link.download = `${pack?.title || 'image'}-${currentImageIndex + 1}.jpg`;
       document.body.appendChild(link);
       link.click();
@@ -404,7 +435,7 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
           <div className='relative group'>
             <div className='aspect-[16/10] rounded-xl overflow-hidden bg-gray-100'>
               <Image
-                src={galleryImages[0]?.original || '/images/hero.jpg'}
+                src={galleryImages[0]?.original || galleryImages[0]?.thumbnail || '/images/hero.jpg'}
                 alt={galleryImages[0]?.alt || 'Gallery image'}
                 width={1200}
                 height={750}
@@ -509,7 +540,7 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
           {/* Main Image */}
           <div className={`relative max-w-7xl max-h-[80vh] mx-auto transition-transform duration-300 ${isZoomed ? 'scale-150 cursor-move' : 'cursor-zoom-in'}`}>
             <Image
-              src={galleryImages[currentImageIndex]?.original || '/images/hero.jpg'}
+              src={galleryImages[currentImageIndex]?.original || galleryImages[currentImageIndex]?.thumbnail || '/images/hero.jpg'}
               alt={galleryImages[currentImageIndex]?.alt || 'Gallery image'}
               width={1200}
               height={800}

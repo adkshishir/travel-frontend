@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     const description = seo.metaDescription || result?.description || 'Explore this amazing package.';
     const keywords = seo.metaKeywords || '';
     const canonical = seo.metaCanonical || '';
-    const image = result?.media?.[0]?.thumbnail || result?.seo?.media?.thumbnail || '/images/hero.jpg';
+    const image = result?.mainImage?.thumbnail || result?.mainImage?.original || result?.media?.[0]?.thumbnail || result?.seo?.media?.thumbnail || '/images/hero.jpg';
     const url = typeof window !== 'undefined' ? window.location.href : '';
     
     return {
@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <main>
         <Banner
           title={result?.title || 'Package Details'}
-          image={result?.media?.[0]?.thumbnail || '/images/hero.jpg'}
+          image={result?.mainImage?.thumbnail || result?.mainImage?.original || result?.media?.[0]?.thumbnail || '/images/hero.jpg'}
           breadcrumb={[
             { name: 'Home', href: '/' },
             { name: activity?.name || 'Activity', href: `/${activity?.slug || activitySlug}` },
