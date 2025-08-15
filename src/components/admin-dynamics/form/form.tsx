@@ -483,12 +483,12 @@ export function DynamicForm({ config, onSubmit, isLoading = false }: DynamicForm
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className='space-y-6 border p-4 rounded-md bg-white'>
+        className='space-y-6'>
         <div className='grid gap-4 lg:grid-cols-2'>
           {config.fields.map(renderField)}
         </div>
         <Button 
-          className='text-white cursor-pointer rounded-sm min-w-[120px]' 
+          className='text-white cursor-pointer rounded-lg min-w-[120px]' 
           type='submit'
           disabled={isSubmitting || isLoading}
         >

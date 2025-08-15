@@ -102,44 +102,36 @@ const CategoryForm = ({ initialData }: { initialData?: any }) => {
         defaultValue: initialData?.seo?.metaKeywords || '',
         description: 'Comma-separated keywords for SEO',
       },
-      {
-        name: 'seo.metaCanonical',
-        label: 'Canonical URL',
-        type: 'text',
-        placeholder: 'https://example.com/canonical-url',
-        required: false,
-        defaultValue: initialData?.seo?.metaCanonical || '',
-        description: 'Canonical URL for this page (optional)',
-      },
     ],
     submitLabel: initialData ? 'Update Category' : 'Create Category',
   };
 
-  const onSubmit = async (data: any) => {
+  const handleSubmit = async (data: any) => {
     try {
-      const payload = {
-        endpoint: data.endpoint,
-        title: data.title,
-        slug: data.slug || data.endpoint, // Use endpoint as slug if slug is empty
-        content: data.content,
+      // Handle boolean conversion for isActive
+      const processedData = {
+        ...data,
         isActive: data.isActive === 'true',
         seo: {
-          metaTitle: data.seo?.metaTitle || '',
-          metaDescription: data.seo?.metaDescription || '',
-          metaKeywords: data.seo?.metaKeywords || '',
-          metaCanonical: data.seo?.metaCanonical || '',
+          metaTitle: data['seo.metaTitle'] || '',
+          metaDescription: data['seo.metaDescription'] || '',
+          metaKeywords: data['seo.metaKeywords'] || '',
         },
       };
 
-      const result = await postAndPatch(
+      // Remove nested field names
+      delete processedData['seo.metaTitle'];
+      delete processedData['seo.metaDescription'];
+      delete processedData['seo.metaKeywords'];
+
+      const res = await postAndPatch(
         ENDPOINTS.CATEGORIES,
-        payload,
+        processedData,
         initialData?.id
       );
 
-      if (result) {
+      if (res) {
         router.push('/admin/categories');
-        router.refresh();
       }
     } catch (error) {
       console.error('Error submitting category:', error);
@@ -147,32 +139,24 @@ const CategoryForm = ({ initialData }: { initialData?: any }) => {
   };
 
   return (
-    <div className=" mx-auto">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-2">📄 Category Page Guidelines</h3>
-        <div className="text-blue-800 text-sm grid md:grid-cols-2 gap-4">
-          <div>
-            <h4 className="font-medium mb-1">Endpoint Examples:</h4>
-            <ul className="space-y-1">
-              <li>• <code>about-us</code> → /about-us</li>
-              <li>• <code>privacy-policy</code> → /privacy-policy</li>
-              <li>• <code>terms-of-service</code> → /terms-of-service</li>
-              <li>• <code>contact-us</code> → /contact-us</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-medium mb-1">Best Practices:</h4>
-            <ul className="space-y-1">
-              <li>• Use descriptive, clear titles</li>
-              <li>• Keep endpoints URL-friendly (lowercase, hyphens)</li>
-              <li>• Add proper SEO metadata</li>
-              <li>• Use rich content formatting for better readability</li>
-            </ul>
-          </div>
+    <div className="max-w-4xl space-y-6">
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {initialData ? 'Edit Category' : 'Create New Category'}
+          </h2>
+          <p className="text-gray-600 mt-1">
+            {initialData 
+              ? 'Update the category information below.' 
+              : 'Fill in the details to create a new static page category.'
+            }
+          </p>
+        </div>
+        
+        <div className="p-6">
+          <DynamicForm config={config} onSubmit={handleSubmit} />
         </div>
       </div>
-      
-      <DynamicForm config={config} onSubmit={onSubmit} />
     </div>
   );
 };

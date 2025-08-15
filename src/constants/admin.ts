@@ -6,10 +6,10 @@ export const ADMIN_CONFIG = {
   
   // Common CSS classes
   BUTTON_CLASSES: {
-    PRIMARY: 'bg-primary text-white w-fit px-4 rounded-sm py-2 hover:bg-primary/90 transition-colors',
-    SECONDARY: 'bg-secondary text-secondary-foreground w-fit px-4 rounded-sm py-2 hover:bg-secondary/90 transition-colors',
-    DANGER: 'bg-destructive text-destructive-foreground w-fit px-4 rounded-sm py-2 hover:bg-destructive/90 transition-colors',
-    SUCCESS: 'bg-green-600 text-white w-fit px-4 rounded-sm py-2 hover:bg-green-700 transition-colors',
+    PRIMARY: 'bg-primary text-white w-fit px-4 rounded-lg py-2 hover:bg-primary/90 transition-colors',
+    SECONDARY: 'bg-secondary text-secondary-foreground w-fit px-4 rounded-lg py-2 hover:bg-secondary/90 transition-colors',
+    DANGER: 'bg-destructive text-destructive-foreground w-fit px-4 rounded-lg py-2 hover:bg-destructive/90 transition-colors',
+    SUCCESS: 'bg-green-600 text-white w-fit px-4 rounded-lg py-2 hover:bg-green-700 transition-colors',
   },
   
   // Form validation patterns

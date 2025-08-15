@@ -98,8 +98,24 @@ const ReviewForm = ({ initialData }: { initialData?: any }) => {
     }
   }
   return (
-    <div>
-      <DynamicForm config={formConfig} onSubmit={handleSubmit} />
+    <div className="max-w-4xl space-y-6">
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {initialData ? 'Edit Review' : 'Create New Review'}
+          </h2>
+          <p className="text-gray-600 mt-1">
+            {initialData 
+              ? 'Update the review information below.' 
+              : 'Fill in the details to create a new review.'
+            }
+          </p>
+        </div>
+        
+        <div className="p-6">
+          <DynamicForm config={formConfig} onSubmit={handleSubmit} />
+        </div>
+      </div>
     </div>
   );
 };

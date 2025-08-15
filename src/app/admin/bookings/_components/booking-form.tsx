@@ -77,225 +77,250 @@ const BookingForm: React.FC<BookingFormProps> = ({ booking }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="grid gap-6">
-        {/* Customer Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Customer Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  placeholder="Customer's full name"
-                />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  placeholder="customer@example.com"
-                />
-              </div>
-              <div>
-                <Label htmlFor="phone">Phone</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  placeholder="Phone number"
-                />
-              </div>
-              <div>
-                <Label htmlFor="country">Country</Label>
-                <Input
-                  id="country"
-                  value={formData.country}
-                  onChange={(e) => handleInputChange('country', e.target.value)}
-                  placeholder="Country of residence"
-                />
-              </div>
-              <div>
-                <Label htmlFor="emergency">Emergency Contact</Label>
-                <Input
-                  id="emergency"
-                  value={formData.emergency}
-                  onChange={(e) => handleInputChange('emergency', e.target.value)}
-                  placeholder="Emergency contact details"
-                />
+    <div className="max-w-4xl space-y-6">
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {booking ? 'Edit Booking' : 'Create New Booking'}
+          </h2>
+          <p className="text-gray-600 mt-1">
+            {booking 
+              ? 'Update the booking information below.' 
+              : 'Fill in the details to create a new booking.'
+            }
+          </p>
+        </div>
+        
+        <div className="p-6">
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-6">
+              {/* Customer Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Customer Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="name">Full Name</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        placeholder="Customer's full name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        placeholder="customer@example.com"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input
+                        id="phone"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        placeholder="Phone number"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="country">Country</Label>
+                      <Input
+                        id="country"
+                        value={formData.country}
+                        onChange={(e) => handleInputChange('country', e.target.value)}
+                        placeholder="Country of residence"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="emergency">Emergency Contact</Label>
+                      <Input
+                        id="emergency"
+                        value={formData.emergency}
+                        onChange={(e) => handleInputChange('emergency', e.target.value)}
+                        placeholder="Emergency contact details"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Travel Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Travel Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="startDate">Start Date</Label>
+                      <Input
+                        id="startDate"
+                        type="date"
+                        value={formData.startDate}
+                        onChange={(e) => handleInputChange('startDate', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="endDate">End Date</Label>
+                      <Input
+                        id="endDate"
+                        type="date"
+                        value={formData.endDate}
+                        onChange={(e) => handleInputChange('endDate', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="flightArrival">Flight Arrival</Label>
+                      <Input
+                        id="flightArrival"
+                        value={formData.flightArrival}
+                        onChange={(e) => handleInputChange('flightArrival', e.target.value)}
+                        placeholder="Arrival flight details"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="flightDeparture">Flight Departure</Label>
+                      <Input
+                        id="flightDeparture"
+                        value={formData.flightDeparture}
+                        onChange={(e) => handleInputChange('flightDeparture', e.target.value)}
+                        placeholder="Departure flight details"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="tripCode">Trip Code</Label>
+                      <Input
+                        id="tripCode"
+                        value={formData.tripCode}
+                        onChange={(e) => handleInputChange('tripCode', e.target.value)}
+                        placeholder="Trip reference code"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Booking Status */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Booking Status</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="status">Booking Status</Label>
+                      <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="confirmed">Confirmed</SelectItem>
+                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="paymentStatus">Payment Status</Label>
+                      <Select value={formData.paymentStatus} onValueChange={(value) => handleInputChange('paymentStatus', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select payment status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="partial">Partial</SelectItem>
+                          <SelectItem value="paid">Paid</SelectItem>
+                          <SelectItem value="refunded">Refunded</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Pricing Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Pricing Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="price">Base Price</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        value={formData.price}
+                        onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="extraPrice">Extra Price</Label>
+                      <Input
+                        id="extraPrice"
+                        type="number"
+                        value={formData.extraPrice}
+                        onChange={(e) => handleInputChange('extraPrice', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="totalPrice">Total Price</Label>
+                      <Input
+                        id="totalPrice"
+                        type="number"
+                        value={formData.totalPrice}
+                        onChange={(e) => handleInputChange('totalPrice', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Additional Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Additional Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="otherInformation">Other Information</Label>
+                    <Textarea
+                      id="otherInformation"
+                      value={formData.otherInformation}
+                      onChange={(e) => handleInputChange('otherInformation', e.target.value)}
+                      placeholder="Any additional notes or requirements..."
+                      rows={4}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="text-white cursor-pointer rounded-lg min-w-[120px]"
+                >
+                  {isSubmitting ? 'Saving...' : booking ? 'Update Booking' : 'Create Booking'}
+                </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Travel Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Travel Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="startDate">Start Date</Label>
-                <Input
-                  id="startDate"
-                  type="date"
-                  value={formData.startDate}
-                  onChange={(e) => handleInputChange('startDate', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="endDate">End Date</Label>
-                <Input
-                  id="endDate"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={(e) => handleInputChange('endDate', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="flightArrival">Flight Arrival</Label>
-                <Input
-                  id="flightArrival"
-                  value={formData.flightArrival}
-                  onChange={(e) => handleInputChange('flightArrival', e.target.value)}
-                  placeholder="Arrival flight details"
-                />
-              </div>
-              <div>
-                <Label htmlFor="flightDeparture">Flight Departure</Label>
-                <Input
-                  id="flightDeparture"
-                  value={formData.flightDeparture}
-                  onChange={(e) => handleInputChange('flightDeparture', e.target.value)}
-                  placeholder="Departure flight details"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Booking Status and Pricing */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Booking Status & Pricing</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="status">Booking Status</Label>
-                <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="confirmed">Confirmed</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="paymentStatus">Payment Status</Label>
-                <Select value={formData.paymentStatus} onValueChange={(value) => handleInputChange('paymentStatus', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select payment status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="paid">Paid</SelectItem>
-                    <SelectItem value="failed">Failed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="price">Base Price ($)</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <Label htmlFor="extraPrice">Extra Price ($)</Label>
-                <Input
-                  id="extraPrice"
-                  type="number"
-                  value={formData.extraPrice}
-                  onChange={(e) => handleInputChange('extraPrice', parseInt(e.target.value) || 0)}
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <Label htmlFor="totalPrice">Total Price ($)</Label>
-                <Input
-                  id="totalPrice"
-                  type="number"
-                  value={formData.totalPrice}
-                  onChange={(e) => handleInputChange('totalPrice', parseInt(e.target.value) || 0)}
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <Label htmlFor="tripCode">Trip Code</Label>
-                <Input
-                  id="tripCode"
-                  value={formData.tripCode}
-                  onChange={(e) => handleInputChange('tripCode', e.target.value)}
-                  placeholder="Trip reference code"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Additional Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Additional Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div>
-              <Label htmlFor="otherInformation">Other Information</Label>
-              <Textarea
-                id="otherInformation"
-                value={formData.otherInformation}
-                onChange={(e) => handleInputChange('otherInformation', e.target.value)}
-                placeholder="Special requests, dietary requirements, etc."
-                rows={4}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Saving...' : booking?.id ? 'Update Booking' : 'Create Booking'}
-          </Button>
+          </form>
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
