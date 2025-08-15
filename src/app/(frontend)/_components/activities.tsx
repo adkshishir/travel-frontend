@@ -1,5 +1,5 @@
 import ActivitiesCard from '@/components/activities/activity-card';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
@@ -10,7 +10,7 @@ const Activities = async () => {
   return (
     <section id='activities' className=' mx-auto max-w-[1180px] max-lg:px-4 mt-16'>
       <PrimaryText className='mx-auto w-fit'>Activities</PrimaryText>
-      <H1 className='mx-auto w-fit '>We Offer The Best Service</H1>
+      <H2 className='mx-auto w-fit '>We Offer The Best Service</H2>
       <div className='lg:flex grid grid-cols-2 max-lg:justify-center  justify-between gap-4 mt-8 '>
         {activities?.map(
           (activity: {

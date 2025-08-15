@@ -1,5 +1,5 @@
 import PackageCard from '@/components/packages/package-card';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
@@ -13,7 +13,7 @@ const TopPackages = async () => {
     <section className='mx-auto max-w-[1180px] mt-32 max-lg:mt-16'>
       <div className='text-center max-w-2xl mx-auto'>
         <PrimaryText className='mb-4'>POPULAR PACKAGES</PrimaryText>
-        <H1 className='mb-8'>Vacations To Make Your Experience Enjoyable</H1>
+        <H2 className='mb-8'>Vacations To Make Your Experience Enjoyable</H2>
       </div>
       <div className='grid max-lg:px-4 grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {data?.map(

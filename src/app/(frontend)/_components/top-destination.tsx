@@ -1,5 +1,5 @@
 import DestinationCard from '@/components/destinations/destination-card';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import P from '@/components/typography/P';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
@@ -14,7 +14,7 @@ const TopDestination = async() => {
       <div className='text-center  max-w-2xl grid  mx-auto'>
       
           <PrimaryText className='mb-4'>Top Destination</PrimaryText>
-          <H1 className='mb-8'>Search a best place in the world</H1>
+          <H2 className='mb-8'>Search a best place in the world</H2>
         
         <P>
           Our dating website offers a range of features and benifits that make

@@ -1,5 +1,5 @@
 import TravelAccordion from '@/components/travel/accordion';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
@@ -12,7 +12,7 @@ const Faq = async () => {
       <div className=' max-w-[1180px] max-lg:px-4 mx-auto '>
         <div className='text-center max-w-2xl grid   mx-auto'>
           <PrimaryText className='mb-4'>FAQ</PrimaryText>
-          <H1 className='mb-8'>Unpacking Your Travel Questions</H1>
+          <H2 className='mb-8'>Unpacking Your Travel Questions</H2>
         </div>
         <TravelAccordion data={result} />
       </div>

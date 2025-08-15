@@ -1,4 +1,4 @@
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import P from '@/components/typography/P';
 import PrimaryText from '@/components/typography/primary';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ const AboutSection = () => {
       <div className='w-full'>
         <div className='max-lg:justify-center max-lg:text-center'>
           <PrimaryText>About</PrimaryText>
-          <H1>We Are The Best Travel Agency</H1>
+          <H2>We Are The Best Travel Agency</H2>
         </div>
         <div className='flex max-lg:flex-col mt-8 gap-4 items-center'>
           <Button variant={'ghost'} size={'icon'} className='w-20'>

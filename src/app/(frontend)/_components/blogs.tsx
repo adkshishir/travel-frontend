@@ -1,5 +1,5 @@
 "use client"
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import PrimaryText from '@/components/typography/primary';
 import React, { useEffect, useState } from 'react';
 import BlogCard from '@/components/blog/blog-card';
@@ -18,7 +18,7 @@ const Blogs = () => {
     <section className='mx-auto max-w-[1180px] my-32 max-lg:my-16 max-lg:px-4'>
       <div className='text-center max-w-2xl grid   mx-auto'>
         <PrimaryText className='mb-4'>Blogs & News</PrimaryText>
-        <H1 className='mb-8'>Tips and Tricks for Planning Your Dream Trip</H1>
+        <H2 className='mb-8'>Tips and Tricks for Planning Your Dream Trip</H2>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {blogs.map((post) => (

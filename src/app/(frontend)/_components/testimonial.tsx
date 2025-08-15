@@ -1,5 +1,5 @@
 import { TestimonialCarousel } from '@/components/testimonial/testimonial-carousel';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import PrimaryText from '@/components/typography/primary';
 import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
@@ -23,9 +23,9 @@ const Testimonial = async () => {
         <div className=''>
           <div className='max-lg:text-center '>
             <PrimaryText className='text-center'>Testimonial</PrimaryText>
-            <H1 className=' max-w-xl mx-auto text-center'>
+            <H2 className=' max-w-xl mx-auto text-center'>
               What Customer Said About Us
-            </H1>
+            </H2>
           </div>
           <div className='flex max-lg:flex-col gap-8 mt-8'>
             <TestimonialCarousel

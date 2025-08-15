@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import PrimaryText from '@/components/typography/primary';
-import H1 from '@/components/typography/h1';
+import H2 from '@/components/typography/h2';
 import { cn } from '@/lib/utils';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
@@ -41,7 +41,7 @@ export default async function Destinations() {
     <section id='popular-destinations' className=' mx-auto max-w-[1180px] pb-32 max-lg:px-4 '>
       <div className='text-center max-lg:text-center max-w-2xl grid mt-32 max-lg:mt-16  mx-auto'>
         <PrimaryText className='mb-4'>Popular Destinations</PrimaryText>
-        <H1 className='mb-8'>Search a best place in the world</H1>
+        <H2 className='mb-8'>Search a best place in the world</H2>
       </div>
       <div className='grid grid-cols-1 h-full md:grid-cols-2 lg:grid-cols-3  lg:grid-rows-2 gap-4'>
         {destinations?.map((destination, index) => (
