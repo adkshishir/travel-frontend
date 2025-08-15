@@ -5,6 +5,7 @@ A comprehensive travel management system built with **Next.js 14**, **NestJS**, 
 ## 🚀 **Features**
 
 ### **Frontend (Next.js 14)**
+
 - 🏠 **Public Website**: Modern, responsive travel website
 - 🔐 **Admin Panel**: Comprehensive management dashboard
 - 📱 **Responsive Design**: Mobile-first approach
@@ -12,6 +13,7 @@ A comprehensive travel management system built with **Next.js 14**, **NestJS**, 
 - ⚡ **Performance**: Server-side rendering and optimization
 
 ### **Backend (NestJS)**
+
 - 🔌 **REST API**: Well-structured RESTful endpoints
 - 🔒 **Authentication**: JWT-based auth with role management
 - 📝 **Validation**: Comprehensive input validation
@@ -20,6 +22,7 @@ A comprehensive travel management system built with **Next.js 14**, **NestJS**, 
 - 🛡️ **Security**: Guards, pipes, and middleware
 
 ### **Core Modules**
+
 - 🏞️ **Destinations**: Manage travel destinations
 - 🎯 **Activities**: Adventure and tour activities
 - 📦 **Packages**: Complete travel packages
@@ -33,6 +36,7 @@ A comprehensive travel management system built with **Next.js 14**, **NestJS**, 
 ## 🛠️ **Tech Stack**
 
 ### **Frontend**
+
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
@@ -42,6 +46,7 @@ A comprehensive travel management system built with **Next.js 14**, **NestJS**, 
 - **Rich Text Editor**: CKEditor 5
 
 ### **Backend**
+
 - **Framework**: NestJS
 - **Language**: TypeScript
 - **Database**: MySQL
@@ -90,29 +95,34 @@ poonhill/
 ## ⚙️ **Setup Instructions**
 
 ### **Prerequisites**
-- Node.js 18+ 
+
+- Node.js 18+
 - MySQL 8.0+
 - npm or yarn
 
 ### **Backend Setup**
 
 1. **Clone and Navigate**
+
    ```bash
    git clone <repository-url>
    cd poonhill/backend
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Environment Configuration**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Configure your `.env` file:
+
    ```env
    DATABASE_URL="mysql://username:password@localhost:3306/poonhill"
    JWT_SECRET="your-secret-key"
@@ -121,6 +131,7 @@ poonhill/
    ```
 
 4. **Database Setup**
+
    ```bash
    npx prisma generate
    npx prisma db push
@@ -135,23 +146,27 @@ poonhill/
 ### **Frontend Setup**
 
 1. **Navigate to Frontend**
+
    ```bash
    cd ../frontend
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Environment Configuration**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Configure your `.env.local` file:
+
    ```env
-   NEXT_PUBLIC_BASE_URL="http://localhost:8080"
+   NEXT_PUBLIC_API_URL="http://localhost:8080"
    ```
 
 4. **Start Development Server**
@@ -162,11 +177,13 @@ poonhill/
 ## 🔗 **API Endpoints**
 
 ### **Authentication**
+
 - `POST /api/auth` - User login
 - `POST /api/auth/verify` - Verify OTP
 - `POST /api/auth/create-admin` - Create admin user
 
 ### **Content Management**
+
 - `GET|POST|PATCH|DELETE /api/activities` - Activities CRUD
 - `GET|POST|PATCH|DELETE /api/destinations` - Destinations CRUD
 - `GET|POST|PATCH|DELETE /api/packages` - Packages CRUD
@@ -174,10 +191,12 @@ poonhill/
 - `GET|POST|PATCH|DELETE /api/authors` - Authors CRUD
 
 ### **Media & Files**
+
 - `POST /api/upload` - File upload
 - `DELETE /api/upload/:id` - Delete file
 
 ### **Public API**
+
 - `GET /api/activities/nav-items` - Navigation data
 - `GET /api/destinations/top` - Featured destinations
 - `GET /api/reviews` - Customer reviews
@@ -185,11 +204,13 @@ poonhill/
 ## 🔐 **Authentication & Authorization**
 
 ### **User Roles**
+
 - **ADMIN**: Full system access
 - **AUTHOR**: Blog management access
 - **USER**: Public user (bookings, reviews)
 
 ### **Protected Routes**
+
 - Admin panel routes require authentication
 - Write operations require appropriate roles
 - File uploads require authentication
@@ -211,11 +232,13 @@ Key entities and relationships:
 ## 🎨 **Admin Panel Features**
 
 ### **Dashboard**
+
 - Overview statistics
 - Recent activities
 - Quick actions
 
 ### **Content Management**
+
 - **Dynamic Forms**: Reusable form components
 - **Data Tables**: Sortable, searchable tables
 - **Rich Text Editor**: CKEditor integration
@@ -223,6 +246,7 @@ Key entities and relationships:
 - **SEO Management**: Meta tags and schema
 
 ### **User Management**
+
 - Author profiles
 - Role assignments
 - Activity tracking
@@ -230,12 +254,14 @@ Key entities and relationships:
 ## 🚀 **Development Guidelines**
 
 ### **Code Standards**
+
 - **TypeScript**: Strict type checking
 - **ESLint**: Code linting and formatting
 - **Prettier**: Code formatting
 - **Conventional Commits**: Commit message format
 
 ### **Backend Patterns**
+
 - **Module Structure**: Feature-based organization
 - **DTOs**: Input validation with class-validator
 - **Guards**: Authentication and authorization
@@ -243,6 +269,7 @@ Key entities and relationships:
 - **Exception Filters**: Error handling
 
 ### **Frontend Patterns**
+
 - **Component Structure**: Atomic design principles
 - **Custom Hooks**: Reusable logic
 - **Error Boundaries**: Error handling
@@ -252,6 +279,7 @@ Key entities and relationships:
 ## 📝 **Available Scripts**
 
 ### **Backend**
+
 ```bash
 npm run start:dev      # Development server
 npm run build          # Production build
@@ -261,6 +289,7 @@ npm run test           # Run tests
 ```
 
 ### **Frontend**
+
 ```bash
 npm run dev           # Development server
 npm run build         # Production build
@@ -272,6 +301,7 @@ npm run type-check    # TypeScript checking
 ## 🔧 **Environment Variables**
 
 ### **Backend (.env)**
+
 ```env
 DATABASE_URL=          # MySQL connection string
 JWT_SECRET=           # JWT signing secret
@@ -280,13 +310,15 @@ PORT=                 # Server port
 ```
 
 ### **Frontend (.env.local)**
+
 ```env
-NEXT_PUBLIC_BASE_URL= # Backend API URL
+NEXT_PUBLIC_API_URL= # Backend API URL
 ```
 
 ## 📚 **API Documentation**
 
 Once the backend is running, visit:
+
 - **Swagger UI**: `http://localhost:8080/api-docs`
 - **API JSON**: `http://localhost:8080/api-docs-json`
 
@@ -305,10 +337,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆘 **Support**
 
 For support and questions:
+
 - Create an issue in the repository
 - Check the documentation
 - Review the API documentation
 
 ---
 
-**Built with ❤️ for the travel industry** 
+**Built with ❤️ for the travel industry**

@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  BASE: process.env.NEXT_PUBLIC_BASE_URL + '/api',
+  BASE: process.env.NEXT_PUBLIC_API_URL + '/api',
   AUTH: 'auth',
   AUTH_VERIFY: 'auth/verify',
   UPLOAD: 'upload',
