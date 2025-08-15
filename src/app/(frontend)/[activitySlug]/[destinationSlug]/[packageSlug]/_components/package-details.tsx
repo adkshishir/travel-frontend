@@ -12,6 +12,9 @@ import {
   X,
   ZoomIn,
   Download,
+  Hotel,
+  Route,
+  Compass,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +27,104 @@ import {
 import TravelAccordion from '@/components/travel/accordion';
 import { extractDataFromHTML } from './extract-data';
 import Image from 'next/image';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+
+// Custom Hover Tooltip Component
+const HoverTooltip = ({ 
+  children, 
+  content, 
+  className = '',
+  contentClassName = ''
+}: { 
+  children: React.ReactNode;
+  content: React.ReactNode;
+  className?: string;
+  contentClassName?: string;
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [position, setPosition] = useState<'top' | 'bottom'>('top');
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  const showTooltip = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
+    // Check position when showing tooltip
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const tooltipHeight = 300; // Approximate tooltip height
+      const spaceAbove = rect.top;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      
+      // If there's not enough space above (less than tooltip height + some padding)
+      // and there's more space below, show tooltip below
+      if (spaceAbove < tooltipHeight + 20 && spaceBelow > spaceAbove) {
+        setPosition('bottom');
+      } else {
+        setPosition('top');
+      }
+    }
+
+    setIsVisible(true);
+  };
+
+  const hideTooltip = () => {
+    const id = setTimeout(() => {
+      setIsVisible(false);
+    }, 150); // Small delay to allow moving cursor to tooltip
+    setTimeoutId(id);
+  };
+
+  const keepTooltip = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
+  return (
+    <div className={`relative inline-block ${className}`} ref={triggerRef}>
+      <div
+        onMouseEnter={showTooltip}
+        onMouseLeave={hideTooltip}
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div 
+          className={`absolute left-1/2 transform -translate-x-1/2 z-50 ${contentClassName} ${
+            position === 'top' 
+              ? 'bottom-full mb-2' 
+              : 'top-full mt-2'
+          }`}
+          onMouseEnter={keepTooltip}
+          onMouseLeave={hideTooltip}
+        >
+          <div className="bg-white rounded-lg shadow-lg border p-4 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
+            {/* Arrow pointing up when tooltip is below, down when tooltip is above */}
+            <div className={`absolute left-1/2 transform -translate-x-1/2 w-0 h-0 ${
+              position === 'top'
+                ? 'top-full border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-white'
+                : 'bottom-full border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-white'
+            }`}></div>
+            {content}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export function PackageDetails({ pack }: { pack: any | undefined }) {
   // const { itinerary, includes } = pack;
@@ -76,6 +176,7 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
   const openGallery = (index: number) => {
     setCurrentImageIndex(index);
     setIsGalleryOpen(true);
+    setIsZoomed(false);
   };
 
   const closeGallery = useCallback(() => {
@@ -84,16 +185,24 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
   }, []);
 
   const nextImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+    if (galleryImages.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+      setIsZoomed(false);
+    }
   }, [galleryImages.length]);
 
   const prevImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+    if (galleryImages.length > 0) {
+      setCurrentImageIndex(
+        (prev) => (prev - 1 + galleryImages.length) % galleryImages.length
+      );
+      setIsZoomed(false);
+    }
   }, [galleryImages.length]);
 
   const toggleZoom = useCallback(() => {
-    setIsZoomed(!isZoomed);
-  }, [isZoomed]);
+    setIsZoomed((prev) => !prev);
+  }, []);
 
   const downloadImage = () => {
     const currentImage = galleryImages[currentImageIndex];
@@ -187,101 +296,137 @@ export function PackageDetails({ pack }: { pack: any | undefined }) {
             <MapPin className='h-3 w-3' />
             Multiple Destinations
           </Badge>
+
+          {/* Experience & Information Badge with Hover Tooltip */}
+          {(pack?.culture || pack?.attractions || pack?.nature || pack?.activity) && (
+            <HoverTooltip
+              content={
+                <div className='space-y-4 w-full'>
+                  <h3 className='font-semibold text-sm'>Experience & Information</h3>
+                  <div className='space-y-3 max-h-64 overflow-y-auto'>
+                    {pack?.culture && (
+                      <div className='space-y-2'>
+                        <div className='flex items-center gap-2'>
+                          <Info className='h-4 w-4 text-blue-600' />
+                          <span className='font-medium text-sm'>Culture</span>
+                        </div>
+                        <div className='text-xs text-gray-700 whitespace-pre-line leading-relaxed pl-6'>
+                          {pack.culture}
+                        </div>
+                      </div>
+                    )}
+                    {pack?.attractions && (
+                      <div className='space-y-2'>
+                        <div className='flex items-center gap-2'>
+                          <MapPin className='h-4 w-4 text-green-600' />
+                          <span className='font-medium text-sm'>Attractions</span>
+                        </div>
+                        <div className='text-xs text-gray-700 whitespace-pre-line leading-relaxed pl-6'>
+                          {pack.attractions}
+                        </div>
+                      </div>
+                    )}
+                    {pack?.nature && (
+                      <div className='space-y-2'>
+                        <div className='flex items-center gap-2'>
+                          <Mountain className='h-4 w-4 text-teal-600' />
+                          <span className='font-medium text-sm'>Nature</span>
+                        </div>
+                        <div className='text-xs text-gray-700 whitespace-pre-line leading-relaxed pl-6'>
+                          {pack.nature}
+                        </div>
+                      </div>
+                    )}
+                    {pack?.activity && (
+                      <div className='space-y-2'>
+                        <div className='flex items-center gap-2'>
+                          <Users className='h-4 w-4 text-primary' />
+                          <span className='font-medium text-sm'>Activities</span>
+                        </div>
+                        <div className='text-xs text-gray-700 whitespace-pre-line leading-relaxed pl-6'>
+                          {pack.activity}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              }
+              contentClassName="w-96"
+            >
+              <Badge variant='outline' className='flex items-center gap-1 cursor-help hover:bg-accent transition-colors'>
+                <Compass className='h-3 w-3' />
+                Experience & Info
+                <Info className='h-3 w-3 text-muted-foreground' />
+              </Badge>
+            </HoverTooltip>
+          )}
+
+          {/* Accommodation Badge with Hover Tooltip */}
+          {pack?.accommodation && (
+            <HoverTooltip
+              content={
+                <div className='space-y-3 w-full'>
+                  <h3 className='font-semibold text-sm flex items-center gap-2'>
+                    <Hotel className='h-4 w-4' />
+                    Accommodation Details
+                  </h3>
+                  <div className='text-xs text-gray-700 whitespace-pre-line leading-relaxed max-h-48 overflow-y-auto'>
+                    {pack.accommodation}
+                  </div>
+                </div>
+              }
+              contentClassName="w-80"
+            >
+              <Badge variant='outline' className='flex items-center gap-1 cursor-help hover:bg-accent transition-colors'>
+                <Hotel className='h-3 w-3' />
+                Accommodation
+                <Info className='h-3 w-3 text-muted-foreground' />
+              </Badge>
+            </HoverTooltip>
+          )}
+
+          {/* Trip Details Badge with Hover Tooltip */}
+          {(pack?.startFrom || pack?.endAt || pack?.groupAge) && (
+            <HoverTooltip
+              content={
+                <div className='space-y-3 w-full'>
+                  <h3 className='font-semibold text-sm flex items-center gap-2'>
+                    <Route className='h-4 w-4' />
+                    Trip Details
+                  </h3>
+                  <div className='grid grid-cols-1 gap-3'>
+                    {pack?.startFrom && (
+                      <div className='space-y-1'>
+                        <span className='font-medium text-xs text-gray-600'>Start From</span>
+                        <p className='text-sm'>{pack.startFrom}</p>
+                      </div>
+                    )}
+                    {pack?.endAt && (
+                      <div className='space-y-1'>
+                        <span className='font-medium text-xs text-gray-600'>End At</span>
+                        <p className='text-sm'>{pack.endAt}</p>
+                      </div>
+                    )}
+                    {pack?.groupAge && (
+                      <div className='space-y-1'>
+                        <span className='font-medium text-xs text-gray-600'>Age Group</span>
+                        <p className='text-sm'>{pack.groupAge}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              }
+              contentClassName="w-64"
+            >
+              <Badge variant='outline' className='flex items-center gap-1 cursor-help hover:bg-accent transition-colors'>
+                <Route className='h-3 w-3' />
+                Trip Details
+                <Info className='h-3 w-3 text-muted-foreground' />
+              </Badge>
+            </HoverTooltip>
+          )}
         </div>
       </div>
-         {/* Cultural Information */}
-      {(pack?.culture || pack?.attractions || pack?.nature || pack?.activity) && (
-        <div className='space-y-6' id='experience'>
-          <h2 className='text-2xl font-semibold'>Experience & Information</h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            {pack?.culture && (
-              <div className='space-y-3 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border'>
-                <h3 className='font-semibold text-lg flex items-center gap-2'>
-                  <Info className='h-5 w-5 text-blue-600' />
-                  Culture
-                </h3>
-                <div className='text-sm text-gray-700 whitespace-pre-line leading-relaxed'>
-                  {pack.culture}
-                </div>
-              </div>
-            )}
-            {pack?.attractions && (
-              <div className='space-y-3 p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border'>
-                <h3 className='font-semibold text-lg flex items-center gap-2'>
-                  <MapPin className='h-5 w-5 text-green-600' />
-                  Attractions
-                </h3>
-                <div className='text-sm text-gray-700 whitespace-pre-line leading-relaxed'>
-                  {pack.attractions}
-                </div>
-              </div>
-            )}
-            {pack?.nature && (
-              <div className='space-y-3 p-6 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg border'>
-                <h3 className='font-semibold text-lg flex items-center gap-2'>
-                  <Mountain className='h-5 w-5 text-teal-600' />
-                  Nature
-                </h3>
-                <div className='text-sm text-gray-700 whitespace-pre-line leading-relaxed'>
-                  {pack.nature}
-                </div>
-              </div>
-            )}
-            {pack?.activity && (
-              <div className='space-y-3 p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg border'>
-                <h3 className='font-semibold text-lg flex items-center gap-2'>
-                  <Users className='h-5 w-5 text-primary' />
-                  Activities
-                </h3>
-                <div className='text-sm text-gray-700 whitespace-pre-line leading-relaxed'>
-                  {pack.activity}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Accommodation Section */}
-      {pack?.accommodation && (
-        <div className='space-y-4' id='accommodation'>
-          <h2 className='text-2xl font-semibold'>Accommodation</h2>
-          <div className='text-muted-foreground whitespace-pre-line leading-relaxed p-6 bg-gray-50 rounded-lg border'>
-            {pack.accommodation}
-          </div>
-        </div>
-      )}
-
-   
-
-      {/* Trip Details Section */}
-      {(pack?.startFrom || pack?.endAt || pack?.groupAge) && (
-        <div className='space-y-6'>
-          <h2 className='text-2xl font-semibold'>Trip Details</h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {pack?.startFrom && (
-              <div className='p-4 bg-gray-50 rounded-lg border'>
-                <h3 className='font-medium text-sm text-gray-600 mb-1'>Start From</h3>
-                <p className='text-sm font-medium'>{pack.startFrom}</p>
-              </div>
-            )}
-            {pack?.endAt && (
-              <div className='p-4 bg-gray-50 rounded-lg border'>
-                <h3 className='font-medium text-sm text-gray-600 mb-1'>End At</h3>
-                <p className='text-sm font-medium'>{pack.endAt}</p>
-              </div>
-            )}
-            {pack?.groupAge && (
-              <div className='p-4 bg-gray-50 rounded-lg border'>
-                <h3 className='font-medium text-sm text-gray-600 mb-1'>Age Group</h3>
-                <p className='text-sm font-medium'>{pack.groupAge}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-    
 
       {/* Overview Section */}
       {pack?.overview && (
