@@ -51,7 +51,6 @@ export default function AdminLayout({
   useEffect(() => {
     (async () => {
       const token = await getCookie('token');
-      console.log(token);
       if (!token) {
         router.push('/auth');
         return;
@@ -135,7 +134,6 @@ export default function AdminLayout({
     },
   ];
 
-  console.log(hasToken);
   return hasToken ? (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-900'>
       {/* Mobile Sidebar Overlay */}

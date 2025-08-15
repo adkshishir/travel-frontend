@@ -64,7 +64,6 @@ const CategoryPage = async ({ params }: { params: Promise<Params> }) => {
   
   try {
     const result = await fetchData(ENDPOINTS.CATEGORIES + '/' + category);
-  console.log(result);  
     // Handle case where category is not found
     if (!result) {
      notFound();

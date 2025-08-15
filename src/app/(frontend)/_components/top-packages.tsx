@@ -8,7 +8,6 @@ import React from 'react';
 
 const TopPackages = async () => {
   const data = await fetchData(ENDPOINTS.PACKAGES);
-  console.log(data);
   return (
     <section className='mx-auto max-w-[1180px] mt-32 max-lg:mt-16'>
       <div className='text-center max-w-2xl mx-auto'>

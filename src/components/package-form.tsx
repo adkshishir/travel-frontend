@@ -85,8 +85,10 @@ const PackageForm = ({
     goodtoknow: initialData?.goodtoknow || '',
     highlights: initialData?.highlights || '',
     mapId: initialData?.mapId || '',
-    map:undefined,
-    destinationId: initialData?.destinationId ? String(initialData.destinationId) : '',
+    map: undefined,
+    destinationId: initialData?.destinationId
+      ? String(initialData.destinationId)
+      : '',
     seo: {
       metaTitle: initialData?.seo?.metaTitle || '',
       metaDescription: initialData?.seo?.metaDescription || '',
@@ -129,19 +131,6 @@ const PackageForm = ({
       alt: img.alt || '',
     })) || []
   );
-
-  // Fetch destinations and maps
-
-  // Debug: Log initial data structure
-  useEffect(() => {
-    if (initialData) {
-      console.log('Initial Data Structure:', initialData);
-      console.log('Main Image:', initialData.mainImage);
-      console.log('Map:', initialData.map);
-      console.log('SEO Media:', initialData.seo?.media);
-      console.log('Gallery Media:', initialData.media);
-    }
-  }, [initialData]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -200,10 +189,13 @@ const PackageForm = ({
     const newPreviews = await Promise.all(
       files.map((file: File) => createImagePreview(file))
     );
-    
+
     setGalleryImages([...galleryImages, ...files]);
     setGalleryPreviews([...galleryPreviews, ...newPreviews]);
-    setGalleryAltTexts([...galleryAltTexts, ...new Array(files.length).fill('')]);
+    setGalleryAltTexts([
+      ...galleryAltTexts,
+      ...new Array(files.length).fill(''),
+    ]);
   };
 
   // Remove gallery image
@@ -215,7 +207,9 @@ const PackageForm = ({
 
   // Remove existing gallery image
   const removeExistingGalleryImage = (index) => {
-    setExistingGalleryImages(existingGalleryImages.filter((_, i) => i !== index));
+    setExistingGalleryImages(
+      existingGalleryImages.filter((_, i) => i !== index)
+    );
   };
 
   // Update gallery alt text
@@ -323,7 +317,7 @@ const PackageForm = ({
           metaCanonical: formData.seo.metaCanonical,
           schema: formData.seo.schema,
         },
-        mediaIds: [...existingGalleryImages.map(img => img.id)], // Start with existing gallery images
+        mediaIds: [...existingGalleryImages.map((img) => img.id)], // Start with existing gallery images
         faqs: formData.faqs.filter(
           (faq: { question: any; answer: any }) => faq.question && faq.answer
         ),
@@ -356,9 +350,9 @@ const PackageForm = ({
           payload.seo.mediaId = seoImageResponse.id;
         }
       }
-      
+
       // Upload map if new one is selected
-      if(map){
+      if (map) {
         const mapImageResponse = await uploadImage({
           img: map,
           folder: 'packages/map',
@@ -376,7 +370,8 @@ const PackageForm = ({
           uploadImage({
             img,
             folder: 'packages/gallery',
-            alt: galleryAltTexts[index] || `Gallery image for ${formData.title}`,
+            alt:
+              galleryAltTexts[index] || `Gallery image for ${formData.title}`,
             showSuccessMessage: false,
           })
         );
@@ -793,7 +788,13 @@ const PackageForm = ({
                           id='mainImage'
                           type='file'
                           accept='image/*'
-                          onChange={(e) => handleFileChange(e, setMainImage, setMainImagePreview)}
+                          onChange={(e) =>
+                            handleFileChange(
+                              e,
+                              setMainImage,
+                              setMainImagePreview
+                            )
+                          }
                         />
                       </div>
                     </div>
@@ -819,10 +820,12 @@ const PackageForm = ({
                           alt='Main image preview'
                           className='w-full h-full object-cover'
                           onError={(e) => {
-                            console.error('Main image failed to load:', mainImagePreview);
+                            console.error(
+                              'Main image failed to load:',
+                              mainImagePreview
+                            );
                             e.currentTarget.style.display = 'none';
                           }}
-                          onLoad={() => console.log('Main image loaded successfully:', mainImagePreview)}
                         />
                       ) : (
                         <div className='flex flex-col items-center text-muted-foreground'>
@@ -857,7 +860,9 @@ const PackageForm = ({
                         id='map'
                         type='file'
                         accept='image/*'
-                        onChange={(e) => handleFileChange(e, setMap, setMapPreview)}
+                        onChange={(e) =>
+                          handleFileChange(e, setMap, setMapPreview)
+                        }
                       />
                     </div>
 
@@ -893,10 +898,12 @@ const PackageForm = ({
                           alt='Map preview'
                           className='w-full h-full object-cover'
                           onError={(e) => {
-                            console.error('Map image failed to load:', mapPreview);
+                            console.error(
+                              'Map image failed to load:',
+                              mapPreview
+                            );
                             e.currentTarget.style.display = 'none';
                           }}
-                          onLoad={() => console.log('Map image loaded successfully:', mapPreview)}
                         />
                       ) : (
                         <div className='flex flex-col items-center text-muted-foreground'>
@@ -938,25 +945,36 @@ const PackageForm = ({
                   {/* Existing Gallery Images */}
                   {existingGalleryImages.length > 0 && (
                     <div className='space-y-4'>
-                      <Label>Existing Gallery Images ({existingGalleryImages.length})</Label>
+                      <Label>
+                        Existing Gallery Images ({existingGalleryImages.length})
+                      </Label>
                       {/* Debug info */}
                       <div className='text-xs text-muted-foreground bg-muted p-2 rounded'>
-                        <div>Gallery Images Found: {initialData?.media?.length || 0}</div>
-                        <div>Processed Images: {existingGalleryImages.length}</div>
+                        <div>
+                          Gallery Images Found:{' '}
+                          {initialData?.media?.length || 0}
+                        </div>
+                        <div>
+                          Processed Images: {existingGalleryImages.length}
+                        </div>
                       </div>
                       <div className='grid grid-cols-2 gap-4'>
                         {existingGalleryImages.map((image, index) => (
-                          <div key={`existing-${image.id}`} className='space-y-2 p-4 border rounded-lg'>
+                          <div
+                            key={`existing-${image.id}`}
+                            className='space-y-2 p-4 border rounded-lg'>
                             <div className='aspect-video bg-muted rounded-md overflow-hidden'>
                               <img
                                 src={image.url}
                                 alt={image.alt || 'Gallery image'}
                                 className='w-full h-full object-cover'
                                 onError={(e) => {
-                                  console.error('Gallery image failed to load:', image.url);
+                                  console.error(
+                                    'Gallery image failed to load:',
+                                    image.url
+                                  );
                                   e.currentTarget.style.display = 'none';
                                 }}
-                                onLoad={() => console.log('Gallery image loaded successfully:', image.url)}
                               />
                             </div>
                             <div className='space-y-2'>
@@ -965,14 +983,21 @@ const PackageForm = ({
                               </div>
                               <Input
                                 value={image.alt}
-                                onChange={(e) => updateExistingGalleryAltText(index, e.target.value)}
+                                onChange={(e) =>
+                                  updateExistingGalleryAltText(
+                                    index,
+                                    e.target.value
+                                  )
+                                }
                                 placeholder='Image alt text'
                               />
                               <Button
                                 type='button'
                                 variant='destructive'
                                 size='sm'
-                                onClick={() => removeExistingGalleryImage(index)}
+                                onClick={() =>
+                                  removeExistingGalleryImage(index)
+                                }
                                 className='w-full'>
                                 <X className='h-4 w-4 mr-2' />
                                 Remove Image
@@ -990,7 +1015,9 @@ const PackageForm = ({
                       <Label>New Gallery Images</Label>
                       <div className='grid grid-cols-2 gap-4'>
                         {galleryImages.map((image, index) => (
-                          <div key={`new-${index}`} className='space-y-2 p-4 border rounded-lg'>
+                          <div
+                            key={`new-${index}`}
+                            className='space-y-2 p-4 border rounded-lg'>
                             <div className='aspect-video bg-muted rounded-md overflow-hidden'>
                               <img
                                 src={galleryPreviews[index]}
@@ -999,10 +1026,14 @@ const PackageForm = ({
                               />
                             </div>
                             <div className='space-y-2'>
-                              <p className='text-sm text-muted-foreground truncate'>{image.name}</p>
+                              <p className='text-sm text-muted-foreground truncate'>
+                                {image.name}
+                              </p>
                               <Input
                                 value={galleryAltTexts[index] || ''}
-                                onChange={(e) => updateGalleryAltText(index, e.target.value)}
+                                onChange={(e) =>
+                                  updateGalleryAltText(index, e.target.value)
+                                }
                                 placeholder='Image alt text'
                               />
                               <Button
@@ -1117,7 +1148,9 @@ const PackageForm = ({
                   </div>
 
                   <div className='space-y-2'>
-                    <Label htmlFor='seo.metaDescription'>Meta Description</Label>
+                    <Label htmlFor='seo.metaDescription'>
+                      Meta Description
+                    </Label>
                     <Textarea
                       id='seo.metaDescription'
                       name='seo.metaDescription'
@@ -1145,7 +1178,9 @@ const PackageForm = ({
                       id='seoImage'
                       type='file'
                       accept='image/*'
-                      onChange={(e) => handleFileChange(e, setSeoImage, setSeoImagePreview)}
+                      onChange={(e) =>
+                        handleFileChange(e, setSeoImage, setSeoImagePreview)
+                      }
                     />
                   </div>
 
@@ -1170,10 +1205,12 @@ const PackageForm = ({
                         alt='SEO image preview'
                         className='w-full h-full object-cover'
                         onError={(e) => {
-                          console.error('SEO image failed to load:', seoImagePreview);
+                          console.error(
+                            'SEO image failed to load:',
+                            seoImagePreview
+                          );
                           e.currentTarget.style.display = 'none';
                         }}
-                        onLoad={() => console.log('SEO image loaded successfully:', seoImagePreview)}
                       />
                     ) : (
                       <div className='flex flex-col items-center text-muted-foreground'>
