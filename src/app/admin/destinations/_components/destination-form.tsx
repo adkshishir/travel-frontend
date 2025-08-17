@@ -5,8 +5,9 @@ import {
 } from '@/components/admin-dynamics/form/form';
 import ENDPOINTS from '@/utils/endpoints';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImagePreview from '@/components/ui/image-preview';
 
 const DestinationForm = ({
   initialData,
@@ -16,6 +17,10 @@ const DestinationForm = ({
   activities?: any;
 }) => {
   const router = useRouter();
+  const [mainImage, setMainImage] = useState<File | null>(null);
+  const [seoImage, setSeoImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const config: FormConfig = {
     fields: [
       {
@@ -59,14 +64,8 @@ const DestinationForm = ({
         options: activities, // This would need to be populated with activities from an API call
       },
       {
-        name: 'media',
-        label: 'Media',
-        type: 'file',
-        required: false,
-      },
-      {
         name: 'alt',
-        label: 'Alt',
+        label: 'Main Image Alt Text',
         type: 'text',
         required: false,
         defaultValue: initialData?.media?.alt || '',
@@ -88,14 +87,8 @@ const DestinationForm = ({
         defaultValue: initialData?.seo?.metaKeywords || '',
       },
       {
-        name: 'seomedia',
-        label: 'Og Image',
-        type: 'file',
-        required: false,
-      },
-      {
         name: 'seomediaAlt',
-        label: 'Og Image Alt',
+        label: 'SEO Image Alt Text',
         type: 'text',
         required: false,
         defaultValue: initialData?.seo?.media?.alt || '',
@@ -160,58 +153,95 @@ const DestinationForm = ({
     fetchActivities();
   }, []);
 
-  async function handleSubmit(data: any) {
-    const { media, seomedia, ...rest } = data;
-    const payload: any = {
-      name: data.name || initialData?.name || '',
-      slug: data.slug || initialData?.slug || '',
-      description: data.description || initialData?.description || '',
-      activityId: Number(data.activityId) || initialData?.activityId || 0,
-      seo: {
-        metaTitle: data.metaTitle || initialData?.seo?.metaTitle || '',
-        metaKeywords: data.metaKeywords || initialData?.seo?.metaKeywords || '',
-        metaCanonical:
-          data.metaCanonical || initialData?.seo?.metaCanonical || '',
-        metaDescription:
-          data.metaDescription || initialData?.seo?.metaDescription || '',
-        schema: data.schema || initialData?.seo?.schema || '',
-        mediaId: undefined,
-      },
-    };
+  // Image Manager Components
+  const ImageManager = () => {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 mb-6">
+        {/* Main Image */}
+        <ImagePreview
+          file={mainImage}
+          existingImageUrl={initialData?.media?.url}
+          alt="Main destination image"
+          onFileChange={setMainImage}
+          label="Main Image"
+          description="Select an image for the destination (recommended: 1200x800px, max 2MB)"
+          disabled={isLoading}
+        />
 
-    if (media) {
-      const response = await uploadImage({
-        img: data.media,
-        folder: 'destinations',
-        alt: data.alt || initialData?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        payload.mediaId = response.id || initialData?.mediaId || undefined;
-      }
-    }
-    if (seomedia) {
-      const response = await uploadImage({
-        img: data.seomedia,
-        folder: 'destinations',
-        alt: data.seomediaAlt || initialData?.seo?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        payload.seo.mediaId =
-          response.id || initialData?.seo?.mediaId || undefined;
-      }
-    }
-
-    const responseData = await postAndPatch(
-      ENDPOINTS.DESTINATIONS,
-      payload,
-      initialData?.id
+        {/* SEO Image */}
+        <ImagePreview
+          file={seoImage}
+          existingImageUrl={initialData?.seo?.media?.url}
+          alt="SEO destination image"
+          onFileChange={setSeoImage}
+          label="SEO Image (Open Graph)"
+          description="Select an image for social media sharing (recommended: 1200x630px, max 2MB)"
+          disabled={isLoading}
+        />
+      </div>
     );
-    if (responseData) {
-      router.push('/admin/destinations');
+  };
+
+  async function handleSubmit(data: any) {
+    setIsLoading(true);
+    try {
+      const payload: any = {
+        name: data.name || initialData?.name || '',
+        slug: data.slug || initialData?.slug || '',
+        description: data.description || initialData?.description || '',
+        activityId: Number(data.activityId) || initialData?.activityId || 0,
+        seo: {
+          metaTitle: data.metaTitle || initialData?.seo?.metaTitle || '',
+          metaKeywords: data.metaKeywords || initialData?.seo?.metaKeywords || '',
+          metaCanonical:
+            data.metaCanonical || initialData?.seo?.metaCanonical || '',
+          metaDescription:
+            data.metaDescription || initialData?.seo?.metaDescription || '',
+          schema: data.schema || initialData?.seo?.schema || '',
+          mediaId: initialData?.seo?.mediaId || undefined,
+        },
+        mediaId: initialData?.mediaId || undefined,
+      };
+
+      // Upload main image if selected
+      if (mainImage) {
+        const response = await uploadImage({
+          img: mainImage,
+          folder: 'destinations',
+          alt: data.alt || initialData?.media?.alt || '',
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.mediaId = response.id;
+        }
+      }
+
+      // Upload SEO image if selected
+      if (seoImage) {
+        const response = await uploadImage({
+          img: seoImage,
+          folder: 'destinations/seo',
+          alt: data.seomediaAlt || initialData?.seo?.media?.alt || '',
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.seo.mediaId = response.id;
+        }
+      }
+
+      const responseData = await postAndPatch(
+        ENDPOINTS.DESTINATIONS,
+        payload,
+        initialData?.id
+      );
+      if (responseData) {
+        router.push('/admin/destinations');
+      }
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <div className="max-w-4xl space-y-6">
       <div className="bg-white rounded-lg shadow-sm border">
@@ -228,7 +258,17 @@ const DestinationForm = ({
         </div>
         
         <div className="p-6">
-          <DynamicForm config={config} onSubmit={handleSubmit} />
+          <DynamicForm config={config} onSubmit={handleSubmit} isLoading={isLoading} />
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-xl font-semibold text-gray-900">Images</h3>
+          <p className="text-gray-600 mt-1">Upload images for the destination.</p>
+        </div>
+        <div className="p-6">
+          <ImageManager />
         </div>
       </div>
     </div>

@@ -1,11 +1,15 @@
 'use client';
 import { DynamicForm, FormConfig } from '@/components/admin-dynamics/form/form';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImagePreview from '@/components/ui/image-preview';
 
 const ReviewForm = ({ initialData }: { initialData?: any }) => {
   const router = useRouter();
+  const [reviewImage, setReviewImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const formConfig: FormConfig = {
     fields: [
       {
@@ -57,13 +61,6 @@ const ReviewForm = ({ initialData }: { initialData?: any }) => {
       //     },
       //   },
       {
-        name: 'media',
-        label: 'Image',
-        type: 'file',
-        placeholder: 'Upload image',
-        required: false,
-      },
-      {
         name: 'description',
         label: 'Description',
         type: 'textarea',
@@ -79,24 +76,53 @@ const ReviewForm = ({ initialData }: { initialData?: any }) => {
     submitLabel: initialData ? 'Update' : 'Create',
   };
 
+  // Image Manager Component
+  const ImageManager = () => {
+    return (
+      <div className="mt-6 mb-6">
+        <ImagePreview
+          file={reviewImage}
+          existingImageUrl={initialData?.media?.url}
+          alt="Review image"
+          onFileChange={setReviewImage}
+          label="Review Image"
+          description="Select an image for the review (optional, max 2MB)"
+          disabled={isLoading}
+        />
+      </div>
+    );
+  };
+
   async function handleSubmit(data: any) {
-    const { media, ...rest } = data;
-    if (data.media) {
-      const response = await uploadImage({
-        img: data.media,
-        folder: 'reviews',
-        alt: data.alt || initialData?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        rest.mediaId = response.id || initialData?.mediaId || undefined;
+    setIsLoading(true);
+    try {
+      const payload = { ...data };
+
+      // Upload image if selected
+      if (reviewImage) {
+        const response = await uploadImage({
+          img: reviewImage,
+          folder: 'reviews',
+          alt: data.alt || initialData?.media?.alt || `Review image for ${data.title}`,
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.mediaId = response.id;
+        }
+      } else if (initialData?.mediaId) {
+        // Keep existing image if no new image is selected
+        payload.mediaId = initialData.mediaId;
       }
-    }
-    const res = await postAndPatch('reviews', rest, initialData?.id);
-    if (res) {
-      router.push('/admin/reviews');
+
+      const res = await postAndPatch('reviews', payload, initialData?.id);
+      if (res) {
+        router.push('/admin/reviews');
+      }
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <div className="max-w-4xl space-y-6">
       <div className="bg-white rounded-lg shadow-sm border">
@@ -113,7 +139,17 @@ const ReviewForm = ({ initialData }: { initialData?: any }) => {
         </div>
         
         <div className="p-6">
-          <DynamicForm config={formConfig} onSubmit={handleSubmit} />
+          <DynamicForm config={formConfig} onSubmit={handleSubmit} isLoading={isLoading} />
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-xl font-semibold text-gray-900">Image</h3>
+          <p className="text-gray-600 mt-1">Upload an optional image for the review.</p>
+        </div>
+        <div className="p-6">
+          <ImageManager />
         </div>
       </div>
     </div>

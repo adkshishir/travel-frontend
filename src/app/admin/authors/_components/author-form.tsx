@@ -1,226 +1,164 @@
 'use client';
-import {
-  DynamicForm,
-  type FormConfig,
-} from '@/components/admin-dynamics/form/form';
+import { DynamicForm, FormConfig } from '@/components/admin-dynamics/form/form';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
-import { ErrorHandler } from '@/utils/error-handler';
-import { ADMIN_CONFIG } from '@/constants/admin';
-import ENDPOINTS from '@/utils/endpoints';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImagePreview from '@/components/ui/image-preview';
 
 const AuthorForm = ({ initialData }: { initialData?: any }) => {
   const router = useRouter();
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profileImagePreview, setProfileImagePreview] = useState<string>(
-    initialData?.media?.url || ''
-  );
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setProfileImage(file);
-      setProfileImagePreview(URL.createObjectURL(file));
-    }
-  };
 
   const config: FormConfig = {
     fields: [
       {
         name: 'name',
-        label: 'Full Name',
+        label: 'Name',
         type: 'text',
-        placeholder: 'Enter author full name',
-        defaultValue: initialData?.name || '',
+        placeholder: 'Enter name',
         required: true,
         validation: {
           minLength: 2,
           maxLength: 100,
         },
-        description: 'Full name of the author (2-100 characters)',
+        defaultValue: initialData?.name || '',
       },
       {
-        name: 'username',
-        label: 'Username',
+        name: 'slug',
+        label: 'Slug',
         type: 'text',
-        placeholder: 'Enter unique username',
-        defaultValue: initialData?.username || '',
+        placeholder: 'Enter slug',
         required: true,
         validation: {
-          minLength: 3,
-          maxLength: 50,
-          pattern: ADMIN_CONFIG.VALIDATION_PATTERNS.USERNAME,
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$',
         },
-        description: ADMIN_CONFIG.COMMON_FIELDS.USERNAME.description,
-      },
-      {
-        name: 'email',
-        label: 'Email Address',
-        type: 'email',
-        placeholder: 'Enter email address',
-        defaultValue: initialData?.email || '',
-        required: true,
-        validation: {
-          pattern: ADMIN_CONFIG.VALIDATION_PATTERNS.EMAIL,
-        },
-        description: ADMIN_CONFIG.COMMON_FIELDS.EMAIL.description,
+        defaultValue: initialData?.slug || '',
       },
       {
         name: 'bio',
-        label: 'Biography',
+        label: 'Bio',
         type: 'textarea',
-        placeholder: 'Enter author biography',
-        defaultValue: initialData?.bio || '',
+        placeholder: 'Enter bio',
         required: false,
-        validation: {
-          maxLength: 500,
-        },
-        description: ADMIN_CONFIG.COMMON_FIELDS.DESCRIPTION.description,
+        defaultValue: initialData?.bio || '',
+      },
+      {
+        name: 'designation',
+        label: 'Designation',
+        type: 'text',
+        placeholder: 'Enter designation',
+        required: false,
+        defaultValue: initialData?.designation || '',
+      },
+      {
+        name: 'email',
+        label: 'Email',
+        type: 'email',
+        placeholder: 'Enter email',
+        required: false,
+        defaultValue: initialData?.email || '',
+      },
+      {
+        name: 'phone',
+        label: 'Phone',
+        type: 'text',
+        placeholder: 'Enter phone',
+        required: false,
+        defaultValue: initialData?.phone || '',
       },
       {
         name: 'website',
-        label: 'Website URL',
+        label: 'Website',
         type: 'text',
-        placeholder: 'https://author-website.com',
+        placeholder: 'Enter website',
+        required: false,
         defaultValue: initialData?.website || '',
+      },
+      {
+        name: 'facebook',
+        label: 'Facebook',
+        type: 'text',
+        placeholder: 'Enter Facebook URL',
         required: false,
-        validation: {
-          pattern: ADMIN_CONFIG.VALIDATION_PATTERNS.URL,
-        },
-        description: ADMIN_CONFIG.COMMON_FIELDS.WEBSITE.description,
+        defaultValue: initialData?.facebook || '',
       },
       {
-        name: 'role',
-        label: 'Role',
-        type: 'select',
-        defaultValue: initialData?.role || 'author',
-        required: true,
-        options: ADMIN_CONFIG.ROLE_OPTIONS.AUTHOR,
-        description: 'Select the author\'s role in the system',
-      },
-      {
-        name: 'status',
-        label: 'Status',
-        type: 'select',
-        defaultValue: initialData?.status || 'active',
-        required: true,
-        options: ADMIN_CONFIG.STATUS_OPTIONS.AUTHOR,
-        description: 'Current status of the author account',
-      },
-      {
-        name: 'socialLinks',
-        label: 'Social Links (JSON)',
-        type: 'textarea',
-        placeholder: '{"twitter": "https://twitter.com/username", "linkedin": "https://linkedin.com/in/username"}',
-        defaultValue: initialData?.socialLinks ? JSON.stringify(initialData.socialLinks, null, 2) : '',
+        name: 'twitter',
+        label: 'Twitter',
+        type: 'text',
+        placeholder: 'Enter Twitter URL',
         required: false,
-        validation: {
-          maxLength: 1000,
-        },
-        description: 'Social media links in JSON format (optional)',
+        defaultValue: initialData?.twitter || '',
       },
+      {
+        name: 'instagram',
+        label: 'Instagram',
+        type: 'text',
+        placeholder: 'Enter Instagram URL',
+        required: false,
+        defaultValue: initialData?.instagram || '',
+      },
+      {
+        name: 'linkedin',
+        label: 'LinkedIn',
+        type: 'text',
+        placeholder: 'Enter LinkedIn URL',
+        required: false,
+        defaultValue: initialData?.linkedin || '',
+      },
+
     ],
     submitLabel: initialData ? 'Update Author' : 'Create Author',
   };
 
-  // Profile Image Manager Component
+  // Profile Image Manager Component using the new ImagePreview component
   const ProfileImageManager = () => {
     return (
-      <div className="mt-6 mb-6 p-4 border rounded-md bg-gray-50">
-        <h3 className="text-lg font-medium mb-4">Profile Image</h3>
-        {profileImagePreview && (
-          <div className="relative w-32 h-32 mb-4">
-            <img
-              src={profileImagePreview}
-              alt="Profile image preview"
-              className="w-full h-full object-cover rounded-full border-4 border-gray-200"
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setProfileImage(null);
-                setProfileImagePreview('');
-              }}
-              className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
-            >
-              ×
-            </button>
-          </div>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleProfileImageChange}
+      <div className="mt-6 mb-6">
+        <ImagePreview
+          file={profileImage}
+          existingImageUrl={initialData?.media?.url}
+          alt="Profile image"
+          onFileChange={setProfileImage}
+          label="Profile Image"
+          description="Select a profile image for the author (recommended: 400x400px, max 2MB)"
           disabled={isLoading}
-          className="block w-full text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-md file:border-0
-            file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100
-            disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="circular"
         />
-        <p className="text-sm text-gray-500 mt-2">
-          Select a profile image for the author (recommended: 400x400px, max 2MB)
-        </p>
       </div>
     );
   };
 
   async function handleSubmit(data: any) {
     setIsLoading(true);
-    
     try {
-      // Process the form data
-      const authorData = {
-        ...data,
-      };
+      const payload = { ...data };
 
-      // Handle profile image upload
+      // Upload profile image if selected
       if (profileImage) {
-        const imageResponse = await uploadImage({
+        const response = await uploadImage({
           img: profileImage,
           folder: 'authors',
           alt: `Profile image for ${data.name}`,
           showSuccessMessage: false,
         });
-        
-        if (imageResponse && imageResponse.id) {
-          authorData.mediaId = imageResponse.id;
-        } else {
-          ErrorHandler.showWarning('Profile image could not be uploaded, but author data will be saved.');
+        if (response) {
+          payload.mediaId = response.id;
         }
       } else if (initialData?.mediaId) {
-        authorData.mediaId = initialData.mediaId;
+        // Keep existing image if no new image is selected
+        payload.mediaId = initialData.mediaId;
       }
 
-      // Handle social links (convert from JSON string if needed)
-      if (data.socialLinks && typeof data.socialLinks === 'string') {
-        try {
-          const parsedLinks = JSON.parse(data.socialLinks);
-          authorData.socialLinks = parsedLinks;
-        } catch (parseError) {
-          ErrorHandler.showWarning('Invalid JSON format for social links. Saving as text.');
-          authorData.socialLinks = data.socialLinks;
-        }
+      const responseData = await postAndPatch(
+        'authors',
+        payload,
+        initialData?.id
+      );
+      if (responseData) {
+        router.push('/admin/authors');
       }
-
-      const result = await postAndPatch(ENDPOINTS.AUTHORS, authorData, initialData?.id);
-      
-      if (result) {
-        // Delay redirect to show success message
-        setTimeout(() => {
-          router.push('/admin/authors');
-        }, ADMIN_CONFIG.FORM_SETTINGS.SUCCESS_REDIRECT_DELAY);
-        return result;
-      }
-      
-      return undefined;
-    } catch (error: any) {
-      ErrorHandler.handleApiError(error, 'Author Submission');
-      return undefined;
     } finally {
       setIsLoading(false);
     }
@@ -236,36 +174,25 @@ const AuthorForm = ({ initialData }: { initialData?: any }) => {
           <p className="text-gray-600 mt-1">
             {initialData 
               ? 'Update the author information below.' 
-              : 'Fill in the details to create a new author profile.'
+              : 'Fill in the details to create a new author.'
             }
           </p>
         </div>
         
         <div className="p-6">
-          <DynamicForm 
-            config={config} 
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-          />
+          <DynamicForm config={config} onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
       </div>
       
       <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-xl font-semibold text-gray-900">Profile Image</h3>
+          <p className="text-gray-600 mt-1">Upload a profile image for the author.</p>
+        </div>
         <div className="p-6">
           <ProfileImageManager />
         </div>
       </div>
-      
-      {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl">
-            <div className="flex items-center space-x-3">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-              <span className="text-gray-700">Processing...</span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

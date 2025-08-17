@@ -1,8 +1,9 @@
 'use client';
 import { DynamicForm, FormConfig } from '@/components/admin-dynamics/form/form';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImagePreview from '@/components/ui/image-preview';
 
 export type TCarousel = {
   id: number;
@@ -22,12 +23,16 @@ export type TCarousel = {
     updatedAt: string;
   };
 };
+
 const CarouselForm = ({
   initialData,
 }: {
   initialData?: TCarousel | undefined;
 }) => {
   const router = useRouter();
+  const [carouselImage, setCarouselImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const formConfig: FormConfig = {
     fields: [
       {
@@ -91,22 +96,10 @@ const CarouselForm = ({
         defaultValue: initialData?.page || '',
       },
       {
-        name: 'media',
-        label: 'Media',
-        type: 'file',
-        placeholder: 'Enter media',
-        required: true,
-        validation: {
-          minLength: 2,
-          maxLength: 100,
-        },
-        defaultValue: initialData?.mediaId || '',
-      },
-      {
         name: 'alt',
-        label: 'Alt',
+        label: 'Image Alt Text',
         type: 'text',
-        placeholder: 'Enter alt',
+        placeholder: 'Enter alt text',
         required: true,
         validation: {
           minLength: 2,
@@ -117,24 +110,58 @@ const CarouselForm = ({
     ],
     submitLabel: initialData ? 'Update' : 'Create',
   };
+
+  // Image Manager Component
+  const ImageManager = () => {
+    return (
+      <div className="mt-6 mb-6">
+        <ImagePreview
+          file={carouselImage}
+          existingImageUrl={initialData?.media?.url}
+          alt="Carousel image"
+          onFileChange={setCarouselImage}
+          label="Carousel Image"
+          description="Select an image for the carousel (recommended: 1920x1080px, max 2MB)"
+          disabled={isLoading}
+          required={!initialData} // Required for new carousels, optional for updates
+        />
+      </div>
+    );
+  };
+
   async function handleSubmit(data: any) {
-    const { media, alt, ...rest } = data;
-    if (data.media) {
-      const response = await uploadImage({
-        img: data.media,
-        folder: 'carousels',
-        alt: data.alt || initialData?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        rest.mediaId = response.id || initialData?.mediaId || undefined;
+    setIsLoading(true);
+    try {
+      const payload = { ...data };
+
+      // Upload image if selected
+      if (carouselImage) {
+        const response = await uploadImage({
+          img: carouselImage,
+          folder: 'carousels',
+          alt: data.alt || initialData?.media?.alt || '',
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.mediaId = response.id;
+        }
+      } else if (initialData?.mediaId) {
+        // Keep existing image if no new image is selected
+        payload.mediaId = initialData.mediaId;
       }
-      const res = await postAndPatch('carousels', rest, initialData?.id);
+
+      // Remove alt from payload as it's handled in the image upload
+      delete payload.alt;
+
+      const res = await postAndPatch('carousels', payload, initialData?.id);
       if (res) {
         router.push('/admin/carousels');
       }
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <div className="max-w-4xl space-y-6">
       <div className="bg-white rounded-lg shadow-sm border">
@@ -151,7 +178,17 @@ const CarouselForm = ({
         </div>
         
         <div className="p-6">
-          <DynamicForm config={formConfig} onSubmit={handleSubmit} />
+          <DynamicForm config={formConfig} onSubmit={handleSubmit} isLoading={isLoading} />
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-xl font-semibold text-gray-900">Image</h3>
+          <p className="text-gray-600 mt-1">Upload an image for the carousel.</p>
+        </div>
+        <div className="p-6">
+          <ImageManager />
         </div>
       </div>
     </div>

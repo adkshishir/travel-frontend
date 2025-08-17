@@ -2,11 +2,16 @@
 import { DynamicForm, FormConfig } from '@/components/admin-dynamics/form/form';
 import ENDPOINTS from '@/utils/endpoints';
 import { postAndPatch, uploadImage } from '@/utils/request-intregation';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImagePreview from '@/components/ui/image-preview';
 
 const ActivityForm = ({ initialData }: { initialData?: any }) => {
   const router = useRouter();
+  const [mainImage, setMainImage] = useState<File | null>(null);
+  const [seoImage, setSeoImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const config: FormConfig = {
     fields: [
       {
@@ -40,16 +45,9 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
         required: false,
         defaultValue: initialData?.description || '',
       },
-
-      {
-        name: 'media',
-        label: 'Media',
-        type: 'file',
-        required: false,
-      },
       {
         name: 'alt',
-        label: 'Alt ',
+        label: 'Main Image Alt Text',
         type: 'text',
         required: false,
         defaultValue: initialData?.media?.alt || '',
@@ -70,16 +68,9 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
         required: false,
         defaultValue: initialData?.seo?.metaKeywords || '',
       },
-
-      {
-        name: 'seomedia',
-        label: 'Og Image',
-        type: 'file',
-        required: false,
-      },
       {
         name: 'seomediaAlt',
-        label: 'Og Image Alt',
+        label: 'SEO Image Alt Text',
         type: 'text',
         required: false,
         defaultValue: initialData?.seo?.media?.alt || '',
@@ -111,57 +102,95 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
     ],
     submitLabel: initialData ? 'Update Activity' : 'Add Activity',
   };
-  async function handleSubmit(data: any) {
-    const { media, seomedia, ...rest } = data;
-    let payload: any = {
-      name: data.name || initialData?.name || '',
-      slug: data.slug || initialData?.slug || '',
-      description: data.description || initialData?.description || '',
-      seo: {
-        metaTitle: data.metaTitle || initialData?.seo?.metaTitle || '',
-        metaKeywords: data.metaKeywords || initialData?.seo?.metaKeywords || '',
-        metaCanonical:
-          data.metaCanonical || initialData?.seo?.metaCanonical || '',
-        metaDescription:
-          data.metaDescription || initialData?.seo?.metaDescription || '',
-        schema: data.schema || initialData?.seo?.schema || '',
-        mediaId: undefined,
-      },
-    };
 
-    if (media) {
-      const response = await uploadImage({
-        img: data.media,
-        folder: 'activities',
-        alt: data.alt || initialData?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        payload.mediaId = response.id || initialData?.mediaId || undefined;
-      }
-    }
-    if (seomedia) {
-      const response = await uploadImage({
-        img: data.seomedia,
-        folder: 'activities',
-        alt: data.seomediaAlt || initialData?.seo?.media?.alt,
-        showSuccessMessage: false,
-      });
-      if (response) {
-        payload.seo.mediaId =
-          response.id || initialData?.seo?.mediaId || undefined;
-      }
-    }
+  // Image Manager Components
+  const ImageManager = () => {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 mb-6">
+        {/* Main Image */}
+        <ImagePreview
+          file={mainImage}
+          existingImageUrl={initialData?.media?.url}
+          alt="Main activity image"
+          onFileChange={setMainImage}
+          label="Main Image"
+          description="Select an image for the activity (recommended: 1200x800px, max 2MB)"
+          disabled={isLoading}
+        />
 
-    const responseData = await postAndPatch(
-      ENDPOINTS.ACTIVITIES,
-      payload,
-      initialData?.id
+        {/* SEO Image */}
+        <ImagePreview
+          file={seoImage}
+          existingImageUrl={initialData?.seo?.media?.url}
+          alt="SEO activity image"
+          onFileChange={setSeoImage}
+          label="SEO Image (Open Graph)"
+          description="Select an image for social media sharing (recommended: 1200x630px, max 2MB)"
+          disabled={isLoading}
+        />
+      </div>
     );
-    if (responseData) {
-      router.push('/admin/activities');
+  };
+
+  async function handleSubmit(data: any) {
+    setIsLoading(true);
+    try {
+      let payload: any = {
+        name: data.name || initialData?.name || '',
+        slug: data.slug || initialData?.slug || '',
+        description: data.description || initialData?.description || '',
+        seo: {
+          metaTitle: data.metaTitle || initialData?.seo?.metaTitle || '',
+          metaKeywords: data.metaKeywords || initialData?.seo?.metaKeywords || '',
+          metaCanonical:
+            data.metaCanonical || initialData?.seo?.metaCanonical || '',
+          metaDescription:
+            data.metaDescription || initialData?.seo?.metaDescription || '',
+          schema: data.schema || initialData?.seo?.schema || '',
+          mediaId: initialData?.seo?.mediaId || undefined,
+        },
+        mediaId: initialData?.mediaId || undefined,
+      };
+
+      // Upload main image if selected
+      if (mainImage) {
+        const response = await uploadImage({
+          img: mainImage,
+          folder: 'activities',
+          alt: data.alt || initialData?.media?.alt || '',
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.mediaId = response.id;
+        }
+      }
+
+      // Upload SEO image if selected
+      if (seoImage) {
+        const response = await uploadImage({
+          img: seoImage,
+          folder: 'activities/seo',
+          alt: data.seomediaAlt || initialData?.seo?.media?.alt || '',
+          showSuccessMessage: false,
+        });
+        if (response) {
+          payload.seo.mediaId = response.id;
+        }
+      }
+
+      const responseData = await postAndPatch(
+        ENDPOINTS.ACTIVITIES,
+        payload,
+        initialData?.id
+      );
+      if (responseData) {
+        router.push('/admin/activities');
+      }
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <div className="max-w-4xl space-y-6">
       <div className="bg-white rounded-lg shadow-sm border">
@@ -178,7 +207,17 @@ const ActivityForm = ({ initialData }: { initialData?: any }) => {
         </div>
         
         <div className="p-6">
-          <DynamicForm config={config} onSubmit={handleSubmit} />
+          <DynamicForm config={config} onSubmit={handleSubmit} isLoading={isLoading} />
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-xl font-semibold text-gray-900">Images</h3>
+          <p className="text-gray-600 mt-1">Upload images for the activity.</p>
+        </div>
+        <div className="p-6">
+          <ImageManager />
         </div>
       </div>
     </div>
