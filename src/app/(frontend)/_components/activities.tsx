@@ -8,10 +8,12 @@ import React from 'react';
 const Activities = async () => {
   const activities = await fetchData(ENDPOINTS.ACTIVITIES);
   return (
-    <section id='activities' className=' mx-auto max-w-[1180px] max-lg:px-4 mt-16'>
-      <PrimaryText className='mx-auto w-fit'>Activities</PrimaryText>
-      <H2 className='mx-auto w-fit '>We Offer The Best Service</H2>
-      <div className='lg:flex grid grid-cols-2 max-lg:justify-center  justify-between gap-4 mt-8 '>
+    <section id='activities' className='mx-auto max-w-[1180px] max-lg:px-4 mt-24 max-lg:mt-16'>
+      <div className='text-center mb-10'>
+        <PrimaryText className='mb-2'>Activities</PrimaryText>
+        <H2>Adventures Waiting for You</H2>
+      </div>
+      <div className='grid grid-cols-2 lg:flex gap-4'>
         {activities?.map(
           (activity: {
             id: number;

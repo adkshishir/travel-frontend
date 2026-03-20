@@ -1,8 +1,10 @@
 import PackageCard from '@/components/packages/package-card';
 import { ParamValue } from 'next/dist/server/request/params';
 import Link from 'next/link';
+import { Package } from 'lucide-react';
 import React from 'react';
-export type Package = {
+
+export type TPackage = {
   id: number;
   title: string;
   description: string;
@@ -17,25 +19,34 @@ export type Package = {
 };
 
 const Packages = ({
-  packages=[],
+  packages = [],
   activitySlug,
 }: {
-  packages: Package[];
+  packages: TPackage[];
   activitySlug: ParamValue;
 }) => {
+  if (!packages.length) {
+    return (
+      <div className='max-w-[1180px] mx-auto px-4 py-12 text-center text-gray-500'>
+        <Package size={40} className='mx-auto mb-4 text-gray-300' />
+        <p>No packages available for this destination yet.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className='grid max-lg:px-4  max-w-[1180px] mx-auto my-16 max-lg:justify-center grid-cols-1 justify-center md:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div className='grid max-lg:px-4 max-w-[1180px] mx-auto pb-16 pt-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
       {packages.map((pack) => (
         <Link
           href={`/${activitySlug}/${pack.destination.slug}/${pack.slug}`}
           key={pack.id}>
           <PackageCard
-            key={pack.id}
             title={pack.title}
             location={pack.destination.name}
             image={
-              (pack?.media?.length > 0 && pack.media[0]?.thumbnail) ||
-              '/images/hero.jpg'
+              pack?.media?.length > 0
+                ? pack.media[0]?.thumbnail
+                : '/images/hero.jpg'
             }
             price={Number(pack.price || 0)}
             rating={pack.rating}
@@ -44,78 +55,6 @@ const Packages = ({
           />
         </Link>
       ))}
-      {/* <PackageCard
-        title='Colombian Coffee Trails'
-        location='Regions'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Istanbul, Turkey'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />{' '}
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />{' '}
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />{' '}
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />{' '}
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      />{' '}
-      <PackageCard
-        title='Colombian Coffee Trails'
-        location='Another Region'
-        image='/images/hero.jpg'
-        price={150}
-        rating={4}
-        reviews={4035}
-        popular
-      /> */}
     </div>
   );
 };

@@ -8,15 +8,12 @@ import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { activitySlug } = await params;
-  
+
   try {
     const result = await fetchData(ENDPOINTS.ACTIVITIES + '/' + activitySlug);
-    
+
     if (!result) {
-      return {
-        title: 'Activity Not Found',
-        description: 'The requested activity could not be found.',
-      };
+      return { title: 'Activity Not Found', description: 'The requested activity could not be found.' };
     }
 
     const seo = result?.seo || {};
@@ -24,53 +21,30 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     const description = seo.metaDescription || result?.description || 'Explore this amazing activity.';
     const keywords = seo.metaKeywords || '';
     const canonical = seo.metaCanonical || '';
-    const image = result?.media?.phone || result?.media?.thumbnail || result?.seo?.media?.thumbnail || '/images/hero.jpg';
-    const url = typeof window !== 'undefined' ? window.location.href : '';
-    
+    const image = result?.media?.phone || result?.media?.thumbnail || '/images/hero.jpg';
+
     return {
       title,
       description,
       keywords,
       alternates: canonical ? { canonical } : undefined,
-      openGraph: {
-        title,
-        description,
-        url: canonical || url,
-        type: 'website',
-        images: [image],
-        siteName: 'Your Site Name',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title,
-        description,
-        images: [image],
-      },
-      robots: {
-        index: true,
-        follow: true,
-      },
+      openGraph: { title, description, url: canonical, type: 'website', images: [image], siteName: 'Poonhill Treks' },
+      twitter: { card: 'summary_large_image', title, description, images: [image] },
+      robots: { index: true, follow: true },
       ...(seo.schema && { other: { 'application/ld+json': seo.schema } }),
     };
-  } catch (error) {
-    return {
-      title: 'Activity Not Found',
-      description: 'The requested activity could not be found.',
-    };
+  } catch {
+    return { title: 'Activity Not Found', description: 'The requested activity could not be found.' };
   }
 }
 
 const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
   const { activitySlug } = await params;
-  
+
   try {
     const result = await fetchData(ENDPOINTS.ACTIVITIES + '/' + activitySlug);
 
-
-    // Handle case where activity is not found
-    if (!result) {
-      notFound();
-    }
+    if (!result) notFound();
 
     return (
       <main>
@@ -80,6 +54,14 @@ const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
           breadcrumb={[{ name: 'Home', href: '/' }]}
           pageName={result?.name || 'Activities'}
         />
+
+        {/* Activity intro */}
+        {result?.description && (
+          <div className='max-w-3xl mx-auto text-center py-12 px-4'>
+            <p className='text-gray-600 text-lg leading-relaxed'>{result.description}</p>
+          </div>
+        )}
+
         <Destinations
           activityName={result?.name}
           activitySlug={activitySlug}
@@ -87,8 +69,7 @@ const ActivitiesPage = async ({ params }: { params: Promise<Params> }) => {
         />
       </main>
     );
-  } catch (error) {
-    // Handle network errors or other issues
+  } catch {
     notFound();
   }
 };

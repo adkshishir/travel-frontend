@@ -8,11 +8,14 @@ import React from 'react';
 const Faq = async () => {
   const result = await fetchData(ENDPOINTS.FAQ);
   return (
-    <section id='faq' className='bg-[#F6F6F6] max-lg:mt-16 max-lg:py-16 py-32'>
-      <div className=' max-w-[1180px] max-lg:px-4 mx-auto '>
-        <div className='text-center max-w-2xl grid   mx-auto'>
-          <PrimaryText className='mb-4'>FAQ</PrimaryText>
-          <H2 className='mb-8'>Unpacking Your Travel Questions</H2>
+    <section id='faq' className='bg-[#f0ece3] max-lg:mt-16 max-lg:py-14 py-20'>
+      <div className='max-w-[1180px] max-lg:px-4 mx-auto'>
+        <div className='text-center max-w-2xl mx-auto mb-10'>
+          <PrimaryText className='mb-2'>FAQ</PrimaryText>
+          <H2>Everything You Need to Know</H2>
+          <p className='text-gray-500 mt-3 text-sm'>
+            Have more questions? <a href='/contact' className='text-primary font-medium hover:underline'>Contact us</a> — we&apos;re happy to help.
+          </p>
         </div>
         <TravelAccordion data={result} />
       </div>
