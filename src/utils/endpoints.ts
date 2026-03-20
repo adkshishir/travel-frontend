@@ -16,6 +16,14 @@ const ENDPOINTS = {
   MAIL: 'mail',
   SITE_INFO: 'site-info',
   CATEGORIES: 'categories',
+  PAYMENT_STRIPE_INTENT: 'payment/stripe/create-intent',
+  PAYMENT_STRIPE_CONFIRM: 'payment/stripe/confirm',
+  PAYMENT_PAYPAL_ORDER: 'payment/paypal/create-order',
+  PAYMENT_PAYPAL_CAPTURE: 'payment/paypal/capture',
+  PAYMENT_CASH: 'payment/cash',
+  PAYMENT_CANCEL: 'payment/cancel',
+  PAYMENT_REFUND: 'payment/refund',
+  PAYMENT_STATUS: 'payment/status',
 };
 
 export default ENDPOINTS;

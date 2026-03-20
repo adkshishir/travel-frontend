@@ -20,7 +20,7 @@ type BannerProps = {
 };
 const Banner = ({ title, image, breadcrumb, pageName }: BannerProps) => {
   return (
-    <section className='relative max-lg:h-[40vh] h-[50vh] bg-[#012E4188]'>
+    <section className='relative max-lg:h-[40vh] h-[50vh] bg-[#1c2b1c]/80'>
       <Image
         src={image}
         alt={title}

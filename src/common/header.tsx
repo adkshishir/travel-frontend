@@ -2,11 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronDown, Mountain } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 
@@ -16,158 +15,150 @@ export type TActivity = {
   destinations: {
     name: string;
     slug: string;
-    packages: {
-      title: string;
-      slug: string;
-    }[];
+    packages: { title: string; slug: string }[];
   }[];
 }[];
 
-// Main navigation links
 const navLinks = [
-  // { href: '/blogs', label: 'Blogs' },
-  { href: '/about', label: 'About Us' },
+  { href: '/blogs', label: 'Blogs' },
+  { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen]             = useState(false);
   const [activeActivity, setActiveActivity] = useState<number | null>(null);
-  const [mobileActiveActivity, setMobileActiveActivity] = useState<
-    number | null
-  >(null);
-  const [mobileActiveDestination, setMobileActiveDestination] = useState<
-    number | null
-  >(null);
-  const router = useRouter();
-  const [navItems, setNavItems] = useState<TActivity>();
-
-  // Refs for detecting clicks outside dropdown
+  const [mobileActiveActivity, setMobileActiveActivity] = useState<number | null>(null);
+  const [scrolled, setScrolled]         = useState(false);
+  const [navItems, setNavItems]         = useState<TActivity>();
+  const router   = useRouter();
+  const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns when clicking outside
+  // Determine if we're on the homepage (hero covers viewport → start transparent)
+  const isHome = pathname === '/';
+
+  // Scroll listener
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close mega menu on outside click
+  useEffect(() => {
+    const handleOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setActiveActivity(null);
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
+  // Fetch nav items
   useEffect(() => {
     (async () => {
-      const navs = await fetchData(ENDPOINTS.NAV_ITEMS);
-      setNavItems(navs);
+      const data = await fetchData(ENDPOINTS.NAV_ITEMS);
+      setNavItems(data);
     })();
   }, []);
 
-  // Handle activity hover/click for desktop
-  const handleActivityInteraction = (index: number) => {
-    if (activeActivity === index) {
-      setActiveActivity(null);
-    } else {
-      setActiveActivity(index);
-    }
-  };
+  // Close mobile menu on route change
+  useEffect(() => { setIsOpen(false); setActiveActivity(null); }, [pathname]);
 
-  // Handle mobile activity click
-  const handleMobileActivityClick = (index: number) => {
-    setMobileActiveActivity(mobileActiveActivity === index ? null : index);
-    setMobileActiveDestination(null);
-  };
-
-  // Handle mobile destination click
-  const handleMobileDestinationClick = (index: number) => {
-    setMobileActiveDestination(
-      mobileActiveDestination === index ? null : index
-    );
-  };
-
-  // Handle activity name click - navigate to activity page
-  const handleActivityNameClick = (e: React.MouseEvent, activitySlug: string) => {
-    e.stopPropagation();
-    router.push(`/${activitySlug}`);
-    setActiveActivity(null);
-  };
-
-  // Handle destination name click - navigate to destination page
-  const handleDestinationNameClick = (e: React.MouseEvent, activitySlug: string, destinationSlug: string) => {
-    e.stopPropagation();
-    router.push(`/${activitySlug}/${destinationSlug}`);
-    setActiveActivity(null);
-  };
+  const transparent = isHome && !scrolled && !isOpen;
 
   return (
-    <header className='fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        transparent
+          ? 'bg-transparent'
+          : 'bg-white/95 backdrop-blur-md border-b border-[#e8e0d4] shadow-sm'
+      )}>
+      <div className='max-w-[1180px] mx-auto px-4'>
         <div className='flex items-center justify-between h-16'>
-          {/* Logo */}
-          <Link href='/' className='flex items-center group'>
-            <span className='text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors duration-200'>
-              Poonhill
-            </span>
-            <span className='text-2xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200'>
-              Treks
+
+          {/* ── Logo ──────────────────────────── */}
+          <Link href='/' className='flex items-center gap-2 shrink-0'>
+            <Mountain
+              size={24}
+              className={cn(
+                'transition-colors duration-300',
+                transparent ? 'text-white' : 'text-primary'
+              )}
+            />
+            <span className={cn(
+              'text-xl font-bold transition-colors duration-300',
+              transparent ? 'text-white' : 'text-[#1c2b1c]'
+            )}>
+              Poonhill<span className={transparent ? 'text-orange-300' : 'text-primary'}>Treks</span>
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className='hidden lg:flex items-center space-x-8'>
-            {/* Activities in nav bar */}
-            {navItems?.map((activity, actIndex) => (
-              <div 
-                key={activity.name} 
+          {/* ── Desktop nav ───────────────────── */}
+          <nav className='hidden lg:flex items-center gap-1' ref={dropdownRef}>
+            {navItems?.map((activity, i) => (
+              <div
+                key={activity.slug}
                 className='relative'
-                onMouseEnter={() => handleActivityInteraction(actIndex)}
+                onMouseEnter={() => setActiveActivity(i)}
                 onMouseLeave={() => setActiveActivity(null)}>
-                
-                {/* Activity Dropdown Trigger */}
                 <button
-                  className='flex items-center space-x-1 text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200'
-                  onClick={(e) => handleActivityNameClick(e, activity.slug)}>
-                  <span>{activity.name}</span>
-                  <ChevronDown className={cn(
-                    'h-4 w-4 transition-transform duration-200',
-                    activeActivity === actIndex ? 'rotate-180' : ''
-                  )} />
+                  onClick={() => { router.push(`/${activity.slug}`); setActiveActivity(null); }}
+                  className={cn(
+                    'flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    transparent
+                      ? 'text-white/90 hover:text-white hover:bg-white/10'
+                      : 'text-[#2d4a2d] hover:text-primary hover:bg-orange-50'
+                  )}>
+                  {activity.name}
+                  <ChevronDown
+                    size={14}
+                    className={cn('transition-transform duration-200', activeActivity === i && 'rotate-180')}
+                  />
                 </button>
 
-                {/* Mega Menu Dropdown */}
-                {activeActivity === actIndex && (
-                  <div className='fixed -translate-x-1/2 left-1/2 transform  mt-0 w-screen max-w-6xl'>
-                    <div className='bg-white shadow-xl ring-1 ring-black ring-opacity-5 rounded-lg border border-gray-200'>
-                      <div className='p-8'>
-                        {/* Grid Layout for Destinations */}
-                        <div className='flex flex-wrap justify-around'>
-                          {activity.destinations.map((destination) => (
-                            <div key={destination.slug} className='space-y-4'>
-                              {/* Destination Header */}
-                              <h3 className='text-sm font-semibold text-primary uppercase tracking-wide border-b border-orange-100 pb-2'>
-                                <button
-                                  onClick={(e) => handleDestinationNameClick(e, activity.slug, destination.slug)}
-                                  className='hover:text-orange-800 transition-colors duration-200'>
-                                  {destination.name}
-                                </button>
-                              </h3>
-                              
-                              {/* All Packages List */}
-                              <ul className='space-y-2'>
-                                {destination.packages.map((pkg) => (
+                {/* Mega dropdown */}
+                <AnimatePresence>
+                  {activeActivity === i && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.18 }}
+                      className='absolute left-1/2 -translate-x-1/2 mt-1 w-max min-w-[480px] max-w-3xl'>
+                      <div className='bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden'>
+                        {/* Header strip */}
+                        <div className='bg-gradient-to-r from-[#1c2b1c] to-[#2d4a2d] px-6 py-3 flex items-center justify-between'>
+                          <div>
+                            <p className='text-white font-semibold text-sm'>{activity.name}</p>
+                            <p className='text-white/60 text-xs'>{activity.destinations.length} destinations</p>
+                          </div>
+                          <button
+                            onClick={() => { router.push(`/${activity.slug}`); setActiveActivity(null); }}
+                            className='text-xs text-orange-300 hover:text-orange-200 font-medium'>
+                            View All →
+                          </button>
+                        </div>
+                        {/* Destinations grid */}
+                        <div className='p-5 grid grid-cols-2 gap-x-8 gap-y-1 max-h-72 overflow-y-auto'>
+                          {activity.destinations.map((dest) => (
+                            <div key={dest.slug} className='min-w-0'>
+                              <button
+                                onClick={() => { router.push(`/${activity.slug}/${dest.slug}`); setActiveActivity(null); }}
+                                className='text-xs font-semibold text-primary hover:text-orange-600 uppercase tracking-wide py-1.5 flex items-center gap-1 transition-colors'>
+                                {dest.name}
+                              </button>
+                              <ul className='mb-3 space-y-0.5'>
+                                {dest.packages.slice(0, 5).map((pkg) => (
                                   <li key={pkg.slug}>
                                     <Link
-                                      href={`/${activity.slug}/${destination.slug}/${pkg.slug
-                                        .toLowerCase()
-                                        .replace(/\s+/g, '-')}`}
-                                      className='text-gray-600 hover:text-primary text-sm block py-1 transition-colors hover:translate-x-1 transform duration-200'
-                                      onClick={() => setActiveActivity(null)}>
+                                      href={`/${activity.slug}/${dest.slug}/${pkg.slug}`}
+                                      onClick={() => setActiveActivity(null)}
+                                      className='text-xs text-gray-500 hover:text-primary block py-0.5 transition-colors hover:translate-x-1 transform duration-150 truncate'>
                                       {pkg.title}
                                     </Link>
                                   </li>
@@ -176,206 +167,141 @@ export default function Header() {
                             </div>
                           ))}
                         </div>
-                        
-                        {/* Call to Action at bottom */}
-                        {/* <div className='mt-8 pt-6 border-t border-gray-100'>
-                          <div className='flex justify-between items-center'>
-                            <p className='text-sm text-primary'>
-                              Ready for your next adventure? Let our experts help you plan.
-                            </p>
-                            <div className='flex space-x-4'>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => router.push('/contact')}>
-                                Contact Us
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                className="bg-primary text-white hover:bg-primary/80"
-                                onClick={() => {
-                                  router.push(`/${activity.slug}`);
-                                  setActiveActivity(null);
-                                }}>
-                                Explore {activity.name}
-                              </Button>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
 
-            {/* Regular nav links */}
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className='text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200'>
+                className={cn(
+                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                  transparent
+                    ? 'text-white/90 hover:text-white hover:bg-white/10'
+                    : 'text-[#2d4a2d] hover:text-primary hover:bg-orange-50'
+                )}>
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          {/* Right Side Actions */}
-          <div className='flex items-center space-x-4'>
-           
-            <Button
-              size="sm"
-              className='bg-primary text-white hover:bg-primary/80 hidden lg:flex'
-              onClick={() => router.push('/booking')}>
-              Book Now
-            </Button>
+          {/* ── Right actions ─────────────────── */}
+          <div className='flex items-center gap-3'>
+            <button
+              onClick={() => router.push('/booking')}
+              className={cn(
+                'hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5',
+                transparent
+                  ? 'bg-primary text-white hover:bg-orange-600 shadow-lg shadow-primary/30'
+                  : 'bg-primary text-white hover:bg-orange-600'
+              )}>
+              Book a Trek
+            </button>
 
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className='lg:hidden'
-              onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
-            </Button>
+            {/* Mobile hamburger */}
+            <button
+              className={cn(
+                'lg:hidden p-2 rounded-lg transition-colors',
+                transparent ? 'text-white hover:bg-white/10' : 'text-[#1c2b1c] hover:bg-gray-100'
+              )}
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label='Toggle menu'>
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className='lg:hidden bg-white border-t border-gray-200'>
-          <div className='px-4 py-6 space-y-6 max-h-96 overflow-y-auto'>
-            {navItems?.map((activity, actIndex) => (
-              <div key={activity.name} className='space-y-4'>
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: actIndex * 0.1 }}>
-                  
-                  {/* Activity Header */}
+      {/* ── Mobile menu ───────────────────────── */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className='lg:hidden bg-white border-t border-[#e8e0d4] overflow-hidden'>
+            <div className='px-4 py-5 space-y-1 max-h-[75vh] overflow-y-auto'>
+              {/* Activities */}
+              {navItems?.map((activity, i) => (
+                <div key={activity.slug}>
                   <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-semibold text-primary/80 border-b border-orange-100 pb-2 flex-1'>
-                      <button
-                        onClick={() => {
-                          router.push(`/${activity.slug}`);
-                          setIsOpen(false);
-                        }}
-                        className='hover:text-orange-800 transition-colors'>
-                        {activity.name}
-                      </button>
-                    </h3>
                     <button
-                      onClick={() => handleMobileActivityClick(actIndex)}
-                      className='ml-4 p-1'>
+                      onClick={() => { router.push(`/${activity.slug}`); setIsOpen(false); }}
+                      className='flex-1 text-left text-sm font-semibold text-[#1c2b1c] py-2.5 hover:text-primary transition-colors'>
+                      {activity.name}
+                    </button>
+                    <button
+                      onClick={() => setMobileActiveActivity(mobileActiveActivity === i ? null : i)}
+                      className='p-2 text-gray-400 hover:text-primary transition-colors'>
                       <ChevronDown
-                        className={cn(
-                          'h-4 w-4 text-gray-600 transition-transform duration-200',
-                          mobileActiveActivity === actIndex ? 'rotate-180' : ''
-                        )}
+                        size={16}
+                        className={cn('transition-transform duration-200', mobileActiveActivity === i && 'rotate-180')}
                       />
                     </button>
                   </div>
 
-                  {/* Mobile Destinations Grid */}
                   <AnimatePresence>
-                    {mobileActiveActivity === actIndex && (
+                    {mobileActiveActivity === i && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className='grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4'>
-                        {activity.destinations.map((destination, destIndex) => (
-                          <div key={destination.slug} className='space-y-3'>
-                            {/* Destination Header */}
-                            <div className='flex items-center justify-between'>
-                              <h4 className='text-sm font-medium text-gray-700'>
-                                <button
-                                  onClick={() => {
-                                    router.push(`/${activity.slug}/${destination.slug}`);
-                                    setIsOpen(false);
-                                  }}
-                                  className='hover:text-primary transition-colors'>
-                                  {destination.name}
-                                </button>
-                              </h4>
-                              <button
-                                onClick={() => handleMobileDestinationClick(destIndex)}
-                                className='p-1'>
-                                <ChevronDown
-                                  className={cn(
-                                    'h-3 w-3 text-gray-500 transition-transform duration-200',
-                                    mobileActiveDestination === destIndex ? 'rotate-180' : ''
-                                  )}
-                                />
-                              </button>
-                            </div>
-
-                            {/* Mobile Packages */}
-                            <AnimatePresence>
-                              {mobileActiveDestination === destIndex && (
-                                <motion.ul
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: 'auto' }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className='space-y-1 pl-3'>
-                                  {destination.packages.map((pkg) => (
-                                    <li key={pkg.slug}>
-                                      <Link
-                                        href={`/${activity.slug}/${destination.slug}/${pkg.slug
-                                          .toLowerCase()
-                                          .replace(/\s+/g, '-')}`}
-                                        className='text-sm text-gray-600 hover:text-primary block py-1 transition-colors'
-                                        onClick={() => setIsOpen(false)}>
-                                        • {pkg.title}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </motion.ul>
-                              )}
-                            </AnimatePresence>
+                        transition={{ duration: 0.2 }}
+                        className='pl-3 pb-3 border-l-2 border-orange-100 ml-2 space-y-2'>
+                        {activity.destinations.map((dest) => (
+                          <div key={dest.slug}>
+                            <button
+                              onClick={() => { router.push(`/${activity.slug}/${dest.slug}`); setIsOpen(false); }}
+                              className='text-xs font-semibold text-primary uppercase tracking-wide py-1 block hover:text-orange-600'>
+                              {dest.name}
+                            </button>
+                            {dest.packages.slice(0, 4).map((pkg) => (
+                              <Link
+                                key={pkg.slug}
+                                href={`/${activity.slug}/${dest.slug}/${pkg.slug}`}
+                                onClick={() => setIsOpen(false)}
+                                className='text-xs text-gray-500 hover:text-primary block py-0.5 pl-2 transition-colors'>
+                                › {pkg.title}
+                              </Link>
+                            ))}
                           </div>
                         ))}
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </motion.div>
-              </div>
-            ))}
-            
-            {/* Regular nav links for mobile */}
-            {navLinks.map((link, index) => (
-              <motion.div
-                key={link.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (navItems?.length || 0 + index) * 0.1 }}>
-                <Link
-                  href={link.href}
-                  className='block text-gray-700 hover:text-primary font-medium py-2'
-                  onClick={() => setIsOpen(false)}>
-                  {link.label}
-                </Link>
-              </motion.div>
-            ))}
+                </div>
+              ))}
 
-            {/* Mobile Actions */}
-            <div className='pt-4 border-t border-gray-200 space-y-3'>
-              
-              <Button 
-                className='w-full bg-primary text-white hover:bg-primary/80'
-                onClick={() => {
-                  router.push('/admin');
-                  setIsOpen(false);
-                }}>
-                Book Now
-              </Button>
+              {/* Regular links */}
+              <div className='pt-2 border-t border-gray-100 space-y-1'>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className='block text-sm font-medium text-[#2d4a2d] hover:text-primary py-2.5 transition-colors'>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div className='pt-3 border-t border-gray-100'>
+                <button
+                  onClick={() => { router.push('/booking'); setIsOpen(false); }}
+                  className='w-full bg-primary text-white font-semibold py-3 rounded-xl text-sm hover:bg-orange-600 transition-colors'>
+                  Book a Trek
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

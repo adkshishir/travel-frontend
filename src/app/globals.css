@@ -5,23 +5,23 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #faf8f5;
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: #ffffff;
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: #ffffff;
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #fa7335;
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: #f97316;
+  --primary-foreground: #ffffff;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --muted: #f4f0e8;
+  --muted-foreground: #6b7c6c;
+  --accent: #f4f0e8;
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: #e8e0d4;
+  --input: #e8e0d4;
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -36,8 +36,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  /* font-family: var(--font-poppins), sans-serif; */
   --p-text: 'Roboto', sans-serif;
+
+  /* Adventure theme custom vars */
+  --forest-dark: #1c2b1c;
+  --forest-mid: #2d4a2d;
+  --earth-bg: #faf7f2;
+  --earth-muted: #f0ece3;
+  --earth-border: #e4ddd1;
 }
 
 .dark {
@@ -69,7 +75,7 @@
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
@@ -120,60 +126,91 @@
     @apply bg-background text-foreground;
   }
 }
+
 * {
-  scroll-behavior: smooth;
   box-sizing: border-box;
-
 }
 
-/* ck editor css  */
-/* @import url('https://fonts.googleapis.com/css2?family=Oswald&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap'); */
+html {
+  scroll-behavior: smooth;
+}
 
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ─── Scrollbar ─────────────────────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ─── Hero animations ───────────────────── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+
+.hero-fade-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+.hero-fade {
+  animation: fade-in 1s ease-out both;
+}
+.hero-ken-burns {
+  animation: ken-burns 12s ease-out both;
+}
+
+/* ─── CKEditor ──────────────────────────── */
 @media print {
-  body {
-    margin: 0 !important;
-  }
+  body { margin: 0 !important; }
 }
-
 .main-container {
   font-family: 'Lato';
   width: fit-content;
-  /* margin-left: auto; */
-  /* margin-right: auto; */
 }
-
 .ck-content {
   font-family: 'Lato';
   line-height: 1.6;
   word-break: break-word;
   min-width: 795px;
 }
-
 .editor-container_classic-editor .editor-container__editor {
   min-height: 500px !important;
   max-width: 795px;
 }
-
 .ck-content h3.category {
   font-family: 'Oswald';
   font-size: 20px;
   font-weight: bold;
   color: #555;
   letter-spacing: 10px;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
 }
-
 .ck-content h2.document-title {
   font-family: 'Oswald';
   font-size: 50px;
   font-weight: bold;
-  margin: 0;
-  padding: 0;
-  border: 0;
+  margin: 0; padding: 0; border: 0;
 }
-
 .ck-content h3.document-subtitle {
   font-family: 'Oswald';
   font-size: 20px;
@@ -182,29 +219,17 @@
   font-weight: bold;
   padding: 0;
 }
-
 .ck-content p.info-box {
   --background-size: 30px;
   --background-color: #e91e63;
   padding: 1.2em 2em;
   border: 1px solid var(--background-color);
-  background: linear-gradient(
-      135deg,
-      var(--background-color) 0%,
-      var(--background-color) var(--background-size),
-      transparent var(--background-size)
-    ),
-    linear-gradient(
-      135deg,
-      transparent calc(100% - var(--background-size)),
-      var(--background-color) calc(100% - var(--background-size)),
-      var(--background-color)
-    );
+  background: linear-gradient(135deg, var(--background-color) 0%, var(--background-color) var(--background-size), transparent var(--background-size)),
+    linear-gradient(135deg, transparent calc(100% - var(--background-size)), var(--background-color) calc(100% - var(--background-size)), var(--background-color));
   border-radius: 10px;
   margin: 1.5em 2em;
   box-shadow: 5px 5px 0 #ffe6ef;
 }
-
 .ck-content blockquote.side-quote {
   font-family: 'Oswald';
   font-style: normal;
@@ -216,51 +241,22 @@
   z-index: 1;
   margin-left: 1em;
 }
-
 .ck-content blockquote.side-quote::before {
-  content: '“';
+  content: '"';
   position: absolute;
-  top: -37px;
-  left: -10px;
+  top: -37px; left: -10px;
   display: block;
   font-size: 200px;
   color: #e7e7e7;
   z-index: -1;
   line-height: 1;
 }
-
-.ck-content blockquote.side-quote p {
-  font-size: 2em;
-  line-height: 1;
-}
-
-.ck-content blockquote.side-quote p:last-child:not(:first-child) {
-  font-size: 1.3em;
-  text-align: right;
-  color: #555;
-}
-
-.ck-content span.marker {
-  background: yellow;
-}
-
-.ck-content span.spoiler {
-  background: #000;
-  color: #000;
-}
-
-.ck-content span.spoiler:hover {
-  background: #000;
-  color: #fff;
-}
-
-.ck-content pre.fancy-code {
-  border: 0;
-  margin-left: 2em;
-  margin-right: 2em;
-  border-radius: 10px;
-}
-
+.ck-content blockquote.side-quote p { font-size: 2em; line-height: 1; }
+.ck-content blockquote.side-quote p:last-child:not(:first-child) { font-size: 1.3em; text-align: right; color: #555; }
+.ck-content span.marker { background: yellow; }
+.ck-content span.spoiler { background: #000; color: #000; }
+.ck-content span.spoiler:hover { background: #000; color: #fff; }
+.ck-content pre.fancy-code { border: 0; margin-left: 2em; margin-right: 2em; border-radius: 10px; }
 .ck-content pre.fancy-code::before {
   content: '';
   display: block;
@@ -269,69 +265,21 @@
   margin-bottom: 8px;
   background-repeat: no-repeat;
 }
-
-.ck-content pre.fancy-code-dark {
-  background: #272822;
-  color: #fff;
-  box-shadow: 5px 5px 0 #0000001f;
-}
-
-.ck-content pre.fancy-code-bright {
-  background: #dddfe0;
-  color: #000;
-  box-shadow: 5px 5px 0 #b3b3b3;
-}
-
+.ck-content pre.fancy-code-dark { background: #272822; color: #fff; box-shadow: 5px 5px 0 #0000001f; }
+.ck-content pre.fancy-code-bright { background: #dddfe0; color: #000; box-shadow: 5px 5px 0 #b3b3b3; }
 .editor_container__word-count .ck-word-count {
   color: var(--ck-color-text);
-  display: flex;
-  height: 20px;
-  gap: var(--ck-spacing-small);
+  display: flex; height: 20px; gap: var(--ck-spacing-small);
   justify-content: flex-end;
   font-size: var(--ck-font-size-base);
   line-height: var(--ck-line-height-base);
   font-family: var(--ck-font-face);
   padding: var(--ck-spacing-small) var(--ck-spacing-standard);
 }
-
-.editor-container_include-word-count.editor-container_classic-editor
-  .editor_container__word-count {
+.editor-container_include-word-count.editor-container_classic-editor .editor_container__word-count {
   border: 1px solid var(--ck-color-base-border);
   border-radius: var(--ck-border-radius);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: none;
+  border-top-left-radius: 0; border-top-right-radius: 0; border-top: none;
 }
-
-.editor-container_include-word-count.editor-container_classic-editor
-  .editor-container__editor
-  .ck-editor
-  .ck-editor__editable {
-  border-radius: 0;
-}
-.ck-editor__editable_inline {
-  min-height: 700px;
-}
-
-/* End ck editor css */
-
-/* Scrollbar utilities */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
-}
-
-/* Smooth scrolling improvements */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
+.editor-container_include-word-count.editor-container_classic-editor .editor-container__editor .ck-editor .ck-editor__editable { border-radius: 0; }
+.ck-editor__editable_inline { min-height: 700px; }

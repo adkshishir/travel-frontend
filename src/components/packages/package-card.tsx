@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, MapPin, Star } from 'lucide-react';
+import { MapPin, Star, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TravelPackageCardProps {
@@ -13,90 +12,80 @@ interface TravelPackageCardProps {
   rating: number;
   reviews: number;
   popular?: boolean;
+  duration?: string;
 }
 
 export default function PackageCard({
-  title = 'Colombian Coffee Trails',
-  location = 'Istanbul, Turkey',
-  image = '/placeholder.svg?height=300&width=500',
-  price = 150,
+  title = 'Poon Hill Trek',
+  location = 'Ghorepani, Nepal',
+  image = '/images/hero.jpg',
+  price = 0,
   rating = 4,
-  reviews = 4035,
+  reviews = 0,
   popular = true,
+  duration,
 }: TravelPackageCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
   return (
-    <div className='max-w-sm max-lg:max-w-md  rounded-xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-md'>
-      <div className='relative'>
-        {/* Image */}
-        <div className='relative h-56 w-full'>
-          <Image
-            src={image || '/placeholder.svg'}
-            alt={title}
-            fill
-            className='object-cover'
-          />
-        </div>
-
-        {/* Popular badge */}
+    <div className='group rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300'>
+      {/* Image */}
+      <div className='relative h-52 w-full overflow-hidden'>
+        <Image
+          src={image || '/images/hero.jpg'}
+          alt={title}
+          fill
+          className='object-cover transition-transform duration-500 group-hover:scale-105'
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+        />
         {popular && (
-          <div className='absolute top-3 left-3 bg-orange-500 text-white text-xs font-medium px-2.5 py-1 rounded'>
-            Trekking
+          <div className='absolute top-3 left-3 bg-primary text-white text-xs font-semibold px-2.5 py-1 rounded-full'>
+            Popular
           </div>
         )}
-
-        {/* Favorite button */}
-        <button
-          className='absolute top-3 right-3 bg-white p-1.5 rounded-full shadow-sm transition-transform duration-200 active:scale-90'
-          onClick={() => setIsFavorite(!isFavorite)}
-          aria-label={
-            isFavorite ? 'Remove from favorites' : 'Add to favorites'
-          }>
-          <Heart
-            size={18}
-            className={cn(
-              'transition-colors duration-300',
-              isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'
-            )}
-          />
-        </button>
+        {duration && (
+          <div className='absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1'>
+            <Clock size={11} /> {duration}
+          </div>
+        )}
       </div>
 
       <div className='p-4'>
         {/* Location */}
-        <div className='flex items-center text-gray-500 mb-1'>
-          <MapPin size={14} className='mr-1' />
-          <span className='text-sm'>{location}</span>
+        <div className='flex items-center text-gray-400 mb-1.5'>
+          <MapPin size={13} className='mr-1 shrink-0' />
+          <span className='text-xs truncate'>{location}</span>
         </div>
 
         {/* Title */}
-        <h3 className='font-bold text-lg text-gray-900 mb-2'>{title}</h3>
+        <h3 className='font-bold text-base text-gray-900 mb-3 leading-snug line-clamp-2'>{title}</h3>
 
         {/* Rating */}
-        <div className='flex items-center mb-4'>
+        <div className='flex items-center gap-1 mb-4'>
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              size={16}
-              className={cn(
-                i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-              )}
+              size={13}
+              className={cn(i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200')}
             />
           ))}
-          <span className='text-sm text-gray-500 ml-1'>
-            {/* ({reviews.toLocaleString()}) */}
-          </span>
+          {reviews > 0 && (
+            <span className='text-xs text-gray-400 ml-1'>({reviews})</span>
+          )}
         </div>
 
         {/* Price and CTA */}
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between pt-3 border-t border-gray-100'>
           <div>
-            <span className='font-bold text-xl'>${price}</span>
-            <span className='text-gray-500 text-sm'>/Person</span>
+            {price > 0 ? (
+              <>
+                <span className='font-bold text-xl text-gray-900'>${price}</span>
+                <span className='text-gray-400 text-xs'>/person</span>
+              </>
+            ) : (
+              <span className='text-sm text-gray-400'>Price on request</span>
+            )}
           </div>
-          <button className='bg-orange-500 hover:bg-primary text-white px-4 py-2 rounded-md transition-colors duration-300 active:scale-95 transform'>
-            Book Trip
+          <button className='bg-primary hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors duration-300 active:scale-95'>
+            View Trek
           </button>
         </div>
       </div>

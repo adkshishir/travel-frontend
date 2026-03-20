@@ -59,11 +59,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ booking }) => {
         endDate: formData.endDate ? new Date(formData.endDate).toISOString() : null,
       };
 
-      const endpoint = booking?.id 
-        ? `${ENDPOINTS.BOOKING}/${booking.id}`
-        : ENDPOINTS.BOOKING;
-
-      await postAndPatch(endpoint, payload, booking?.id ? 'PATCH' : 'POST');
+      await postAndPatch(ENDPOINTS.BOOKING, payload, booking?.id || undefined);
       
       // toast.success(booking?.id ? 'Booking updated successfully!' : 'Booking created successfully!');
       router.push('/admin/bookings');

@@ -1,71 +1,73 @@
-
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter, Linkedin, MapPin, Phone, Mail, Mountain, Users, Shield, Award } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, MapPin, Phone, Mail, Mountain, Shield, Award, ArrowRight } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className='relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden'>
-      {/* Background Pattern */}
-      <div className='absolute inset-0 opacity-5'>
-        <div className='absolute inset-0' style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 30l15-15v30l-15-15zm-15 0l15 15H0l15-15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
+    <footer className='bg-[#0d1117] text-white'>
+      {/* Top CTA strip */}
+      <div className='bg-primary'>
+        <div className='max-w-[1200px] mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4'>
+          <div>
+            <p className='font-bold text-white text-lg'>Ready for your next adventure?</p>
+            <p className='text-white/80 text-sm'>Talk to our trekking experts — free consultation</p>
+          </div>
+          <Link
+            href='/contact'
+            className='shrink-0 inline-flex items-center gap-2 bg-white text-primary font-semibold px-5 py-2.5 rounded-xl hover:bg-orange-50 transition-colors text-sm'>
+            Plan My Trek <ArrowRight size={14} />
+          </Link>
+        </div>
       </div>
-      
-      <div className='relative max-w-[1200px] mx-auto px-4 py-12'>
-        {/* Main Footer Content */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12'>
-          
-          {/* Brand Section */}
-          <div className='lg:col-span-1 space-y-6'>
-            <Link href='/' className='inline-block group'>
-              <div className='flex items-center space-x-2'>
-                <Mountain className='text-primary w-8 h-8 group-hover:text-orange-400 transition-colors' />
-                <span className='text-2xl font-bold'>
-                  <span className='text-primary'>Poonhill</span>Treks
-                </span>
-              </div>
+
+      <div className='max-w-[1200px] mx-auto px-4 pt-14 pb-10'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12'>
+
+          {/* Brand */}
+          <div className='lg:col-span-1 space-y-5'>
+            <Link href='/' className='inline-flex items-center gap-2'>
+              <Mountain className='text-primary w-7 h-7' />
+              <span className='text-xl font-bold'>
+                <span className='text-primary'>Poonhill</span>Treks
+              </span>
             </Link>
-            <p className='text-gray-300 text-sm leading-relaxed max-w-xs'>
-              Your trusted companion for unforgettable trekking adventures. We turn your mountain dreams into reality with expert guidance and unmatched experience.
+            <p className='text-gray-400 text-sm leading-relaxed'>
+              Your trusted guide for Himalayan adventures since 2009. Expert-led treks with safety, sustainability, and unforgettable memories at the core.
             </p>
-            
-            {/* Social Media */}
-            <div className='flex space-x-4'>
+            <div className='flex gap-3'>
               {[
                 { icon: Facebook, href: '#', label: 'Facebook' },
                 { icon: Instagram, href: '#', label: 'Instagram' },
                 { icon: Twitter, href: '#', label: 'Twitter' },
-                { icon: Linkedin, href: '#', label: 'LinkedIn' }
+                { icon: Youtube, href: '#', label: 'YouTube' },
               ].map(({ icon: Icon, href, label }) => (
                 <Link
                   key={label}
                   href={href}
-                  className='w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-gray-300 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110'>
-                  <Icon size={18} />
-                  <span className='sr-only'>{label}</span>
+                  aria-label={label}
+                  className='w-9 h-9 bg-white/5 rounded-lg flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-all duration-300'>
+                  <Icon size={16} />
                 </Link>
               ))}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold mb-6 text-orange-400'>Quick Links</h3>
+          <div>
+            <h3 className='text-sm font-semibold uppercase tracking-widest text-gray-400 mb-5'>Explore</h3>
             <ul className='space-y-3'>
               {[
-                { label: ' Packages', href: '/#activities' },
+                { label: 'All Packages', href: '/#activities' },
                 { label: 'Popular Destinations', href: '/#popular-destinations' },
                 { label: 'About Us', href: '/about' },
-                // { label: 'Booking Guide', href: '/guide' },
-                // { label: 'Safety Guidelines', href: '/safety' },
-                { label: 'FAQ', href: '/faq' }
+                { label: 'Blogs & Stories', href: '/blogs' },
+                { label: 'FAQ', href: '/#faq' },
+                { label: 'Contact', href: '/contact' },
               ].map(({ label, href }) => (
                 <li key={label}>
                   <Link
                     href={href}
-                    className='text-gray-300 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group'>
-                    <span className='w-2 h-2 bg-primary rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></span>
+                    className='text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group'>
+                    <span className='w-1 h-1 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity' />
                     {label}
                   </Link>
                 </li>
@@ -74,88 +76,71 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold mb-6 text-orange-400'>Our Services</h3>
+          <div>
+            <h3 className='text-sm font-semibold uppercase tracking-widest text-gray-400 mb-5'>Our Services</h3>
             <ul className='space-y-3'>
               {[
-                { label: 'Guided Trekking', icon: Users },
-                { label: 'Equipment Rental', icon: Mountain },
-                { label: 'Safety Training', icon: Shield },
-                { label: 'Photography Tours', icon: Award }
-              ].map(({ label, icon: Icon }) => (
-                <li key={label} className='flex items-center space-x-3 text-gray-300 text-sm'>
-                  <Icon size={16} className='text-primary' />
-                  <span>{label}</span>
+                'Guided Trekking',
+                'Group & Private Tours',
+                'Equipment Rental',
+                'Helicopter Tours',
+                'Photography Tours',
+                'Safety & First Aid',
+              ].map((label) => (
+                <li key={label} className='text-gray-400 text-sm flex items-center gap-2'>
+                  <span className='w-1 h-1 rounded-full bg-primary shrink-0' />
+                  {label}
                 </li>
               ))}
             </ul>
-            
-            {/* CTA Button */}
-            <div className='pt-4'>
-              <Link
-                href='/contact'
-                className='inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary to-orange-600 text-white text-sm font-medium rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 hover:scale-105 shadow-lg'>
-                Plan Your Trek
-                <Mountain size={16} className='ml-2' />
-              </Link>
-            </div>
           </div>
 
-          {/* Contact Info */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold mb-6 text-orange-400'>Get In Touch</h3>
-            <div className='space-y-4'>
+          {/* Contact + Newsletter */}
+          <div>
+            <h3 className='text-sm font-semibold uppercase tracking-widest text-gray-400 mb-5'>Get in Touch</h3>
+            <div className='space-y-3 mb-6'>
               {[
                 { icon: MapPin, text: 'Thamel, Kathmandu, Nepal', href: '#' },
                 { icon: Phone, text: '+977-1-4123456', href: 'tel:+97714123456' },
-                { icon: Mail, text: 'info@triptopia.com', href: 'mailto:info@triptopia.com' }
+                { icon: Mail, text: 'info@poonhilltreks.com', href: 'mailto:info@poonhilltreks.com' },
               ].map(({ icon: Icon, text, href }) => (
                 <Link
                   key={text}
                   href={href}
-                  className='flex items-start space-x-3 text-gray-300 hover:text-orange-400 transition-colors duration-300 group'>
-                  <Icon size={18} className='text-primary mt-0.5 group-hover:scale-110 transition-transform duration-300' />
+                  className='flex items-start gap-3 text-gray-400 hover:text-white transition-colors group'>
+                  <Icon size={15} className='text-primary mt-0.5 shrink-0' />
                   <span className='text-sm'>{text}</span>
                 </Link>
               ))}
             </div>
-            
-            {/* Newsletter */}
-            <div className='pt-4'>
-              <h4 className='text-sm font-medium text-white mb-3'>Stay Updated</h4>
-              <div className='flex'>
-                <input
-                  type='email'
-                  placeholder='Your email'
-                  className='flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-l-lg text-sm text-white placeholder-gray-400 focus:outline-none focus:border-primary transition-colors'
-                />
-                <button className='px-4 py-2 bg-primary hover:bg-orange-600 rounded-r-lg transition-colors duration-300'>
-                  <Mail size={16} />
-                </button>
-              </div>
+
+            <h4 className='text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3'>Newsletter</h4>
+            <div className='flex rounded-lg overflow-hidden border border-white/10'>
+              <input
+                type='email'
+                placeholder='Your email'
+                className='flex-1 px-3 py-2.5 bg-white/5 text-sm text-white placeholder-gray-500 focus:outline-none focus:bg-white/10 transition-colors'
+              />
+              <button className='px-4 bg-primary hover:bg-orange-600 transition-colors'>
+                <ArrowRight size={15} />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className='border-t border-slate-700 mb-8'></div>
-
-        {/* Bottom Section */}
-        <div className='flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0'>
-          <div className='text-sm text-gray-400'>
-            © {new Date().getFullYear()} Poonhill Treks. All rights reserved. | 
-            <Link href='/privacy' className='hover:text-orange-400 transition-colors ml-1'>Privacy Policy</Link> | 
-            <Link href='/terms' className='hover:text-orange-400 transition-colors ml-1'>Terms of Service</Link>
+        {/* Bottom */}
+        <div className='border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500'>
+          <p>© {new Date().getFullYear()} Poonhill Treks. All rights reserved.</p>
+          <div className='flex items-center gap-4'>
+            <Link href='/privacy' className='hover:text-white transition-colors'>Privacy Policy</Link>
+            <Link href='/terms' className='hover:text-white transition-colors'>Terms of Service</Link>
           </div>
-          
-          <div className='flex items-center space-x-4 text-sm text-gray-400'>
-            <span className='flex items-center space-x-2'>
-              <Shield size={14} className='text-primary' />
-              <span>Licensed & Insured</span>
+          <div className='flex items-center gap-4'>
+            <span className='flex items-center gap-1.5'>
+              <Shield size={12} className='text-primary' /> Licensed & Insured
             </span>
-            <span className='flex items-center space-x-2'>
-              <Award size={14} className='text-primary' />
-              <span>5+ Years Experience</span>
+            <span className='flex items-center gap-1.5'>
+              <Award size={12} className='text-primary' /> 15+ Years Experience
             </span>
           </div>
         </div>

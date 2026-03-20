@@ -4,30 +4,30 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
-import { 
-  Activity, 
-  MapPin, 
-  Package, 
-  FileText, 
-  Users, 
-  Star, 
-  TrendingUp, 
-  Calendar,
-  Plus,
+import {
+  Activity,
+  MapPin,
+  Package,
+  FileText,
+  Users,
+  Star,
   BarChart3,
   Eye,
-  DollarSign
+  DollarSign,
+  BookOpen,
+  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 
 const AdminDashboard = async () => {
   // Fetch data for dashboard stats with proper error handling
-  const [activitiesRes, destinationsRes, packagesRes, blogsRes, reviewsRes] = await Promise.all([
+  const [activitiesRes, destinationsRes, packagesRes, blogsRes, reviewsRes, bookingsRes] = await Promise.all([
     fetchData(ENDPOINTS.ACTIVITIES).catch(() => ([])),
     fetchData(ENDPOINTS.DESTINATIONS).catch(() => ([])),
     fetchData(ENDPOINTS.PACKAGES).catch(() => ([])),
     fetchData(ENDPOINTS.BLOGS).catch(() => ([])),
-    fetchData(ENDPOINTS.REVIEWS).catch(() => ([]))
+    fetchData(ENDPOINTS.REVIEWS).catch(() => ([])),
+    fetchData(ENDPOINTS.BOOKING).catch(() => ([])),
   ]);
 
   const activities = activitiesRes || [];
@@ -35,12 +35,17 @@ const AdminDashboard = async () => {
   const packages = packagesRes || [];
   const blogs = blogsRes || [];
   const reviews = reviewsRes || [];
+  const bookings = bookingsRes || [];
 
-  // Calculate stats with proper error handling
-  const totalRevenue = packages.reduce((sum: number, pkg: any) => {
-    const price = parseFloat(pkg.price);
-    return sum + (isNaN(price) ? 0 : price);
-  }, 0);
+  // Booking stats
+  const totalBookings = bookings.length;
+  const confirmedBookings = bookings.filter((b: any) => b.status === 'confirmed').length;
+  const pendingBookings = bookings.filter((b: any) => b.status === 'pending').length;
+  const cancelledBookings = bookings.filter((b: any) => b.status === 'cancelled').length;
+  const pendingRefunds = bookings.filter((b: any) => b.refundStatus === 'requested').length;
+  const totalRevenue = bookings
+    .filter((b: any) => b.paymentStatus === 'paid')
+    .reduce((sum: number, b: any) => sum + (b.totalPrice || 0), 0);
   
   const averageRating = reviews.length > 0 
     ? reviews.reduce((sum: number, review: any) => {
@@ -63,33 +68,33 @@ const AdminDashboard = async () => {
   // Quick actions data
   const quickActions = [
     {
+      title: 'View Bookings',
+      description: `${pendingBookings} pending · ${pendingRefunds > 0 ? pendingRefunds + ' refund(s)' : 'no refunds'}`,
+      href: '/admin/bookings',
+      icon: BookOpen,
+      color: pendingRefunds > 0 ? 'bg-yellow-500' : 'bg-blue-500',
+    },
+    {
       title: 'Add New Package',
       description: 'Create a new travel package',
       href: '/admin/packages/add',
       icon: Package,
-      color: 'bg-blue-500'
+      color: 'bg-blue-500',
     },
     {
       title: 'Add Destination',
       description: 'Add a new travel destination',
       href: '/admin/destinations/add',
       icon: MapPin,
-      color: 'bg-green-500'
+      color: 'bg-green-500',
     },
     {
       title: 'Write Blog Post',
       description: 'Create new blog content',
       href: '/admin/blogs/add',
       icon: FileText,
-      color: 'bg-purple-500'
+      color: 'bg-purple-500',
     },
-    {
-      title: 'Add Activity',
-      description: 'Create new activity category',
-      href: '/admin/activities/add',
-      icon: Activity,
-      color: 'bg-orange-500'
-    }
   ];
 
   return (
@@ -111,8 +116,18 @@ const AdminDashboard = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">From paid bookings</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalBookings}</div>
             <p className="text-xs text-muted-foreground">
-              From {packages.length} packages
+              {confirmedBookings} confirmed · {pendingBookings} pending
             </p>
           </CardContent>
         </Card>
@@ -128,27 +143,17 @@ const AdminDashboard = async () => {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={pendingRefunds > 0 ? 'border-yellow-300' : ''}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Refund Requests</CardTitle>
+            <AlertCircle className={`h-4 w-4 ${pendingRefunds > 0 ? 'text-yellow-500' : 'text-muted-foreground'}`} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{averageRating.toFixed(1)}</div>
+            <div className={`text-2xl font-bold ${pendingRefunds > 0 ? 'text-yellow-600' : ''}`}>
+              {pendingRefunds}
+            </div>
             <p className="text-xs text-muted-foreground">
-              From {reviews.length} reviews
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{blogs.length}</div>
-            <p className="text-xs text-muted-foreground">
-              {recentBlogs} published this week
+              {pendingRefunds > 0 ? 'Need your action' : 'All clear'}
             </p>
           </CardContent>
         </Card>
@@ -238,6 +243,52 @@ const AdminDashboard = async () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Bookings */}
+      {bookings.length > 0 && (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Bookings</CardTitle>
+              <CardDescription>Latest booking activity</CardDescription>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/admin/bookings">View All</Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {bookings.slice(0, 5).map((b: any) => (
+                <Link
+                  key={b.id}
+                  href={`/admin/bookings/${b.id}`}
+                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${
+                      b.status === 'confirmed' ? 'bg-green-500' :
+                      b.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
+                    }`} />
+                    <div>
+                      <p className="text-sm font-medium">{b.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground">{b.package?.title || 'Package'}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-semibold">${b.totalPrice || 0}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{b.paymentStatus}</p>
+                    {b.refundStatus === 'requested' && (
+                      <span className="text-xs font-medium text-yellow-600 flex items-center gap-1 justify-end">
+                        <AlertCircle size={10} /> Refund
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Management Sections */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

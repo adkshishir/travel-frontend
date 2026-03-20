@@ -6,7 +6,7 @@ type TProps = {
 };
 const P = ({ className, children }: TProps) => {
   return (
-    <p className={cn(`text-[16px] text-[#345867]`, className)}>{children}</p>
+    <p className={cn(`text-[16px] leading-relaxed text-[#4b5e4c]`, className)}>{children}</p>
   );
 };
 
