@@ -8,8 +8,9 @@ import Link from 'next/link';
 import React from 'react';
 
 const Categories = async () => {
-  const result = await fetchData(ENDPOINTS.CATEGORIES);
-  
+  const resultRes = await fetchData(ENDPOINTS.CATEGORIES);
+  const result = resultRes?.items || [];
+
   return (
     <div className='space-y-6'>
       {/* Header Section */}
@@ -86,7 +87,7 @@ const Categories = async () => {
         <CardContent>
           <DynamicDataTable
             ENDPOINT={ENDPOINTS.CATEGORIES}
-            data={result || []}
+            data={result}
             excludeColumns={['id', 'seoId', 'seo', 'content', 'updatedAt']}
             title='Categories'
             EDIT_NAME={'admin/categories'}

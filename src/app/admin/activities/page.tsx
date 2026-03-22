@@ -9,7 +9,8 @@ import React from 'react';
 
 const Activities = async () => {
   const result = await fetchData(ENDPOINTS.ACTIVITIES);
-  
+  const activities = result?.items || [];
+
   return (
     <div className='space-y-6'>
       {/* Header Section */}
@@ -39,7 +40,7 @@ const Activities = async () => {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{result.length}</div>
+            <div className="text-2xl font-bold">{activities.length}</div>
             <p className="text-xs text-muted-foreground">
               Active adventure categories
             </p>
@@ -52,7 +53,7 @@ const Activities = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {result.filter((activity: any) => activity.destinations?.length > 0).length}
+              {activities.filter((activity: any) => activity.destinations?.length > 0).length}
             </div>
             <p className="text-xs text-muted-foreground">
               Activities with destinations
@@ -66,7 +67,7 @@ const Activities = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {result.filter((activity: any) => {
+              {activities.filter((activity: any) => {
                 try {
                   const updatedAt = new Date(activity.updatedAt);
                   const weekAgo = new Date();
@@ -102,7 +103,7 @@ const Activities = async () => {
       {/* Data Table */}
       <DynamicDataTable
         ENDPOINT={ENDPOINTS.ACTIVITIES}
-        data={result}
+        data={activities}
         excludeColumns={['id', '_count', 'createdAt', 'updatedAt']}
         title='Activities'
         EDIT_NAME={'admin/activities'}

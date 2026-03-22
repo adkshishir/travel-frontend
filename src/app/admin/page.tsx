@@ -22,20 +22,20 @@ import Link from 'next/link';
 const AdminDashboard = async () => {
   // Fetch data for dashboard stats with proper error handling
   const [activitiesRes, destinationsRes, packagesRes, blogsRes, reviewsRes, bookingsRes] = await Promise.all([
-    fetchData(ENDPOINTS.ACTIVITIES).catch(() => ([])),
-    fetchData(ENDPOINTS.DESTINATIONS).catch(() => ([])),
-    fetchData(ENDPOINTS.PACKAGES).catch(() => ([])),
-    fetchData(ENDPOINTS.BLOGS).catch(() => ([])),
-    fetchData(ENDPOINTS.REVIEWS).catch(() => ([])),
-    fetchData(ENDPOINTS.BOOKING).catch(() => ([])),
+    fetchData(ENDPOINTS.ACTIVITIES).catch(() => ({})),
+    fetchData(ENDPOINTS.DESTINATIONS).catch(() => ({})),
+    fetchData(ENDPOINTS.PACKAGES).catch(() => ({})),
+    fetchData(ENDPOINTS.BLOGS).catch(() => ({})),
+    fetchData(ENDPOINTS.REVIEWS).catch(() => ({})),
+    fetchData(ENDPOINTS.BOOKING).catch(() => ({})),
   ]);
 
-  const activities = activitiesRes || [];
-  const destinations = destinationsRes || [];
-  const packages = packagesRes || [];
-  const blogs = blogsRes || [];
-  const reviews = reviewsRes || [];
-  const bookings = bookingsRes || [];
+  const activities = activitiesRes?.items || [];
+  const destinations = destinationsRes?.items || [];
+  const packages = packagesRes?.items || [];
+  const blogs = blogsRes?.items || [];
+  const reviews = reviewsRes?.items || [];
+  const bookings = bookingsRes?.items || [];
 
   // Booking stats
   const totalBookings = bookings.length;

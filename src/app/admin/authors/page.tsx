@@ -8,9 +8,10 @@ import Link from 'next/link';
 import React from 'react';
 
 const Authors = async () => {
-  const result = await fetchData(ENDPOINTS.AUTHORS).catch(() => ([]));
+  const resultRes = await fetchData(ENDPOINTS.AUTHORS).catch(() => ({}));
+  const result = resultRes?.items || [];
 
-  
+
   // Calculate stats
   const totalAuthors = result?.length;
   const activeAuthors = result?.filter((author: any) => author.status === 'active').length;

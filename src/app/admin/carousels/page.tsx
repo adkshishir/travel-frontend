@@ -5,7 +5,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const CarouselsPage = async () => {
-  const result = await fetchData(ENDPOINTS.CAROUSELS);
+  const resultRes = await fetchData(ENDPOINTS.CAROUSELS);
+  const result = resultRes?.items || [];
   return (
     <div className='grid gap-4'>
       <Link

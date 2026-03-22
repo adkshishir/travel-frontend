@@ -17,7 +17,7 @@ import DynamicDataTable from '@/components/admin-dynamics/table/dynamic-data-tab
 
 const BookingsPage = async () => {
   const result = await fetchData(ENDPOINTS.BOOKING);
-  const bookings = result || [];
+  const bookings = result?.items || [];
 
   // Calculate stats
   const totalBookings = bookings.length;

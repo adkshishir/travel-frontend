@@ -8,9 +8,10 @@ import Link from 'next/link';
 import React from 'react';
 
 const Blogs = async () => {
-  const result = await fetchData(ENDPOINTS.BLOGS);
- 
-  
+  const resultRes = await fetchData(ENDPOINTS.BLOGS);
+  const result = resultRes?.items || [];
+
+
   // Calculate stats with proper error handling
   const totalBlogs = result.length;
   const publishedBlogs = result.filter((blog: any) => blog.isPublished === true).length;
