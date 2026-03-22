@@ -33,7 +33,8 @@ export const metadata = {
 
 export default async function Home() {
   // Fetch data for HeroSection
-  const carousels = await fetchData(ENDPOINTS.CAROUSELS + '/home');
+  const carouselsRes = await fetchData(ENDPOINTS.CAROUSELS + '/home');
+  const carousels = Array.isArray(carouselsRes) ? carouselsRes : carouselsRes?.items || [];
   const siteInfo = await fetchData(ENDPOINTS.SITE_INFO);
 
   return (

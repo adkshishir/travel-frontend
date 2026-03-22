@@ -6,10 +6,21 @@ import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
 import React from 'react';
 
-const BlogsPage = async () => {
-  const response = await fetchData(ENDPOINTS.BLOGS);
-  const blogs = response || []; // Fixed: use response.data instead of direct access
-  
+const BLOGS_PER_PAGE = 6;
+
+const BlogsPage = async ({ searchParams }: { searchParams: Promise<{ page?: string }> }) => {
+  const params = await searchParams;
+  const currentPage = Number(params?.page) || 1;
+
+  const response = await fetchData(ENDPOINTS.BLOGS, {
+    page: currentPage,
+    limit: BLOGS_PER_PAGE,
+  });
+
+  // Handle both paginated response format and legacy array format
+  const blogs = response?.items || response || [];
+  const totalPages = response?.totalPages || 1;
+
   return (
     <main>
       <Banner
@@ -19,7 +30,6 @@ const BlogsPage = async () => {
         pageName='Blogs'
       />
       <div className='flex flex-col lg:flex-row gap-8 max-lg:px-4 max-w-[1180px] mx-auto my-16'>
-        {/* Main content */}
         <div className='lg:w-2/3'>
           {blogs && blogs.length > 0 ? (
             blogs.map((blog: any) => (
@@ -31,7 +41,7 @@ const BlogsPage = async () => {
                 date: blog.createdAt?.slice(0, 10) || '',
                 comments: blog.comments?.length || 0,
                 shares: 0,
-                slug: blog.slug, // Added slug for proper navigation
+                slug: blog.slug,
               }} />
             ))
           ) : (
@@ -41,13 +51,11 @@ const BlogsPage = async () => {
             </div>
           )}
 
-          {/* TODO: Implement real pagination */}
-          {blogs && blogs.length > 6 && (
-            <Pagination currentPage={1} totalPages={1} />
+          {totalPages > 1 && (
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
           )}
         </div>
 
-        {/* Sidebar */}
         <div className='lg:w-1/3'>
           <div className='lg:sticky lg:top-20'>
             <Sidebar />

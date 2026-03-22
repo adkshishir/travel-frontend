@@ -6,7 +6,8 @@ import { fetchData } from '@/utils/request-intregation';
 import React from 'react';
 
 const Testimonial = async () => {
-  const testimonials = await fetchData(ENDPOINTS.REVIEWS);
+  const testimonialsRes = await fetchData(ENDPOINTS.REVIEWS);
+  const testimonialsList = testimonialsRes?.items || [];
   return (
     <section className='bg-[#f0ece3] mt-24 max-lg:mt-16'>
       <div className='max-w-[1180px] mx-auto py-20 max-lg:py-14 max-lg:px-4'>
@@ -15,7 +16,7 @@ const Testimonial = async () => {
           <H2 className='max-w-xl mx-auto'>What Our Trekkers Say</H2>
         </div>
         <TestimonialCarousel
-          testimonials={testimonials?.map((item: any) => ({
+          testimonials={testimonialsList?.map((item: any) => ({
             name: item.name,
             quote: item.description,
             rating: item.rating,

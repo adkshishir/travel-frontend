@@ -8,7 +8,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const TopDestination = async () => {
-  const destinations = await fetchData(ENDPOINTS.DESTINATIONS);
+  const destinationsData = await fetchData(ENDPOINTS.DESTINATIONS);
+  const destinations = destinationsData?.items || [];
 
   return (
     <section className='mx-auto max-w-[1180px] max-lg:px-4 mt-24 max-lg:mt-16'>

@@ -14,7 +14,7 @@ const Activities = async () => {
         <H2>Adventures Waiting for You</H2>
       </div>
       <div className='grid grid-cols-2 lg:flex gap-4'>
-        {activities?.map(
+        {activities?.items?.map(
           (activity: {
             id: number;
             name: string;

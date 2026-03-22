@@ -7,7 +7,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const TopPackages = async () => {
-  const data = await fetchData(ENDPOINTS.PACKAGES);
+  const dataRes = await fetchData(ENDPOINTS.PACKAGES);
+  const data = dataRes?.items || [];
   return (
     <section className='mx-auto max-w-[1180px] max-lg:px-4 mt-24 max-lg:mt-16'>
       <div className='flex items-end justify-between gap-4 mb-8'>

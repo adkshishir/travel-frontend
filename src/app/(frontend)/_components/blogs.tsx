@@ -7,8 +7,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const Blogs = async () => {
-  const blogs = await fetchData(ENDPOINTS.BLOGS);
-  const list = Array.isArray(blogs) ? blogs : blogs?.data ?? [];
+  const blogsRes = await fetchData(ENDPOINTS.BLOGS);
+  const list = blogsRes?.items || [];
 
   return (
     <section className='mx-auto max-w-[1180px] my-24 max-lg:my-16 max-lg:px-4'>

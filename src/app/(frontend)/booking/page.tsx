@@ -41,7 +41,7 @@ const Booking = () => {
     const loadPackages = async () => {
       try {
         const response = await fetchData(ENDPOINTS.PACKAGES);
-        setPackages(response || []);
+        setPackages(response?.items || []);
       } catch (error) {
         console.error('Failed to load packages:', error);
       } finally {

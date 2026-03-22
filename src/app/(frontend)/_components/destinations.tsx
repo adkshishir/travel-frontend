@@ -20,7 +20,8 @@ interface Destination {
 }
 
 export default async function Destinations() {
-  const fetchedDestinations = await fetchData(ENDPOINTS.DESTINATIONS);
+  const fetchedDestinationsRes = await fetchData(ENDPOINTS.DESTINATIONS);
+  const fetchedDestinations = fetchedDestinationsRes?.items || [];
   const destinations: Destination[] | undefined = fetchedDestinations
     ?.filter((_: any, index: number) => index < 4)
     .map((destination: any) => ({

@@ -6,7 +6,8 @@ import { fetchData } from '@/utils/request-intregation';
 import React from 'react';
 
 const Faq = async () => {
-  const result = await fetchData(ENDPOINTS.FAQ);
+  const resultRes = await fetchData(ENDPOINTS.FAQ);
+  const result = resultRes?.items || [];
   return (
     <section id='faq' className='bg-[#f0ece3] max-lg:mt-16 max-lg:py-14 py-20'>
       <div className='max-w-[1180px] max-lg:px-4 mx-auto'>
