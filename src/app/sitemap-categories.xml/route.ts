@@ -7,9 +7,10 @@ export async function GET() {
   
   try {
     // Fetch all active categories/static pages
-    const categories = await fetchData(ENDPOINTS.CATEGORIES)
-    
-    if (!categories || !Array.isArray(categories)) {
+    const categoriesRes = await fetchData(ENDPOINTS.CATEGORIES)
+    const categories = categoriesRes?.items || []
+
+    if (!categories || !Array.isArray(categories) || categories.length === 0) {
       throw new Error('No categories found')
     }
 

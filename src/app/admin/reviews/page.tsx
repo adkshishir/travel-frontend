@@ -5,7 +5,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const ReviewsPage = async () => {
-    const reviews = await fetchData(ENDPOINTS.REVIEWS);
+    const reviewsRes = await fetchData(ENDPOINTS.REVIEWS);
+    const reviews = reviewsRes?.items || [];
   return (
     <div className='grid gap-4'>
       <Link

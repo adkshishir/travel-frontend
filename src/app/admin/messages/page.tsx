@@ -15,7 +15,7 @@ import DynamicDataTable from '@/components/admin-dynamics/table/dynamic-data-tab
 
 const ContactMessagesPage = async () => {
   const result = await fetchData(ENDPOINTS.MAIL);
-  const messages = result || [];
+  const messages = result?.items || [];
 
   // Calculate stats
   const totalMessages = messages.length;

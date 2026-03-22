@@ -9,9 +9,10 @@ import Link from 'next/link';
 import React from 'react';
 
 const Packages = async () => {
-  const result = await fetchData(ENDPOINTS.PACKAGES);
- 
-  
+  const resultRes = await fetchData(ENDPOINTS.PACKAGES);
+  const result = resultRes?.items || [];
+
+
   // Calculate stats with proper error handling
   const totalPackages = result.length;
   const averagePrice = result.reduce((sum: number, pkg: any) => {

@@ -3,7 +3,8 @@ import ENDPOINTS from '@/utils/endpoints';
 import { fetchData } from '@/utils/request-intregation';
 
 export default async function NewPackagePage() {
-  const destinations = await fetchData(ENDPOINTS.DESTINATIONS);
+  const destinationsRes = await fetchData(ENDPOINTS.DESTINATIONS);
+  const destinations = destinationsRes?.items || [];
   const formatedDestinations = destinations?.map((destination: any) => ({
     id: destination.id,
     name: destination.name,

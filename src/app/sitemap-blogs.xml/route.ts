@@ -7,9 +7,10 @@ export async function GET() {
   
   try {
     // Fetch all published blogs
-    const blogs = await fetchData(ENDPOINTS.BLOGS)
-    
-    if (!blogs || !Array.isArray(blogs)) {
+    const blogsRes = await fetchData(ENDPOINTS.BLOGS)
+    const blogs = blogsRes?.items || []
+
+    if (!blogs || !Array.isArray(blogs) || blogs.length === 0) {
       throw new Error('No blogs found')
     }
 

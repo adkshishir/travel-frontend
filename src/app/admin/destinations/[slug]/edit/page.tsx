@@ -7,13 +7,13 @@ import DestinationForm from '../../_components/destination-form';
 const DestinationEdit = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
   const result = await fetchData(ENDPOINTS.DESTINATIONS + '/' + slug);
-  const activities = await fetchData(ENDPOINTS.ACTIVITIES);
+  const activitiesData = await fetchData(ENDPOINTS.ACTIVITIES);
 
   return (
     <div>
       <DestinationForm
         initialData={result}
-        activities={activities?.map((activity: any) => ({
+        activities={activitiesData?.items?.map((activity: any) => ({
           value: activity.id,
           label: activity.name,
         }))}

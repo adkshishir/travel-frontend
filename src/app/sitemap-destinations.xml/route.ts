@@ -7,9 +7,10 @@ export async function GET() {
   
   try {
     // Fetch all destinations with their related activities
-    const destinations = await fetchData(ENDPOINTS.DESTINATIONS)
-    
-    if (!destinations || !Array.isArray(destinations)) {
+    const destinationsRes = await fetchData(ENDPOINTS.DESTINATIONS)
+    const destinations = destinationsRes?.items || []
+
+    if (!destinations || !Array.isArray(destinations) || destinations.length === 0) {
       throw new Error('No destinations found')
     }
 

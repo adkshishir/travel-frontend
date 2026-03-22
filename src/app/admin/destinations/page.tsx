@@ -8,9 +8,10 @@ import Link from 'next/link';
 import React from 'react';
 
 const Destinations = async () => {
-  const result = await fetchData(ENDPOINTS.DESTINATIONS);
-  
-  
+  const resultRes = await fetchData(ENDPOINTS.DESTINATIONS);
+  const result = resultRes?.items || [];
+
+
   // Calculate stats
   const totalDestinations = result.length;
   const destinationsWithPackages = result.filter((dest: any) => dest._count?.packages > 0).length;

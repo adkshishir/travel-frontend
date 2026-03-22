@@ -5,7 +5,8 @@ import Link from 'next/link';
 import React from 'react';
 
 const Faq = async () => {
-  const result = await fetchData(ENDPOINTS.FAQ);
+  const resultRes = await fetchData(ENDPOINTS.FAQ);
+  const result = resultRes?.items || [];
   return (
     <div className='grid gap-4'>
       <Link

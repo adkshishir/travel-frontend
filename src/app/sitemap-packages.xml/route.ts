@@ -7,9 +7,10 @@ export async function GET() {
   
   try {
     // Fetch all packages with their related destinations and activities
-    const packages = await fetchData(ENDPOINTS.PACKAGES)
-    
-    if (!packages || !Array.isArray(packages)) {
+    const packagesRes = await fetchData(ENDPOINTS.PACKAGES)
+    const packages = packagesRes?.items || []
+
+    if (!packages || !Array.isArray(packages) || packages.length === 0) {
       throw new Error('No packages found')
     }
 

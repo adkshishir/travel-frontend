@@ -4,11 +4,11 @@ import React from 'react';
 import DestinationForm from '../_components/destination-form';
 
 const FormPage = async () => {
-  const activities = await fetchData(ENDPOINTS.ACTIVITIES);
+  const activitiesData = await fetchData(ENDPOINTS.ACTIVITIES);
   return (
     <div>
       <DestinationForm
-        activities={activities?.map((activity: any) => ({
+        activities={activitiesData?.items?.map((activity: any) => ({
           value: activity.id,
           label: activity.name,
         }))}

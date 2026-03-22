@@ -8,13 +8,19 @@ export async function GET() {
   
   try {
     // Fetch all data in parallel
-    const [activities, destinations, packages, blogs, categories] = await Promise.all([
-      fetchData(ENDPOINTS.ACTIVITIES).catch(() => []),
-      fetchData(ENDPOINTS.DESTINATIONS).catch(() => []),
-      fetchData(ENDPOINTS.PACKAGES).catch(() => []),
-      fetchData(ENDPOINTS.BLOGS).catch(() => []),
-      fetchData(ENDPOINTS.CATEGORIES).catch(() => []),
+    const [activitiesRes, destinationsRes, packagesRes, blogsRes, categoriesRes] = await Promise.all([
+      fetchData(ENDPOINTS.ACTIVITIES).catch(() => ({})),
+      fetchData(ENDPOINTS.DESTINATIONS).catch(() => ({})),
+      fetchData(ENDPOINTS.PACKAGES).catch(() => ({})),
+      fetchData(ENDPOINTS.BLOGS).catch(() => ({})),
+      fetchData(ENDPOINTS.CATEGORIES).catch(() => ({})),
     ])
+
+    const activities = activitiesRes?.items || []
+    const destinations = destinationsRes?.items || []
+    const packages = packagesRes?.items || []
+    const blogs = blogsRes?.items || []
+    const categories = categoriesRes?.items || []
 
     const allUrls: any[] = []
 

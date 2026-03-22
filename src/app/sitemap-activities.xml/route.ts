@@ -7,9 +7,10 @@ export async function GET() {
   
   try {
     // Fetch all activities from API
-    const activities = await fetchData(ENDPOINTS.ACTIVITIES)
-    
-    if (!activities || !Array.isArray(activities)) {
+    const activitiesRes = await fetchData(ENDPOINTS.ACTIVITIES)
+    const activities = activitiesRes?.items || []
+
+    if (!activities || !Array.isArray(activities) || activities.length === 0) {
       throw new Error('No activities found')
     }
 
