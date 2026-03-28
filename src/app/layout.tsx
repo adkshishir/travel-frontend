@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Roboto, Poppins } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import JsonLd from '@/components/seo/JsonLd';
 
 const poppins = Poppins({
   subsets: ['latin'], // Supports Latin characters
@@ -31,9 +32,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com';
+
   return (
     <html lang='en'>
-      <body className={`${roboto.className} ${roboto.variable}  antialiased`}>
+      <body className={`${roboto.className} ${roboto.variable} ${poppins.variable} antialiased`}>
+        <JsonLd schema={{
+          '@context': 'https://schema.org',
+          '@type': 'TravelAgency',
+          name: 'Poonhill Treks',
+          url: siteUrl,
+          description: 'Expert-led Nepal trekking and Himalayan adventure tours since 2009. Poon Hill, Annapurna, Everest Base Camp and more.',
+          address: { '@type': 'PostalAddress', addressCountry: 'NP', addressLocality: 'Pokhara' },
+          priceRange: '$$',
+          currenciesAccepted: 'USD, NPR',
+          paymentAccepted: 'Cash, Credit Card',
+          openingHours: 'Mo-Su 07:00-20:00',
+          sameAs: [
+            'https://www.facebook.com/poonhilltreks',
+            'https://www.instagram.com/poonhilltreks',
+          ],
+        }} />
         <Toaster position='top-right' />
         {children}
       </body>

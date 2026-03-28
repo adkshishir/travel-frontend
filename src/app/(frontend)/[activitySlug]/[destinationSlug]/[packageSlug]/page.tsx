@@ -1,3 +1,5 @@
+export const revalidate = 1800; // 30 min for package pages
+
 import Banner from '@/components/banner';
 import React from 'react';
 import { Params } from 'next/dist/server/request/params';
@@ -7,6 +9,11 @@ import { PackageDetails } from './_components/package-details';
 import { PackageBooking } from './_components/booking';
 import { Navigation } from './_components/navigation';
 import { notFound } from 'next/navigation';
+import getCanonicalUrl from '@/utils/canonical';
+import JsonLd, { tourPackageSchema, faqPageSchema, breadcrumbSchema } from '@/components/seo/JsonLd';
+import ShareButtons from '@/components/share-buttons';
+import DifficultyBadge from '@/components/difficulty-badge';
+import CommentSection from '@/components/comment-section';
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { activitySlug, destinationSlug, packageSlug } = await params;
@@ -31,20 +38,20 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     const keywords = seo.metaKeywords || '';
     const canonical = seo.metaCanonical || '';
     const image = result?.mainImage?.thumbnail || result?.mainImage?.original || result?.media?.[0]?.thumbnail || result?.seo?.media?.thumbnail || '/images/hero.jpg';
-    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const pageUrl = canonical || getCanonicalUrl(`/${activitySlug}/${destinationSlug}/${packageSlug}`);
     
     return {
       title,
       description,
       keywords,
-      alternates: canonical ? { canonical } : undefined,
+      alternates: { canonical: pageUrl },
       openGraph: {
         title,
         description,
-        url: canonical || url,
+        url: pageUrl,
         type: 'article',
         images: [image],
-        siteName: 'Your Site Name',
+        siteName: 'Poonhill Treks',
       },
       twitter: {
         card: 'summary_large_image',
@@ -90,8 +97,19 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       notFound();
     }
 
+    const breadcrumbItems = [
+      { name: 'Home', href: '/' },
+      { name: activity?.name || 'Activity', href: `/${activity?.slug || activitySlug}` },
+      { name: destination?.name || 'Destination', href: `/${activity?.slug || activitySlug}/${destination?.slug || destinationSlug}` },
+      { name: result?.title || 'Package', href: `/${activitySlug}/${destinationSlug}/${packageSlug}` },
+    ];
+
     return (
       <main>
+        <JsonLd schema={tourPackageSchema({ ...result, slug: packageSlug as string })} />
+        {result?.faqs?.length > 0 && <JsonLd schema={faqPageSchema(result.faqs)} />}
+        <JsonLd schema={breadcrumbSchema(breadcrumbItems)} />
+
         <Banner
           title={result?.title || 'Package Details'}
           image={result?.mainImage?.thumbnail || result?.mainImage?.original || result?.media?.[0]?.thumbnail || '/images/hero.jpg'}
@@ -104,11 +122,30 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         />
 
         <div className='max-w-7xl mx-auto px-4 py-8'>
+          {/* Package meta bar */}
+          <div className='flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100'>
+            <div className='flex flex-wrap items-center gap-3'>
+              <DifficultyBadge difficulty={result?.culture || result?.activity} />
+              {result?.bestSeason && (
+                <span className='text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
+                  Best: {result.bestSeason}
+                </span>
+              )}
+              {result?.altitude && (
+                <span className='text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full'>
+                  Max Alt: {result.altitude}
+                </span>
+              )}
+            </div>
+            <ShareButtons title={result?.title || 'Package Details'} url={getCanonicalUrl(`/${activitySlug}/${destinationSlug}/${packageSlug}`)} />
+          </div>
+
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
             {/* Main Content */}
             <div className='lg:col-span-2'>
               <Navigation packageData={result} />
               <PackageDetails pack={result} />
+              <CommentSection packageId={result?.id} />
             </div>
 
             {/* Sidebar */}

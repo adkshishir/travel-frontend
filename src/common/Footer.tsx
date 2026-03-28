@@ -56,11 +56,16 @@ export default function Footer() {
             <h3 className='text-sm font-semibold uppercase tracking-widest text-gray-400 mb-5'>Explore</h3>
             <ul className='space-y-3'>
               {[
-                { label: 'All Packages', href: '/#activities' },
+                { label: 'Search All Packages', href: '/search' },
                 { label: 'Popular Destinations', href: '/#popular-destinations' },
                 { label: 'About Us', href: '/about' },
+                { label: 'Our Team', href: '/team' },
+                { label: 'Photo Gallery', href: '/gallery' },
                 { label: 'Blogs & Stories', href: '/blogs' },
-                { label: 'FAQ', href: '/#faq' },
+                { label: 'Trekker Reviews', href: '/testimonials' },
+                { label: 'Why Choose Us', href: '/why-us' },
+                { label: 'Responsible Travel', href: '/responsible-travel' },
+                { label: 'Travel Tips', href: '/travel-tips' },
                 { label: 'Contact', href: '/contact' },
               ].map(({ label, href }) => (
                 <li key={label}>

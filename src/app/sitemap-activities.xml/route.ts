@@ -1,9 +1,10 @@
+import { getBaseUrl } from '@/config/sitemap'
 import { NextResponse } from 'next/server'
 import { fetchData } from '@/utils/request-intregation'
 import ENDPOINTS from '@/utils/endpoints'
 
 export async function GET() {
-  const baseUrl = 'https://poonhill.com'
+  const baseUrl = getBaseUrl()
   
   try {
     // Fetch all activities from API

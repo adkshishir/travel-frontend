@@ -132,6 +132,18 @@ export default function AdminLayout({
       href: '/admin/authors',
       description: 'Manage blog authors',
     },
+    {
+      icon: Users,
+      label: 'Team',
+      href: '/admin/team',
+      description: 'Manage team members',
+    },
+    {
+      icon: Mail,
+      label: 'Newsletter',
+      href: '/admin/newsletter',
+      description: 'View newsletter subscribers',
+    },
   ];
 
   return hasToken ? (

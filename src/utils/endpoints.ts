@@ -24,6 +24,12 @@ const ENDPOINTS = {
   PAYMENT_CANCEL: 'payment/cancel',
   PAYMENT_REFUND: 'payment/refund',
   PAYMENT_STATUS: 'payment/status',
+  TEAM: 'team',
+  NEWSLETTER_SUBSCRIBE: 'newsletter/subscribe',
+  NEWSLETTER_UNSUBSCRIBE: 'newsletter/unsubscribe',
+  COMMENTS: 'comments',
+  COMMENTS_APPROVED: 'comments/approved',
+  WISHLIST: 'wishlist',
 };
 
 export default ENDPOINTS;

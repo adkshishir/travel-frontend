@@ -1,3 +1,5 @@
+export const revalidate = 3600;
+
 import Banner from '@/components/banner';
 import BlogCard from '@/components/blog/blog-card-big';
 import Sidebar from '@/components/blog/side-bar';

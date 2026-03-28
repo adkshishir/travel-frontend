@@ -20,8 +20,23 @@ export type TActivity = {
 }[];
 
 const navLinks = [
-  { href: '/blogs', label: 'Blogs' },
-  { href: '/about', label: 'About' },
+  { href: '/search', label: 'All Packages' },
+  // { href: '/blogs', label: 'Blogs' },
+  {
+    href: '#', label: 'Company', children: [
+      { href: '/about', label: 'About Us' },
+      { href: '/team', label: 'Our Team' },
+      { href: '/why-us', label: 'Why Choose Us' },
+      { href: '/responsible-travel', label: 'Responsible Travel' },
+    ]
+  },
+  // {
+  //   href: '#', label: 'Resources', children: [
+  //     { href: '/travel-tips', label: 'Travel Tips & Guides' },
+  //     { href: '/gallery', label: 'Photo Gallery' },
+  //     { href: '/testimonials', label: 'Reviews' },
+  //   ]
+  // },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -174,19 +189,43 @@ export default function Header() {
               </div>
             ))}
 
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
-                  transparent
-                    ? 'text-white/90 hover:text-white hover:bg-white/10'
-                    : 'text-[#2d4a2d] hover:text-primary hover:bg-orange-50'
-                )}>
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.children ? (
+                <div key={link.label} className='relative group'>
+                  <button className={cn(
+                    'flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    transparent
+                      ? 'text-white/90 hover:text-white hover:bg-white/10'
+                      : 'text-[#2d4a2d] hover:text-primary hover:bg-orange-50'
+                  )}>
+                    {link.label}
+                    <ChevronDown size={14} className='group-hover:rotate-180 transition-transform duration-200' />
+                  </button>
+                  <div className='absolute left-0 top-full mt-1 w-52 bg-white rounded-xl shadow-xl ring-1 ring-black/5 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50'>
+                    {link.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className='block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-primary transition-colors'>
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    transparent
+                      ? 'text-white/90 hover:text-white hover:bg-white/10'
+                      : 'text-[#2d4a2d] hover:text-primary hover:bg-orange-50'
+                  )}>
+                  {link.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* ── Right actions ─────────────────── */}
@@ -279,15 +318,30 @@ export default function Header() {
 
               {/* Regular links */}
               <div className='pt-2 border-t border-gray-100 space-y-1'>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className='block text-sm font-medium text-[#2d4a2d] hover:text-primary py-2.5 transition-colors'>
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) =>
+                  link.children ? (
+                    <div key={link.label}>
+                      <p className='text-xs font-semibold text-gray-400 uppercase tracking-wide pt-2 pb-1 px-1'>{link.label}</p>
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          onClick={() => setIsOpen(false)}
+                          className='block text-sm text-gray-600 hover:text-primary py-2 pl-3 transition-colors'>
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className='block text-sm font-medium text-[#2d4a2d] hover:text-primary py-2.5 transition-colors'>
+                      {link.label}
+                    </Link>
+                  )
+                )}
               </div>
 
               {/* CTA */}

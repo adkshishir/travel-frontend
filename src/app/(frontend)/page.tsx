@@ -1,4 +1,7 @@
+export const revalidate = 3600; // Revalidate every 1 hour
+
 import HeroSection from './_components/hero';
+import TrustBar from './_components/trust-bar';
 import Activities from './_components/activities';
 import AboutSection from './_components/about';
 import TopDestination from './_components/top-destination';
@@ -7,8 +10,10 @@ import Testimonial from './_components/testimonial';
 import Destinations from './_components/destinations';
 import Faq from './_components/faq';
 import Blogs from './_components/blogs';
+import NewsletterSection from './_components/newsletter-section';
 import { fetchData } from '@/utils/request-intregation';
 import ENDPOINTS from '@/utils/endpoints';
+import JsonLd from '@/components/seo/JsonLd';
 
 export const metadata = {
   title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
@@ -32,14 +37,27 @@ export const metadata = {
 };
 
 export default async function Home() {
-  // Fetch data for HeroSection
   const carouselsRes = await fetchData(ENDPOINTS.CAROUSELS + '/home');
   const carousels = Array.isArray(carouselsRes) ? carouselsRes : carouselsRes?.items || [];
   const siteInfo = await fetchData(ENDPOINTS.SITE_INFO);
 
+  const homeSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal. Expert-led Poon Hill, Annapurna, and Himalayan treks.',
+    url: 'https://poonhill.com',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://poonhill.com' }],
+    },
+  };
+
   return (
     <main>
+      <JsonLd schema={homeSchema} />
       <HeroSection carousels={carousels} siteInfo={siteInfo} />
+      <TrustBar />
       <Activities />
       <AboutSection />
       <TopDestination />
@@ -47,6 +65,7 @@ export default async function Home() {
       <Testimonial />
       <Destinations />
       <Faq />
+      <NewsletterSection />
       <Blogs />
     </main>
   );

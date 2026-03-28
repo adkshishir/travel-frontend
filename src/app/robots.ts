@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://poonhill.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com'
 
   return {
     rules: [
@@ -15,29 +15,17 @@ export default function robots(): MetadataRoute.Robots {
           '/private/',
           '/_next/',
           '/temp/',
-          '*.json',
-          '/sitemap.xml', // Disallow the default Next.js sitemap since we have custom ones
         ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: [
-          '/admin/',
-          '/auth/',
-          '/api/',
-          '/private/',
-        ],
+        disallow: ['/admin/', '/auth/', '/api/', '/private/'],
       },
       {
         userAgent: 'Bingbot',
         allow: '/',
-        disallow: [
-          '/admin/',
-          '/auth/',
-          '/api/',
-          '/private/',
-        ],
+        disallow: ['/admin/', '/auth/', '/api/', '/private/'],
       },
     ],
     sitemap: [
@@ -47,7 +35,8 @@ export default function robots(): MetadataRoute.Robots {
       `${baseUrl}/sitemap-packages.xml`,
       `${baseUrl}/sitemap-blogs.xml`,
       `${baseUrl}/sitemap-categories.xml`,
+      `${baseUrl}/sitemap-comprehensive.xml`,
     ],
     host: baseUrl,
   }
-} 
+}

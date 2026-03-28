@@ -1,3 +1,5 @@
+export const revalidate = 3600;
+
 import Banner from '@/components/banner';
 import React from 'react';
 import Packages from './_components/packages';
