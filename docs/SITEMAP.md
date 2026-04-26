@@ -2,16 +2,18 @@
 
 ## Overview
 
-This document outlines the comprehensive sitemap implementation for the Poon Hill Trekking & Tours website. The sitemap system is designed following the latest SEO best practices and XML sitemap standards.
+This document outlines the comprehensive sitemap implementation for the Travel Trekking & Tours website. The sitemap system is designed following the latest SEO best practices and XML sitemap standards.
 
 ## Sitemap Structure
 
 ### 1. Main Sitemap (`/sitemap.xml`)
+
 - Contains essential static pages
 - Provides immediate crawl access to primary content
 - High-priority pages (home, booking, contact, etc.)
 
 ### 2. Sitemap Index (`/sitemap-index.xml`)
+
 - References all individual sitemaps
 - Organized structure for search engines
 - Proper lastmod timestamps
@@ -19,12 +21,14 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 ### 3. Individual Sitemaps
 
 #### Static Pages (`/sitemap-static.xml`)
+
 - **Priority**: 0.3 - 1.0
 - **Change Frequency**: yearly - daily
 - **Content**: Home, About, Contact, Blogs listing, Privacy, Terms, Booking
 - **Cache**: 1 hour
 
 #### Activities (`/sitemap-activities.xml`)
+
 - **Priority**: 0.8
 - **Change Frequency**: weekly
 - **URL Pattern**: `/{activitySlug}`
@@ -32,6 +36,7 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 - **Cache**: 1 hour
 
 #### Destinations (`/sitemap-destinations.xml`)
+
 - **Priority**: 0.7
 - **Change Frequency**: weekly
 - **URL Pattern**: `/{activitySlug}/{destinationSlug}`
@@ -39,6 +44,7 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 - **Cache**: 1 hour
 
 #### Packages (`/sitemap-packages.xml`)
+
 - **Priority**: 0.9 (highest for content)
 - **Change Frequency**: weekly
 - **URL Pattern**: `/{activitySlug}/{destinationSlug}/{packageSlug}`
@@ -46,6 +52,7 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 - **Cache**: 1 hour
 
 #### Blogs (`/sitemap-blogs.xml`)
+
 - **Priority**: 0.6
 - **Change Frequency**: monthly
 - **URL Pattern**: `/blogs/{slug}`
@@ -53,6 +60,7 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 - **Cache**: 1 hour
 
 #### Categories (`/sitemap-categories.xml`)
+
 - **Priority**: 0.5
 - **Change Frequency**: monthly
 - **URL Pattern**: `/pages/{endpoint}`
@@ -62,36 +70,42 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 ## Features
 
 ### 1. XML Sitemap Standards Compliance
+
 - ✅ XML version 1.0, UTF-8 encoding
 - ✅ Proper namespaces (sitemap, image, news)
 - ✅ Valid XSD schema references
 - ✅ Proper URL escaping
 
 ### 2. Image Sitemaps
+
 - ✅ Google Image Search optimization
 - ✅ Image titles and captions
 - ✅ Multiple images per URL (max 10)
 - ✅ Proper image URL validation
 
 ### 3. News Sitemaps
+
 - ✅ Recent blog posts (last 2 days)
 - ✅ Publication metadata
 - ✅ Article timestamps
 - ✅ Language specification
 
 ### 4. SEO Optimization
+
 - ✅ Priority weighting by content importance
 - ✅ Appropriate change frequencies
 - ✅ Last modification timestamps
 - ✅ Content filtering (published/active only)
 
 ### 5. Performance
+
 - ✅ Efficient caching (1 hour normal, 5 min error)
 - ✅ Error handling with fallback empty sitemaps
 - ✅ Separated sitemaps for better organization
 - ✅ Proper HTTP headers
 
 ### 6. Dynamic Content
+
 - ✅ Real-time data fetching from API
 - ✅ Hierarchical URL structure preservation
 - ✅ Content relationship mapping
@@ -100,6 +114,7 @@ This document outlines the comprehensive sitemap implementation for the Poon Hil
 ## Configuration
 
 ### Base URL Management
+
 ```typescript
 // Configure in environment variables
 NEXT_PUBLIC_SITE_URL=https://poonhill.com
@@ -109,6 +124,7 @@ BASE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com'
 ```
 
 ### Priority Settings
+
 ```typescript
 PRIORITIES: {
   HOME: 1.0,           // Homepage
@@ -122,6 +138,7 @@ PRIORITIES: {
 ```
 
 ### Change Frequencies
+
 ```typescript
 CHANGE_FREQUENCIES: {
   HOME: 'daily',       // Updated frequently
@@ -134,6 +151,7 @@ CHANGE_FREQUENCIES: {
 ## URLs Included
 
 ### Static Pages
+
 - `/` (Homepage)
 - `/about` (About Us)
 - `/contact` (Contact)
@@ -143,6 +161,7 @@ CHANGE_FREQUENCIES: {
 - `/terms` (Terms & Conditions)
 
 ### Dynamic Pages
+
 - `/{activitySlug}` (Activity pages)
 - `/{activitySlug}/{destinationSlug}` (Destination pages)
 - `/{activitySlug}/{destinationSlug}/{packageSlug}` (Package pages)
@@ -152,24 +171,28 @@ CHANGE_FREQUENCIES: {
 ## SEO Benefits
 
 ### 1. Search Engine Discovery
+
 - ✅ Comprehensive URL coverage
 - ✅ Hierarchical site structure communication
 - ✅ Priority guidance for crawlers
 - ✅ Update frequency hints
 
 ### 2. Image Search Optimization
+
 - ✅ Google Images indexing
 - ✅ Alt text and caption optimization
 - ✅ Travel/tourism visual content boost
 - ✅ Gallery image exposure
 
 ### 3. News Content
+
 - ✅ Google News eligibility
 - ✅ Fresh content signals
 - ✅ Publication authority
 - ✅ Timely indexing
 
 ### 4. Technical SEO
+
 - ✅ Crawl budget optimization
 - ✅ Canonical URL establishment
 - ✅ Content freshness signals
@@ -178,17 +201,20 @@ CHANGE_FREQUENCIES: {
 ## Monitoring & Maintenance
 
 ### Google Search Console
+
 1. Submit sitemap index: `https://poonhill.com/sitemap-index.xml`
 2. Submit individual sitemaps for granular monitoring
 3. Monitor coverage reports
 4. Check for crawl errors
 
 ### Bing Webmaster Tools
+
 1. Submit same sitemaps
 2. Monitor indexing status
 3. Review crawl statistics
 
 ### Regular Checks
+
 - [ ] Weekly: Verify sitemap accessibility
 - [ ] Monthly: Check for 404 errors in sitemaps
 - [ ] Quarterly: Review priority and frequency settings
@@ -232,6 +258,7 @@ Sitemap: https://poonhill.com/sitemap-categories.xml
    - Verify cache duration settings
 
 ### Debug URLs
+
 - Individual sitemaps: `/sitemap-{type}.xml`
 - Sitemap index: `/sitemap-index.xml`
 - Main sitemap: `/sitemap.xml`
@@ -240,6 +267,7 @@ Sitemap: https://poonhill.com/sitemap-categories.xml
 ## Future Enhancements
 
 ### Potential Improvements
+
 - [ ] Multilingual sitemap support
 - [ ] Video sitemap implementation
 - [ ] Mobile-specific sitemap
@@ -248,9 +276,10 @@ Sitemap: https://poonhill.com/sitemap-categories.xml
 - [ ] Sitemap analytics and reporting
 
 ### Performance Optimizations
+
 - [ ] Implement sitemap compression
 - [ ] Add ETag headers
 - [ ] Implement conditional requests
 - [ ] Add sitemap splitting for large datasets
 
-This sitemap implementation provides a solid foundation for SEO success and can be easily maintained and extended as the site grows. 
+This sitemap implementation provides a solid foundation for SEO success and can be easily maintained and extended as the site grows.

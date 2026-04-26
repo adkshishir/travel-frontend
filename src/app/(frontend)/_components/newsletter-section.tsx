@@ -56,7 +56,7 @@ export default function NewsletterSection() {
             <div className='flex flex-col items-center gap-3'>
               <CheckCircle size={48} className='text-green-400' />
               <p className='text-green-300 font-semibold text-lg'>{msg}</p>
-              <p className='text-white/60 text-sm'>Welcome to the Poonhill Treks community!</p>
+              <p className='text-white/60 text-sm'>Welcome to the Traveltreks community!</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-3'>

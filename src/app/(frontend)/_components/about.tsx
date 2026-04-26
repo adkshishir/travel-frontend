@@ -47,11 +47,11 @@ const AboutSection = () => {
           Your Trusted Partner for Himalayan Adventures
         </H2>
         <p className='text-gray-600 mt-4 leading-relaxed max-lg:text-center'>
-          Based in the heart of Nepal, Poonhill Treks has been crafting
-          unforgettable mountain experiences since 2009. We connect you with
-          the raw beauty of the Himalayas — from the iconic Poon Hill sunrise
-          to the serene trails of the Annapurna Circuit — with guides who know
-          every stone on the path.
+          Based in the heart of Nepal, Traveltreks has been crafting
+          unforgettable mountain experiences since 2009. We connect you with the
+          raw beauty of the Himalayas — from the iconic Travel sunrise to the
+          serene trails of the Annapurna Circuit — with guides who know every
+          stone on the path.
         </p>
 
         {/* Highlights */}

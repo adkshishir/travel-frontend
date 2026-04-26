@@ -25,8 +25,8 @@ export function organizationSchema(siteInfo?: {
   return {
     '@context': 'https://schema.org',
     '@type': 'TravelAgency',
-    name: siteInfo?.name || 'Poonhill Treks',
-    url: siteInfo?.url || 'https://poonhill.com',
+    name: siteInfo?.name || 'Traveltreks',
+    url: siteInfo?.url || 'https://traveltreks.com',
     logo: siteInfo?.logo,
     telephone: siteInfo?.phone1,
     email: siteInfo?.email1,
@@ -55,7 +55,7 @@ export function tourPackageSchema(pkg: {
   reviews?: { name?: string; description?: string; rating?: number; reviewDate?: string }[];
   mainImage?: { original?: string; thumbnail?: string };
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://traveltreks.com';
   const reviewCount = pkg.reviews?.length || 0;
 
   const schema: Record<string, unknown> = {
@@ -112,7 +112,7 @@ export function faqPageSchema(faqs: { question?: string; answer?: string }[]) {
 }
 
 export function breadcrumbSchema(items: { name: string; href: string }[]) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://traveltreks.com';
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -135,7 +135,7 @@ export function blogPostingSchema(blog: {
   media?: { original?: string };
   content?: string;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://traveltreks.com';
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -147,10 +147,10 @@ export function blogPostingSchema(blog: {
     image: blog.media?.original,
     author: blog.author
       ? { '@type': 'Person', name: blog.author.name, description: blog.author.bio }
-      : { '@type': 'Organization', name: 'Poonhill Treks' },
+      : { '@type': 'Organization', name: 'Traveltreks' },
     publisher: {
       '@type': 'Organization',
-      name: 'Poonhill Treks',
+      name: 'Traveltreks',
       logo: { '@type': 'ImageObject', url: `${baseUrl}/logo.png` },
     },
   };

@@ -27,7 +27,7 @@ export default function Footer() {
             <Link href='/' className='inline-flex items-center gap-2'>
               <Mountain className='text-primary w-7 h-7' />
               <span className='text-xl font-bold'>
-                <span className='text-primary'>Poonhill</span>Treks
+                <span className='text-primary'>Travel</span>treks
               </span>
             </Link>
             <p className='text-gray-400 text-sm leading-relaxed'>
@@ -107,7 +107,7 @@ export default function Footer() {
               {[
                 { icon: MapPin, text: 'Thamel, Kathmandu, Nepal', href: '#' },
                 { icon: Phone, text: '+977-1-4123456', href: 'tel:+97714123456' },
-                { icon: Mail, text: 'info@poonhilltreks.com', href: 'mailto:info@poonhilltreks.com' },
+                { icon: Mail, text: 'info@traveltreks.com', href: 'mailto:info@traveltreks.com' },
               ].map(({ icon: Icon, text, href }) => (
                 <Link
                   key={text}
@@ -135,7 +135,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className='border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500'>
-          <p>© {new Date().getFullYear()} Poonhill Treks. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Traveltreks. All rights reserved.</p>
           <div className='flex items-center gap-4'>
             <Link href='/privacy' className='hover:text-white transition-colors'>Privacy Policy</Link>
             <Link href='/terms' className='hover:text-white transition-colors'>Terms of Service</Link>

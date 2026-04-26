@@ -149,7 +149,7 @@ const MessageDetailPage = async ({ params }: MessageDetailPageProps) => {
                       className="w-full"
                       size="sm"
                     >
-                      <a href={`mailto:${message.email}?subject=Re: Your inquiry to Poonhill Treks`}>
+                      <a href={`mailto:${message.email}?subject=Re: Your inquiry to Traveltreks`}>
                         <Mail className="h-4 w-4 mr-2" />
                         Reply via Email
                       </a>
@@ -215,7 +215,7 @@ const MessageDetailPage = async ({ params }: MessageDetailPageProps) => {
                     size="sm"
                     asChild
                   >
-                    <a href={`mailto:${message.email}?subject=Trek Information - Poonhill Treks&body=Dear ${message.name || 'Valued Customer'},%0D%0A%0D%0AThank you for your interest in our trekking packages. I'd be happy to provide you with detailed information about our treks.%0D%0A%0D%0ABased on your inquiry, I recommend...%0D%0A%0D%0ABest regards,%0D%0APoonhill Treks Team`}>
+                    <a href={`mailto:${message.email}?subject=Trek Information - Traveltreks&body=Dear ${message.name || 'Valued Customer'},%0D%0A%0D%0AThank you for your interest in our trekking packages. I'd be happy to provide you with detailed information about our treks.%0D%0A%0D%0ABased on your inquiry, I recommend...%0D%0A%0D%0ABest regards,%0D%0ATraveltreks Team`}>
                       Use Template
                     </a>
                   </Button>
@@ -235,7 +235,7 @@ const MessageDetailPage = async ({ params }: MessageDetailPageProps) => {
                     size="sm"
                     asChild
                   >
-                    <a href={`mailto:${message.email}?subject=Booking Assistance - Poonhill Treks&body=Dear ${message.name || 'Valued Customer'},%0D%0A%0D%0AThank you for choosing Poonhill Treks. I'm here to assist you with your booking process.%0D%0A%0D%0ATo complete your booking, please...%0D%0A%0D%0ABest regards,%0D%0APoonhill Treks Team`}>
+                    <a href={`mailto:${message.email}?subject=Booking Assistance - Traveltreks&body=Dear ${message.name || 'Valued Customer'},%0D%0A%0D%0AThank you for choosing Traveltreks. I'm here to assist you with your booking process.%0D%0A%0D%0ATo complete your booking, please...%0D%0A%0D%0ABest regards,%0D%0ATraveltreks Team`}>
                       Use Template
                     </a>
                   </Button>

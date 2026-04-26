@@ -9,7 +9,7 @@ interface WhatsAppButtonProps {
 
 export default function WhatsAppButton({
   phone = '977000000000',
-  message = 'Hello! I am interested in trekking with Poonhill Treks. Can you help me plan my adventure?',
+  message = 'Hello! I am interested in trekking with Traveltreks. Can you help me plan my adventure?',
 }: WhatsAppButtonProps) {
   const encodedMessage = encodeURIComponent(message);
   const cleanPhone = phone.replace(/[^0-9]/g, '');

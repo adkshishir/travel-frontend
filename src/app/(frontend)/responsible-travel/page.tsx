@@ -4,15 +4,15 @@ import Link from 'next/link';
 import getCanonicalUrl from '@/utils/canonical';
 
 export const metadata = {
-  title: 'Responsible Travel | Sustainable Trekking in Nepal | Poonhill Treks',
-  description: 'Learn how Poonhill Treks practices responsible and sustainable tourism. We protect Nepal\'s mountains, support local communities, and minimize environmental impact.',
+  title: 'Responsible Travel | Sustainable Trekking in Nepal | Traveltreks',
+  description: 'Learn how Traveltreks practices responsible and sustainable tourism. We protect Nepal\'s mountains, support local communities, and minimize environmental impact.',
   alternates: { canonical: getCanonicalUrl('/responsible-travel') },
   openGraph: {
-    title: 'Responsible Travel | Poonhill Treks',
+    title: 'Responsible Travel | Traveltreks',
     description: 'Sustainable trekking that protects Nepal\'s mountains and supports local communities.',
     url: getCanonicalUrl('/responsible-travel'),
     type: 'website',
-    siteName: 'Poonhill Treks',
+    siteName: 'Traveltreks',
   },
 };
 

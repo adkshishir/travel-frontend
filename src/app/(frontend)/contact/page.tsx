@@ -101,8 +101,8 @@ const ContactPage = () => {
                 <Mail className='h-5 w-5 text-blue-500 mt-0.5' />
                 <div>
                   <h3 className='font-medium text-gray-900'>Email</h3>
-                  <p className='text-gray-600'>info@poonhilltreks.com</p>
-                  <p className='text-gray-600'>support@poonhilltreks.com</p>
+                  <p className='text-gray-600'>info@traveltreks.com</p>
+                  <p className='text-gray-600'>support@traveltreks.com</p>
                 </div>
               </div>
 

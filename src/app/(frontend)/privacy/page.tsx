@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { Shield, Eye, Lock, Database, Globe, UserCheck, Settings, AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Poonhill Treks',
-  description: 'Privacy policy for Poonhill Treks. Learn how we collect, use, and protect your personal information when you book our trekking services.',
+  title: 'Privacy Policy | Traveltreks',
+  description: 'Privacy policy for Traveltreks. Learn how we collect, use, and protect your personal information when you book our trekking services.',
 };
 
 export default function PrivacyPolicy() {
@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
             </div>
             <div className="text-gray-700 space-y-4">
               <p>
-                Poonhill Treks ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy 
+                Traveltreks ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy 
                 explains how we collect, use, disclose, and safeguard your information when you visit our website 
                 or use our trekking services.
               </p>
@@ -331,11 +331,11 @@ export default function PrivacyPolicy() {
             <div className="text-gray-700 space-y-4">
               <p>If you have questions about this Privacy Policy or wish to exercise your rights, please contact us:</p>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Poonhill Treks - Privacy Officer</strong></p>
+                <p><strong>Traveltreks - Privacy Officer</strong></p>
                 <p>Thamel, Kathmandu, Nepal</p>
                 <p>Phone: +977-1-4123456</p>
-                <p>Email: privacy@poonhilltreks.com</p>
-                <p>General Email: info@poonhilltreks.com</p>
+                <p>Email: privacy@traveltreks.com</p>
+                <p>General Email: info@traveltreks.com</p>
               </div>
             </div>
           </section>

@@ -5,15 +5,15 @@ import getCanonicalUrl from '@/utils/canonical';
 import JsonLd, { breadcrumbSchema } from '@/components/seo/JsonLd';
 
 export const metadata = {
-  title: 'Why Choose Poonhill Treks | Nepal\'s Most Trusted Trekking Company',
-  description: 'Discover why 10,000+ trekkers choose Poonhill Treks. Licensed, insured, and locally owned. Expert guides, fair prices, and 15+ years of Himalayan experience.',
+  title: 'Why Choose Traveltreks | Nepal\'s Most Trusted Trekking Company',
+  description: 'Discover why 10,000+ trekkers choose Traveltreks. Licensed, insured, and locally owned. Expert guides, fair prices, and 15+ years of Himalayan experience.',
   alternates: { canonical: getCanonicalUrl('/why-us') },
   openGraph: {
-    title: 'Why Choose Poonhill Treks',
+    title: 'Why Choose Traveltreks',
     description: 'Licensed, insured, and locally owned Nepal trekking company with 15+ years of experience.',
     url: getCanonicalUrl('/why-us'),
     type: 'website',
-    siteName: 'Poonhill Treks',
+    siteName: 'Traveltreks',
   },
 };
 
@@ -82,7 +82,7 @@ export default function WhyUsPage() {
       ])} />
       <Banner
         title='Why Choose Us'
-        pageName='Why Choose Poonhill Treks'
+        pageName='Why Choose Traveltreks'
         breadcrumb={[{ name: 'Home', href: '/' }]}
         image='/images/hero.jpg'
       />
@@ -109,7 +109,7 @@ export default function WhyUsPage() {
             6 Reasons to Trek With Us
           </h2>
           <p className='text-gray-600 max-w-2xl mx-auto text-lg'>
-            There are hundreds of trekking companies in Nepal. Here is why over 10,000 adventurers have chosen Poonhill Treks for their once-in-a-lifetime experience.
+            There are hundreds of trekking companies in Nepal. Here is why over 10,000 adventurers have chosen Traveltreks for their once-in-a-lifetime experience.
           </p>
         </div>
 
@@ -133,14 +133,14 @@ export default function WhyUsPage() {
         {/* Comparison Table */}
         <div className='bg-gray-50 rounded-3xl p-8 md:p-12 mb-16'>
           <h3 className='text-2xl font-bold text-gray-900 mb-8 text-center'>
-            Poonhill Treks vs. The Rest
+            Traveltreks vs. The Rest
           </h3>
           <div className='overflow-x-auto'>
             <table className='w-full'>
               <thead>
                 <tr className='border-b-2 border-gray-200'>
                   <th className='text-left py-3 text-gray-600 font-medium'>Feature</th>
-                  <th className='text-center py-3 text-primary font-bold text-lg'>Poonhill Treks</th>
+                  <th className='text-center py-3 text-primary font-bold text-lg'>Traveltreks</th>
                   <th className='text-center py-3 text-gray-400 font-medium'>Others</th>
                 </tr>
               </thead>

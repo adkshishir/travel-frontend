@@ -1,4 +1,4 @@
-# Poon Hill Travel Management System
+# Travel Travel Management System
 
 A comprehensive travel management system built with **Next.js 14**, **NestJS**, **Prisma**, and **MySQL**. This system provides a complete solution for managing travel packages, destinations, activities, blogs, and bookings with a powerful admin panel.
 

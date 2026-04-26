@@ -16,10 +16,10 @@ const roboto = Roboto({
 });
 export const metadata: Metadata = {
   title: {
-    default: 'Poonhill Treks | Nepal Trekking & Adventure Tours',
-    template: '%s | Poonhill Treks',
+    default: 'Traveltreks | Nepal Trekking & Adventure Tours',
+    template: '%s | Traveltreks',
   },
-  description: 'Discover the best trekking and tour packages in Nepal. Expert-led Poon Hill, Annapurna, and Himalayan treks. Book your adventure with local guides.',
+  description: 'Discover the best trekking and tour packages in Nepal. Expert-led Annapurna and Himalayan treks. Book your adventure with local guides.',
   robots: {
     index: true,
     follow: true,
@@ -32,7 +32,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://traveltreks.com';
 
   return (
     <html lang='en'>
@@ -40,17 +40,17 @@ export default function RootLayout({
         <JsonLd schema={{
           '@context': 'https://schema.org',
           '@type': 'TravelAgency',
-          name: 'Poonhill Treks',
+          name: 'Traveltreks',
           url: siteUrl,
-          description: 'Expert-led Nepal trekking and Himalayan adventure tours since 2009. Poon Hill, Annapurna, Everest Base Camp and more.',
+          description: 'Expert-led Nepal trekking and Himalayan adventure tours since 2009. Annapurna, Everest Base Camp and more.',
           address: { '@type': 'PostalAddress', addressCountry: 'NP', addressLocality: 'Pokhara' },
           priceRange: '$$',
           currenciesAccepted: 'USD, NPR',
           paymentAccepted: 'Cash, Credit Card',
           openingHours: 'Mo-Su 07:00-20:00',
           sameAs: [
-            'https://www.facebook.com/poonhilltreks',
-            'https://www.instagram.com/poonhilltreks',
+            'https://www.facebook.com/traveltreks',
+            'https://www.instagram.com/traveltreks',
           ],
         }} />
         <Toaster position='top-right' />

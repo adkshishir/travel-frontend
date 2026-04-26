@@ -57,7 +57,7 @@ const BookingSuccess = async ({ searchParams }: Props) => {
 
           <div className="text-muted-foreground">
             <p className="mb-4 text-sm">
-              Thank you for booking with Poonhill Treks! We have received your information and will contact you within 24 hours to finalise your trek details.
+              Thank you for booking with Traveltreks! We have received your information and will contact you within 24 hours to finalise your trek details.
             </p>
 
             <div className="bg-amber-50 rounded-lg p-4 text-left border border-amber-100">
@@ -91,8 +91,8 @@ const BookingSuccess = async ({ searchParams }: Props) => {
           <div className="text-sm text-muted-foreground">
             <p>
               Need help?{' '}
-              <a href="mailto:info@poonhilltreks.com" className="text-primary hover:underline">
-                info@poonhilltreks.com
+              <a href="mailto:info@traveltreks.com" className="text-primary hover:underline">
+                info@traveltreks.com
               </a>
             </p>
           </div>

@@ -16,7 +16,7 @@ interface TravelPackageCardProps {
 }
 
 export default function PackageCard({
-  title = 'Poon Hill Trek',
+  title = 'Travel Trek',
   location = 'Ghorepani, Nepal',
   image = '/images/hero.jpg',
   price = 0,
@@ -56,7 +56,9 @@ export default function PackageCard({
         </div>
 
         {/* Title */}
-        <h3 className='font-bold text-base text-gray-900 mb-3 leading-snug line-clamp-2'>{title}</h3>
+        <h3 className='font-bold text-base text-gray-900 mb-3 leading-snug line-clamp-2'>
+          {title}
+        </h3>
 
         {/* Rating */}
         <div className='flex items-center gap-1 mb-4'>
@@ -64,7 +66,11 @@ export default function PackageCard({
             <Star
               key={i}
               size={13}
-              className={cn(i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200')}
+              className={cn(
+                i < rating
+                  ? 'text-yellow-400 fill-yellow-400'
+                  : 'text-gray-200 fill-gray-200',
+              )}
             />
           ))}
           {reviews > 0 && (
@@ -77,7 +83,9 @@ export default function PackageCard({
           <div>
             {price > 0 ? (
               <>
-                <span className='font-bold text-xl text-gray-900'>${price}</span>
+                <span className='font-bold text-xl text-gray-900'>
+                  ${price}
+                </span>
                 <span className='text-gray-400 text-xs'>/person</span>
               </>
             ) : (

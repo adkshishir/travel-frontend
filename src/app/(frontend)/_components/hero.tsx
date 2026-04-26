@@ -4,7 +4,14 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { VideoModal } from '@/components/video-modal';
-import { ChevronLeft, ChevronRight, Mountain, Clock, Users, Star } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Mountain,
+  Clock,
+  Users,
+  Star,
+} from 'lucide-react';
 
 interface HeroSectionProps {
   carousels: any[];
@@ -13,9 +20,9 @@ interface HeroSectionProps {
 
 const stats = [
   { icon: Mountain, value: '100+', label: 'Trek Routes' },
-  { icon: Users,    value: '10K+', label: 'Happy Trekkers' },
-  { icon: Star,     value: '4.9',  label: 'Avg Rating' },
-  { icon: Clock,    value: '15+',  label: 'Years Experience' },
+  { icon: Users, value: '10K+', label: 'Happy Trekkers' },
+  { icon: Star, value: '4.9', label: 'Avg Rating' },
+  { icon: Clock, value: '15+', label: 'Years Experience' },
 ];
 
 const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
@@ -24,24 +31,30 @@ const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
   const [animKey, setAnimKey] = useState(0);
 
   if (!carousels?.length) {
-    carousels = [{
-      media: { original: '/images/hero.jpg', alt: 'Poon Hill Trek Nepal' },
-      title: "Nepal's Premier Trek Company",
-      subtitle: 'Discover the Himalayas with Expert Local Guides',
-      description: 'From the iconic Poon Hill sunrise to the high passes of Annapurna — we bring the mountains to life.',
-    }];
+    carousels = [
+      {
+        media: { original: '/images/hero.jpg', alt: 'Travel Trek Nepal' },
+        title: "Nepal's Premier Trek Company",
+        subtitle: 'Discover the Himalayas with Expert Local Guides',
+        description:
+          'From the iconic Travel sunrise to the high passes of Annapurna — we bring the mountains to life.',
+      },
+    ];
   }
 
   useEffect(() => {
     if (!autoPlay) return;
     const t = setInterval(() => {
-      setCurrent(p => (p + 1) % carousels.length);
-      setAnimKey(k => k + 1);
+      setCurrent((p) => (p + 1) % carousels.length);
+      setAnimKey((k) => k + 1);
     }, 6000);
     return () => clearInterval(t);
   }, [autoPlay, carousels.length]);
 
-  const goTo = (i: number) => { setCurrent(i); setAnimKey(k => k + 1); };
+  const goTo = (i: number) => {
+    setCurrent(i);
+    setAnimKey((k) => k + 1);
+  };
   const prev = () => goTo((current - 1 + carousels.length) % carousels.length);
   const next = () => goTo((current + 1) % carousels.length);
 
@@ -52,7 +65,6 @@ const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
       className='relative h-screen min-h-[600px] w-full overflow-hidden'
       onMouseEnter={() => setAutoPlay(false)}
       onMouseLeave={() => setAutoPlay(true)}>
-
       {/* ── Background images ─────────────────── */}
       {carousels.map((c, i) => (
         <div
@@ -97,7 +109,6 @@ const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
       {/* ── Main content ──────────────────────── */}
       <div className='relative z-20 h-full flex flex-col justify-center'>
         <div className='max-w-[1180px] mx-auto px-4 w-full pt-20 pb-32'>
-
           {/* Badge */}
           <div
             key={`badge-${animKey}`}
@@ -125,7 +136,8 @@ const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
             key={`sub-${animKey}`}
             className='hero-fade-up mt-5 text-white/80 text-base sm:text-lg max-w-xl leading-relaxed'
             style={{ animationDelay: '200ms' }}>
-            {slide?.description || 'Expert-led treks through Nepal\'s most breathtaking trails. Poon Hill, Annapurna, Everest Base Camp and beyond.'}
+            {slide?.description ||
+              "Expert-led treks through Nepal's most breathtaking trails. Travel, Annapurna, Everest Base Camp and beyond."}
           </p>
 
           {/* CTAs */}
@@ -172,12 +184,16 @@ const HeroSection = ({ carousels, siteInfo }: HeroSectionProps) => {
           <div className='max-w-[1180px] mx-auto px-4'>
             <div className='grid grid-cols-2 sm:grid-cols-4 divide-x divide-white/10'>
               {stats.map(({ icon: Icon, value, label }) => (
-                <div key={label} className='flex items-center gap-3 py-4 px-4 sm:px-6'>
+                <div
+                  key={label}
+                  className='flex items-center gap-3 py-4 px-4 sm:px-6'>
                   <div className='w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0'>
                     <Icon size={16} className='text-primary' />
                   </div>
                   <div>
-                    <p className='text-white font-bold text-lg leading-none'>{value}</p>
+                    <p className='text-white font-bold text-lg leading-none'>
+                      {value}
+                    </p>
                     <p className='text-white/60 text-xs mt-0.5'>{label}</p>
                   </div>
                 </div>

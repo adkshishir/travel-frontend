@@ -109,7 +109,7 @@ export default function Header() {
               'text-xl font-bold transition-colors duration-300',
               transparent ? 'text-white' : 'text-[#1c2b1c]'
             )}>
-              Poonhill<span className={transparent ? 'text-orange-300' : 'text-primary'}>Treks</span>
+              Travel<span className={transparent ? 'text-orange-300' : 'text-primary'}>treks</span>
             </span>
           </Link>
 

@@ -7,15 +7,15 @@ import getCanonicalUrl from '@/utils/canonical';
 import JsonLd from '@/components/seo/JsonLd';
 
 export const metadata = {
-  title: 'Meet Our Team | Poonhill Treks',
-  description: 'Meet the expert guides and passionate team behind Poonhill Treks. Our experienced local team ensures safe, memorable Himalayan adventures.',
+  title: 'Meet Our Team | Traveltreks',
+  description: 'Meet the expert guides and passionate team behind Traveltreks. Our experienced local team ensures safe, memorable Himalayan adventures.',
   alternates: { canonical: getCanonicalUrl('/team') },
   openGraph: {
-    title: 'Meet Our Team | Poonhill Treks',
-    description: 'Meet the expert guides and passionate team behind Poonhill Treks.',
+    title: 'Meet Our Team | Traveltreks',
+    description: 'Meet the expert guides and passionate team behind Traveltreks.',
     url: getCanonicalUrl('/team'),
     type: 'website',
-    siteName: 'Poonhill Treks',
+    siteName: 'Traveltreks',
   },
 };
 
@@ -26,7 +26,7 @@ export default async function TeamPage() {
   const teamSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Poonhill Treks',
+    name: 'Traveltreks',
     member: team.map((m: any) => ({
       '@type': 'Person',
       name: m.name,

@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
         url: pageUrl,
         type: 'article',
         images: [image],
-        siteName: 'Poonhill Treks',
+        siteName: 'Traveltreks',
       },
       twitter: {
         card: 'summary_large_image',

@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
       description,
       keywords,
       alternates: canonical ? { canonical } : undefined,
-      openGraph: { title, description, url: canonical, type: 'website', images: [image], siteName: 'Poonhill Treks' },
+      openGraph: { title, description, url: canonical, type: 'website', images: [image], siteName: 'Traveltreks' },
       twitter: { card: 'summary_large_image', title, description, images: [image] },
       robots: { index: true, follow: true },
       ...(seo.schema && { other: { 'application/ld+json': seo.schema } }),

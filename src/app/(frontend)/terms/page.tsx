@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { Mountain, Shield, Clock, AlertTriangle, FileText, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | Poonhill Treks',
-  description: 'Terms and conditions for booking trekking packages with Poonhill Treks. Read our policies on bookings, cancellations, safety, and liability.',
+  title: 'Terms & Conditions | Traveltreks',
+  description: 'Terms and conditions for booking trekking packages with Traveltreks. Read our policies on bookings, cancellations, safety, and liability.',
 };
 
 export default function TermsAndConditions() {
@@ -17,7 +17,7 @@ export default function TermsAndConditions() {
             <h1 className="text-4xl md:text-5xl font-bold">Terms & Conditions</h1>
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Please read these terms and conditions carefully before booking any trekking package with Poonhill Treks.
+            Please read these terms and conditions carefully before booking any trekking package with Traveltreks.
           </p>
           <div className="mt-8 text-sm text-gray-400">
             Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -37,11 +37,11 @@ export default function TermsAndConditions() {
             </div>
             <div className="text-gray-700 space-y-4">
               <p>
-                Welcome to Poonhill Treks. These terms and conditions ("Terms") govern your use of our services and website. 
+                Welcome to Traveltreks. These terms and conditions ("Terms") govern your use of our services and website. 
                 By booking any trekking package or using our services, you agree to be bound by these Terms.
               </p>
               <p>
-                Poonhill Treks is a licensed trekking company based in Kathmandu, Nepal, specializing in trekking and 
+                Traveltreks is a licensed trekking company based in Kathmandu, Nepal, specializing in trekking and 
                 mountaineering expeditions in the Himalayas.
               </p>
             </div>
@@ -141,7 +141,7 @@ export default function TermsAndConditions() {
               
               <h3 className="text-lg font-semibold text-gray-800">5.1 Limitation of Liability</h3>
               <p>
-                Poonhill Treks acts as an intermediary and is not liable for any injury, loss, damage, or delay 
+                Traveltreks acts as an intermediary and is not liable for any injury, loss, damage, or delay 
                 caused by circumstances beyond our control, including but not limited to weather conditions, 
                 natural disasters, political situations, or third-party services.
               </p>
@@ -200,7 +200,7 @@ export default function TermsAndConditions() {
             </div>
             <div className="text-gray-700 space-y-4">
               <p>
-                Poonhill Treks reserves the right to modify these terms and conditions at any time. 
+                Traveltreks reserves the right to modify these terms and conditions at any time. 
                 Updated terms will be posted on our website with the revision date. Continued use of 
                 our services after changes constitutes acceptance of the new terms.
               </p>
@@ -216,10 +216,10 @@ export default function TermsAndConditions() {
             <div className="text-gray-700 space-y-4">
               <p>For questions about these terms and conditions, please contact us:</p>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Poonhill Treks</strong></p>
+                <p><strong>Traveltreks</strong></p>
                 <p>Thamel, Kathmandu, Nepal</p>
                 <p>Phone: +977-1-4123456</p>
-                <p>Email: info@poonhilltreks.com</p>
+                <p>Email: info@traveltreks.com</p>
               </div>
             </div>
           </section>
@@ -228,7 +228,7 @@ export default function TermsAndConditions() {
           <section className="border-t pt-8">
             <div className="bg-primary/10 p-6 rounded-lg">
               <p className="text-gray-800 font-medium">
-                By booking with Poonhill Treks, you acknowledge that you have read, understood, and 
+                By booking with Traveltreks, you acknowledge that you have read, understood, and 
                 agree to be bound by these terms and conditions.
               </p>
             </div>

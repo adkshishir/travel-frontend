@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title') || 'Poonhill Treks';
+  const title = searchParams.get('title') || 'Traveltreks';
   const subtitle = searchParams.get('subtitle') || 'Nepal Trekking & Adventure Tours';
 
   return new ImageResponse(
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
             <span
               style={{ fontSize: '28px', fontWeight: 700, color: '#ff6c0a' }}
             >
-              Poonhill Treks
+              Traveltreks
             </span>
           </div>
 

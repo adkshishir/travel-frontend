@@ -5,15 +5,15 @@ import ENDPOINTS from '@/utils/endpoints';
 import getCanonicalUrl from '@/utils/canonical';
 
 export const metadata = {
-  title: 'Search Trekking Packages | Nepal Treks & Tours | Poonhill Treks',
+  title: 'Search Trekking Packages | Nepal Treks & Tours | Traveltreks',
   description: 'Search and filter Nepal trekking packages by activity, duration, budget, and difficulty. Find the perfect Himalayan adventure for your group.',
   alternates: { canonical: getCanonicalUrl('/search') },
   openGraph: {
-    title: 'Search Nepal Trekking Packages | Poonhill Treks',
+    title: 'Search Nepal Trekking Packages | Traveltreks',
     description: 'Filter by activity, duration, budget and difficulty to find your perfect Nepal trek.',
     url: getCanonicalUrl('/search'),
     type: 'website',
-    siteName: 'Poonhill Treks',
+    siteName: 'Traveltreks',
   },
 };
 

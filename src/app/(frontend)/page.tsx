@@ -16,21 +16,21 @@ import ENDPOINTS from '@/utils/endpoints';
 import JsonLd from '@/components/seo/JsonLd';
 
 export const metadata = {
-  title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
-  description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
-  keywords: 'poon hill, trekking, nepal, tours, hiking, ghorepani, annapurna, adventure, himalayas',
-  alternates: { canonical: 'https://poonhill.com/' },
+  title: 'Traveltreks | Best Nepal Trekking Packages',
+  description: 'Discover the best trekking and tour packages in Nepal with Traveltreks. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+  keywords: 'traveltreks, trekking, nepal, tours, hiking, ghorepani, annapurna, adventure, himalayas',
+  alternates: { canonical: 'https://traveltreks.com/' },
   openGraph: {
-    title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
-    description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
-    url: 'https://poonhill.com/',
+    title: 'Traveltreks | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal with Traveltreks. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+    url: 'https://traveltreks.com/',
     type: 'website',
     images: ['/images/hero.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
-    description: 'Discover the best trekking and tour packages in Nepal, including the famous Poon Hill trek. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
+    title: 'Traveltreks | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal with Traveltreks. Book your adventure with local experts and enjoy breathtaking Himalayan views, cultural experiences, and more.',
     images: ['/images/hero.jpg'],
   },
   // Optionally add schema here
@@ -44,12 +44,12 @@ export default async function Home() {
   const homeSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Poon Hill Trekking & Tours | Best Nepal Trekking Packages',
-    description: 'Discover the best trekking and tour packages in Nepal. Expert-led Poon Hill, Annapurna, and Himalayan treks.',
-    url: 'https://poonhill.com',
+    name: 'Traveltreks | Best Nepal Trekking Packages',
+    description: 'Discover the best trekking and tour packages in Nepal. Expert-led Annapurna and Himalayan treks.',
+    url: 'https://traveltreks.com',
     breadcrumb: {
       '@type': 'BreadcrumbList',
-      itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://poonhill.com' }],
+      itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://traveltreks.com' }],
     },
   };
 

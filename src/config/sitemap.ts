@@ -1,7 +1,7 @@
 // Sitemap Configuration
 export const SITEMAP_CONFIG = {
   // Base URL of the website
-  BASE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://poonhill.com',
+  BASE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://traveltreks.com',
   
   // Cache settings
   CACHE_DURATION: 3600, // 1 hour in seconds
@@ -47,7 +47,7 @@ export const SITEMAP_CONFIG = {
   // News sitemap settings
   NEWS: {
     RECENT_DAYS: 2, // Days to consider as "recent news"
-    PUBLICATION_NAME: 'Poon Hill Trekking & Tours',
+    PUBLICATION_NAME: 'Traveltreks',
     LANGUAGE: 'en',
   },
   
